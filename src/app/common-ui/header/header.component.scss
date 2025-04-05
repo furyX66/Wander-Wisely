@@ -1,0 +1,78 @@
+.header {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.logo p {
+  color: var(--text-color);
+  font-family: var(--main-font), sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.logo span {
+  color: var(--red);
+  font-family: var(--main-font), sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.logo {
+  display: flex;
+  width: 178px;
+  height: 36px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.menu-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.login-button {
+  border: none;
+  display: flex;
+  width: 37px;
+  height: 21px;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-color);
+  text-align: center;
+  font-family: var(--main-font), sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background: transparent;
+  cursor: pointer;
+}
+
+.sign-up-button {
+  background: transparent;
+  display: flex;
+  height: 30px;
+  padding: 4px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 15px;
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+  text-align: center;
+  font-family: var(--main-font), sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+}

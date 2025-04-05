@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+.logo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 180px auto 0 auto;
+  flex-shrink: 0;
+}
+
+.content-wrapper {
+  margin: 0 auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box
+}
+
+.content-wrapper h1 {
+  margin: 0;
+  color: var(--text-color);
+  font-family: var(--main-font), sans-serif;
+  font-size: 96px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+}
+
+.content-wrapper span {
+  font-family: var(--main-font), sans-serif;
+  font-size: 96px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.content-wrapper p {
+  margin: 0;
+  color: var(--text-color);
+  text-align: center;
+  font-family: var(--main-font), sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.main-title{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container {
+  margin-top: 16px;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  max-width: calc(100vw/3.2);
+  height: 40px;
+  padding: 5px 10px;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-radius: 50px;
+  border: 1px solid var(--text-color);
+}
+
+.input-container input {
+  max-width: calc(100vw/3.2);
+  width: 100%;
+  height: 40px;
+  padding: 5px 10px;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-color);
+  font-family: var(--main-font), sans-serif;
+}
+
+.changing-word-container {
+  display: inline-block;
+  position: relative;
+  min-width: 100px;
+}
+
+.fancy-w {
+  color: var(--red);
+  font-size: 1.5em;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1px;
+  margin-right: 2px;
+  display: inline-block;
+  transform: rotate(-2deg);
+}
+
+.input-container button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+}
+
+.input-container img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.input-container input::placeholder {
+  color: var(--text-color);
+  font-family: var(--main-font), sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.5;
+}
+
+
