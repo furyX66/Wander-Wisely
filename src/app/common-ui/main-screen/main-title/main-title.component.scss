@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
-
 .logo {
   display: flex;
   align-items: flex-end;
@@ -91,13 +90,10 @@
 
 .fancy-w {
   color: var(--red);
+  font-family: var(--main-font), sans-serif;
   font-size: 1.5em;
   font-weight: 700;
-  font-family: 'Playfair Display', serif;
-  letter-spacing: 1px;
-  margin-right: 2px;
   display: inline-block;
-  transform: rotate(-2deg);
 }
 
 .input-container button {
@@ -123,6 +119,15 @@
   font-weight: 400;
   line-height: normal;
   opacity: 0.5;
+}
+
+@media (max-width: 768px){
+  .input-container{
+    max-width: calc(100vw/1.5);
+  }
+  .input-container input {
+    max-width: calc(100vw/1.5);
+  }
 }
 
 

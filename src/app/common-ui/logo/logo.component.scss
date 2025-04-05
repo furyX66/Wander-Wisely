@@ -1,0 +1,28 @@
+p {
+  color: var(--text-color);
+  font-family: var(--main-font), sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+span {
+  color: var(--red);
+  font-family: var(--main-font), sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+a {
+  display: flex;
+  width: 178px;
+  height: 36px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-decoration: none;
+}

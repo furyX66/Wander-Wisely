@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Nabla&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 :root{
   /* Color scheme */
-  --background: var(--yellow-gradient);
+  --background: var(--white);
   --text-color: var(--black);
+  --main-page-color: var(--yellow-gradient);
 
   /* Color styles */
   --dark-gray: #272727;
@@ -14,7 +15,6 @@
   --light--gray: #D4D4D4;
   --green: #44BBA4;
   --yellow-gradient:linear-gradient(255deg, #FFE100 0%, #FFA600 100%);
-
 
   /* Text-size styles */
   --main-font: 'Poppins', sans-serif;
@@ -31,6 +31,7 @@
 .dark-mode{
   --background: var(--black);
   --text-color: var(--white);
+  --main-page-color: var(--black);
   background-attachment: fixed;
   background-size: 100% 100%;
 }

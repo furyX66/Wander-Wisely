@@ -1,0 +1,100 @@
+.side-bar {
+  display: flex;
+  width: 220px;
+  height: 100vh;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.side-bar::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 80%;
+  background-color: var(--text-color);
+}
+
+.chats-with-logo{
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 20px;
+}
+
+.chats {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.option-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.option-buttons div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.option-buttons div p {
+  margin: 0;
+  cursor: pointer;
+  color: var(--text-color);
+  font-family: var(--main-font), sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  line-height: normal;
+}
+
+.option-buttons div:first-child {
+  font-weight: 600;
+}
+
+.chats-lits {
+  font-family: var(--main-font), sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--text-color)
+}
+
+.chats-lits .group-title {
+  font-weight: 500;
+  color: var(--text-color);
+  opacity: 0.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.chats-lits .chat-title {
+  cursor: pointer;
+}
+
+.chats-lits .active {
+  font-weight: 500;
+}
+
+.bottom-bar {
+  display: flex;
+  width: 200px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
