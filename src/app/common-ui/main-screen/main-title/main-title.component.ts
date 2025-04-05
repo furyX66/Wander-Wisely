@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import { CommonModule } from '@angular/common';
 import {RouterLink} from '@angular/router';
-import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-main-title',
