@@ -1,5 +1,10 @@
 :host {
   display: block;
-  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
   background: var(--main-page-color);
+}
+app-chat-input{
+  width: 600px;
+  margin: 12px auto;
 }

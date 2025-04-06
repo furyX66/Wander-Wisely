@@ -1,2 +1,7 @@
 <app-header></app-header>
 <app-main-title></app-main-title>
+<app-chat-input
+  (onClick)="handleChatInput($event)"
+  [link]="'/chat'"
+  placeholder="Enter your wishes for the trip"
+></app-chat-input>

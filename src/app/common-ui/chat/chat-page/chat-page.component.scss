@@ -1,1 +1,31 @@
+:host{
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+}
 
+app-chat-input{
+  margin: 12px;
+  width: 808px;
+}
+
+app-map{
+  width: 824px;
+  height: 100vh;
+}
+
+.chat-area{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.chat-messages{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  justify-content: flex-end;
+}

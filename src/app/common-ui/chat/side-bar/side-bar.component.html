@@ -27,20 +27,9 @@
           <p>New chat</p>
         </div>
       </div>
-      <section class="chats-lits">
-        <div class="group" *ngFor="let group of timelineData">
-          <div class="group-title">{{ group.label }}</div>
-          <div class="chat-title"
-               *ngFor="let item of group.items"
-               (click)="selectItem(item.text)"
-               [class.bold]="item.bold"
-               [class.active]="selectedItem === item.text">
-            {{ item.text }}
-          </div>
-        </div>
-      </section>
     </div>
   </div>
+  <p class="not-login-massege">Sign up or login to get access to history, more chats etc.</p>
   <section class="bottom-bar">
     <app-login-button/>
     <app-sign-up-button/>

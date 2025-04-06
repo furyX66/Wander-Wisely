@@ -54,34 +54,6 @@
   align-items: center;
 }
 
-.input-container {
-  margin-top: 16px;
-  box-sizing: border-box;
-  display: flex;
-  width: 100%;
-  max-width: calc(100vw/3.2);
-  height: 40px;
-  padding: 5px 10px;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-  border-radius: 50px;
-  border: 1px solid var(--text-color);
-}
-
-.input-container input {
-  max-width: calc(100vw/3.2);
-  width: 100%;
-  height: 40px;
-  padding: 5px 10px;
-  border-radius: 50px;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: var(--text-color);
-  font-family: var(--main-font), sans-serif;
-}
-
 .changing-word-container {
   display: inline-block;
   position: relative;
@@ -96,38 +68,6 @@
   display: inline-block;
 }
 
-.input-container button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-}
 
-.input-container img {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.input-container input::placeholder {
-  color: var(--text-color);
-  font-family: var(--main-font), sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  opacity: 0.5;
-}
-
-@media (max-width: 768px){
-  .input-container{
-    max-width: calc(100vw/1.5);
-  }
-  .input-container input {
-    max-width: calc(100vw/1.5);
-  }
-}
 
 

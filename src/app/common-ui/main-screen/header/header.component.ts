@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {ColorSchemeSwitchComponent} from '../../color-scheme-switch/color-scheme-switch.component';
-import {SignUpButtonComponent} from '../../sign-up-button/sign-up-button.component';
-import {LoginButtonComponent} from '../../login-button/login-button.component';
-import {LogoComponent} from '../../logo/logo.component';
+import {ColorSchemeSwitchComponent} from '../../shared/color-scheme-switch/color-scheme-switch.component';
+import {SignUpButtonComponent} from '../../shared/sign-up-button/sign-up-button.component';
+import {LoginButtonComponent} from '../../shared/login-button/login-button.component';
+import {LogoComponent} from '../../shared/logo/logo.component';
 
 
 @Component({
