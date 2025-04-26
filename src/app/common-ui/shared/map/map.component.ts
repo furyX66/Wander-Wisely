@@ -9,13 +9,39 @@ import * as L from 'leaflet';
 })
 export class MapComponent implements AfterViewInit {
   private map!: L.Map;
+  private tilesLight = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    minZoom: 3,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  });
+
+  private tilesDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+    minZoom: 3,
+    attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
+  });
+
+  private observeThemeChanges(): void {
+    const observer = new MutationObserver(() => {
+      this.applyTheme(this.isDarkMode());
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+
+  private currentTiles!: L.TileLayer;
 
   constructor() {}
 
   ngAfterViewInit(): void {
     this.initMap();
     this.tryLocateUser();
+    this.observeThemeChanges();
   }
+
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -23,13 +49,19 @@ export class MapComponent implements AfterViewInit {
       zoom: 3
     });
 
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      minZoom: 3,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    });
+    this.applyTheme(this.isDarkMode()); // ставим правильную тему на старте
+  }
 
-    tiles.addTo(this.map);
+  private applyTheme(isDark: boolean): void {
+    if (this.currentTiles) {
+      this.map.removeLayer(this.currentTiles);
+    }
+    this.currentTiles = isDark ? this.tilesDark : this.tilesLight;
+    this.currentTiles.addTo(this.map);
+  }
+
+  private isDarkMode(): boolean {
+    return document.body.classList.contains('dark-mode');
   }
 
   private tryLocateUser(): void {
@@ -60,7 +92,7 @@ export class MapComponent implements AfterViewInit {
     this.map.setView(warsawLatLng, 13);
     L.marker(warsawLatLng)
       .addTo(this.map)
-      .bindPopup('Deafault place')
+      .bindPopup('Default place')
       .openPopup();
   }
 }

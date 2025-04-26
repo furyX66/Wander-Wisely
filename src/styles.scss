@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Nabla&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
   /* Color scheme */
   --background: var(--white);
   --text-color: var(--black);
@@ -17,16 +22,83 @@
   --green: #44BBA4;
   --yellow-gradient: linear-gradient(255deg, #FFE100 0%, #FFA600 100%);
 
-  /* Text-size styles */
+  /* Main font */
   --main-font: 'Poppins', sans-serif;
-  --menu-list-font: 14px;
-  --time-period-font: 14px;
-  --chat-list-amp-message: 16px;
-  --chat-list-font--selected: 16px;
-  --list-of-chats: 14px;
-  --list-of-chats--selected: 14px;
-  --login-font: 24px;
+}
 
+/* Text styles */
+.chat-list-font{
+  color: var(--text-color);
+  font-family: var(--main-font), serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.chat-list-font-selected{
+  color: var(--main-font);
+  font-family: var(--main-font), serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.menu-list-font-bold{
+  color: var(--text-color);
+  text-align: center;
+  font-family: var(--main-font), serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.menu-list-font{
+  color: var(--text-color);
+  text-align: center;
+  font-family: var(--main-font), serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.time-period-font{
+  color: var(--text-color);
+  font-family: var(--main-font), serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.list-of-chats-font{
+  color: var(--main-font);
+  font-family: var(--main-font), serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+
+.list-of-chats-selected{
+  color: var(--main-font);
+  font-family: var(--main-font), serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.modal-window-title{
+  color: var(--main-font);
+  font-family: var(--main-font), serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 /* Dark mode */
@@ -41,6 +113,7 @@ body {
   background: var(--background);
   font-family: var(--main-font), sans-serif;
   color: var(--text-color);
+  width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;

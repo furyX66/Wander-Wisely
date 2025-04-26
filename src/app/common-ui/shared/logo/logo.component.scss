@@ -1,28 +1,22 @@
-p {
-  color: var(--text-color);
-  font-family: var(--main-font), sans-serif;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
 span {
   color: var(--red);
-  font-family: var(--main-font), sans-serif;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+}
+
+p {
+  color: var(--text-color);
 }
 
 a {
   display: flex;
-  width: 178px;
-  height: 36px;
+  width: 11.125rem;
+  height: 2.25rem;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
   cursor: pointer;
   text-decoration: none;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

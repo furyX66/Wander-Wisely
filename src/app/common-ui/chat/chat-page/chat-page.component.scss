@@ -1,28 +1,34 @@
 :host{
-  display: flex;
+  display: grid;
+  grid-template-columns: 0.8fr 3fr 3fr;
   gap: 24px;
-  align-items: flex-end;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+app-side-bar{
+  grid-column: 1;
 }
 
 app-chat-input{
-  margin: 12px;
-  width: 808px;
+  flex: 0 0 auto;
+  margin: 16px 0;
 }
 
-app-map{
-  width: 824px;
-  height: 100vh;
+app-map {
+  grid-column: 3;
+  height: 100%;
 }
 
 .chat-area{
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  gap: 16px;
+  grid-column: 2;
+  align-self: end;
 }
 
 .chat-messages{
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;

@@ -1,14 +1,14 @@
-<app-side-bar></app-side-bar>
-<section class="chat-area">
-  <div class="chat-messages">
-    <app-user-message
-      *ngFor="let msg of messages"
-      [text]="msg"
-    ></app-user-message>
-  </div>
-  <app-chat-input
-    (onClick)="handleChatInput($event)"
-    placeholder="Enter your wishes for the trip"
-  ></app-chat-input>
-</section>
-<app-map></app-map>
+<app-side-bar/>
+  <section class="chat-area">
+    <div class="chat-messages">
+      <app-user-message
+        *ngFor="let msg of messages"
+        [text]="msg"
+      ></app-user-message>
+    </div>
+    <app-chat-input
+      (onClick)="handleChatInput($event)"
+      placeholder="Enter your wishes for the trip"
+    ></app-chat-input>
+  </section>
+<app-map/>
