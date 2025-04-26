@@ -1,10 +1,23 @@
 :host {
-  display: block;
+  display: grid;
+  grid-template-rows: auto 1fr;
   min-height: 100vh;
   margin: 0;
   background: var(--main-page-color);
 }
+
+app-header{
+  grid-row: 1;
+}
+
+.main-content{
+  align-self: center;
+  justify-self: center;
+  grid-row: 2;
+}
+
 app-chat-input{
-  width: 600px;
-  margin: 12px auto;
+  max-width: 600px;
+  padding: 16px 0;
+  margin: 0 auto;
 }

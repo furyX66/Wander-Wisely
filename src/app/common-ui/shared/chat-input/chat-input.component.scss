@@ -33,6 +33,7 @@
   border: none;
   outline: none;
   background: transparent;
+  font-size: 16px;
   color: var(--text-color);
   font-family: var(--main-font), sans-serif;
 }
@@ -53,11 +54,5 @@
 }
 
 .input-container input::placeholder {
-  color: var(--text-color);
-  font-family: var(--main-font), sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
   opacity: 0.5;
 }

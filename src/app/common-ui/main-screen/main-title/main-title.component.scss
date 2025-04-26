@@ -1,14 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
 .logo {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  margin: 180px auto 0 auto;
+  margin: auto;
   flex-shrink: 0;
 }
 
 .content-wrapper {
-  margin: 0 auto;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -45,6 +43,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  padding: 0 24px;
 }
 
 .main-title{
@@ -52,6 +51,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 0 24px;
 }
 
 .changing-word-container {
@@ -62,10 +62,27 @@
 
 .fancy-w {
   color: var(--red);
-  font-family: var(--main-font), sans-serif;
-  font-size: 1.5em;
-  font-weight: 700;
   display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .logo{
+    margin: 0 auto 16px;
+  }
+  .logo svg {
+    width: 320px;
+    height: auto;
+  }
+  .content-wrapper h1,
+  .content-wrapper span {
+    font-size: 36px;
+  }
+  .content-wrapper p {
+    font-size: 16px;
+  }
+  .logo {
+    margin-top: 36px ;
+  }
 }
 
 
