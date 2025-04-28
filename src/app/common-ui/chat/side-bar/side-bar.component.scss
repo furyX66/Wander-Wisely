@@ -22,6 +22,7 @@
 .chats-with-logo{
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 32px;
   padding: 20px;
 }

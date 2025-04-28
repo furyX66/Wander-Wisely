@@ -5,7 +5,6 @@
   grid-template-rows: 1fr auto;
   height: 100%;
   width: 100%;
-  //overflow: hidden;
 }
 
 app-side-bar{
@@ -25,6 +24,7 @@ app-map {
 .chat-area{
   grid-column: 2;
   align-self: end;
+  padding: 0 16px;
 }
 
 .chat-messages{
@@ -34,4 +34,20 @@ app-map {
   gap: 8px;
   align-items: flex-end;
   justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  app-side-bar{
+    display: none;
+  }
+  app-map{
+    display: none;
+  }
+  :host{
+    grid-template-columns: 1fr;
+  }
+  .chat-area{
+    grid-column: 1;
+    align-self: end;
+  }
 }
