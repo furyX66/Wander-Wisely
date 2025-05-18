@@ -1,6 +1,13 @@
 :host{
   width: 100%;
 }
+
+.input-wrapper{
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
 input{
   box-sizing: border-box;
   padding: 0 16px;
@@ -15,7 +22,12 @@ input{
   background: transparent;
 }
 
-.custom-input:focus{
+input:focus{
   outline: none;
   border: 1px solid var(--text-color);
 }
+
+.icon-eye {
+  color: var(--text-color);
+}
+

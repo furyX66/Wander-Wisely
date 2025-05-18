@@ -1,22 +1,54 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
-  imports: [],
   templateUrl: './input.component.html',
-  styleUrl: './input.component.scss'
+  styleUrl: './input.component.scss',
+  imports: [
+  ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true
+    }
+  ]
 })
-export class InputComponent {
+export class InputComponent implements ControlValueAccessor {
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
-  @Input() value: string = '';
   @Input() name: string = '';
   @Input() required: boolean = false;
 
-  @Output() valueChange = new EventEmitter<string>();
+  internalValue: string = '';
+  showPassword: boolean = false;
 
+  private onChange: any = () => {};
+  private onTouched: any = () => {};
+
+  writeValue(value: any): void {
+    this.internalValue = value || '';
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
   onInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.valueChange.emit(input.value);
+    const value = (event.target as HTMLInputElement).value;
+    this.internalValue = value;
+    this.onChange(value);
+    this.onTouched();
   }
 }
