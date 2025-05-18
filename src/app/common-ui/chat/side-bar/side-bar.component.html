@@ -31,8 +31,14 @@
   </div>
   <p class="not-login-massege">Sign up or login to get access to history, more chats etc.</p>
   <section class="bottom-bar">
-    <app-login-button/>
-    <app-sign-up-button/>
+    <app-login-button (click)="openLoginModal()"/>
+    <app-sign-up-button (click)="openRegistrationModal()"/>
     <app-color-scheme-switch/>
   </section>
 </div>
+@if(showRegistrationModal){
+  <app-register-modal (switchToLogin)="handleSwitchToLogin()" (close)="closeModals()"/>
+}
+@if(showLoginModal){
+  <app-login-modal  (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()" />
+}

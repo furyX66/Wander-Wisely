@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
-import {NgForOf} from '@angular/common';
+import {Component} from '@angular/core';
 import {LoginButtonComponent} from '../../shared/login-button/login-button.component';
 import {SignUpButtonComponent} from '../../shared/sign-up-button/sign-up-button.component';
 import {ColorSchemeSwitchComponent} from '../../shared/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../shared/logo/logo.component';
+import {LoginModalComponent} from '../../modals/login-modal/login-modal.component';
+import {RegisterModalComponent} from '../../modals/register-modal/register-modal.component';
 
 @Component({
   selector: 'app-side-bar',
   imports: [
-    NgForOf,
     LoginButtonComponent,
     SignUpButtonComponent,
     ColorSchemeSwitchComponent,
-    LogoComponent
+    LogoComponent,
+    LoginModalComponent,
+    RegisterModalComponent
   ],
   templateUrl: './side-bar.component.html',
   standalone: true,
@@ -20,6 +22,31 @@ import {LogoComponent} from '../../shared/logo/logo.component';
 })
 export class SideBarComponent {
   selectedItem: string | null = null;
+  showRegistrationModal = false;
+  showLoginModal = false;
+
+  openRegistrationModal() {
+    this.showLoginModal = false;
+    this.showRegistrationModal = true;
+  }
+
+  openLoginModal() {
+    this.showRegistrationModal = false;
+    this.showLoginModal = true;
+  }
+
+  handleSwitchToLogin() {
+    this.openLoginModal();
+  }
+
+  handleSwitchToRegister() {
+    this.openRegistrationModal();
+  }
+
+  closeModals() {
+    this.showRegistrationModal = false;
+    this.showLoginModal = false;
+  }
 
   selectItem(text: string) {
     if (this.selectedItem === text) {

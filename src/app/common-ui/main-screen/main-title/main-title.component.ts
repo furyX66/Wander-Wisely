@@ -1,16 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {RouterLink} from '@angular/router';
-import {ChatInputComponent} from '../../shared/chat-input/chat-input.component';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-main-title',
   templateUrl: './main-title.component.html',
   styleUrls: ['./main-title.component.scss'],
   imports: [
-    CommonModule,
-    RouterLink,
-    ChatInputComponent
+    CommonModule
   ],
   standalone: true
 })

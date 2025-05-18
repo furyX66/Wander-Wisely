@@ -1,0 +1,21 @@
+<div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="modal-wrapper">
+  <div class="modal-content">
+    <h1 class="modal-window-title">Login</h1>
+    <div class="modal-window-inputs">
+      <div class="modal-window-input-field">
+        <p class="list-of-chats-selected">Email or username</p>
+        <app-input/>
+      </div>
+      <div class="modal-window-input-field">
+        <p class="list-of-chats-selected">Password</p>
+        <app-input type="password"/>
+      </div>
+    </div>
+    <app-button text="Login" type="submit"/>
+    <p class="poppins-light">Forgot Password?</p>
+    <div class="thin-divider"></div>
+    <p class="acc-font">Don’t have an account? <a (click)="switchToRegister.emit()" style="font-weight: 600; cursor: pointer">Sign up</a></p>
+  </div>
+</div>
+

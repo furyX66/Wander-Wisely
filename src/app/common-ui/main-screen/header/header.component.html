@@ -2,7 +2,15 @@
   <app-logo/>
   <div class="menu-buttons">
     <app-color-scheme-switch/>
-    <app-login-button/>
-    <app-sign-up-button/>
+    <app-login-button (click)="openLoginModal()"/>
+    <app-sign-up-button (click)="openRegistrationModal()"/>
   </div>
 </div>
+@if(showRegistrationModal){
+  <app-register-modal (switchToLogin)="handleSwitchToLogin()" (close)="closeModals()"/>
+}
+@if(showLoginModal){
+  <app-login-modal  (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()" />
+}
+
+

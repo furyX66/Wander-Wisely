@@ -25,6 +25,20 @@
   /* Main font */
   --main-font: 'Poppins', sans-serif;
 }
+//*{
+//  border: 1px solid black;
+//}
+
+/* Dark mode */
+.dark-mode {
+  --background: var(--black);
+  --text-color: var(--white);
+  --main-page-color: var(--black);
+  background-size: 100% 100%;
+}
+*{
+  margin: 0;
+}
 
 /* Text styles */
 .chat-list-font{
@@ -75,16 +89,17 @@
 }
 
 .list-of-chats-font{
-  color: var(--main-font);
+  color: var(--text-color);
   font-family: var(--main-font), serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
+  margin: 0;
 }
 
 .list-of-chats-selected{
-  color: var(--main-font);
+  color: var(--text-color);
   font-family: var(--main-font), serif;
   font-size: 14px;
   font-style: normal;
@@ -101,12 +116,63 @@
   line-height: normal;
 }
 
-/* Dark mode */
-.dark-mode {
-  --background: var(--black);
-  --text-color: var(--white);
-  --main-page-color: var(--black);
-  background-size: 100% 100%;
+.poppins-light{
+  color: var(--text-color);
+  text-align: center;
+  font-family: Poppins, serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  opacity: 0.3;
+}
+
+.modal-wrapper{
+  box-sizing: border-box;
+  position: fixed;
+  margin: auto;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2000;
+  display: flex;
+  padding: 48px;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  border-radius: 40px;
+  background: var(--background, #FFFCFA);
+  max-width: 350px;
+  max-height: 672px;
+}
+
+.modal-content{
+  display: flex;
+  gap: 36px;
+  width: 250px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-window-inputs{
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+}
+
+.modal-window-input-field{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  align-self: stretch;
+}
+
+.thin-divider {
+  width: 80%;
+  border-top: 1px solid var(--light--gray);
+  opacity: 0.5;
 }
 
 body {
