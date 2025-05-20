@@ -1,19 +1,52 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {ButtonComponent} from "../../shared/button/button.component";
 import {InputComponent} from "../../shared/input/input.component";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login-modal',
   imports: [
     ButtonComponent,
     InputComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './login-modal.component.html',
-  styleUrl: './login-modal.component.scss'
+  styleUrl: './login-modal.component.scss',
+  standalone: true,
 })
 export class LoginModalComponent {
+  loginForm: FormGroup;
+  errorMessage = '';
+
   @Output() close = new EventEmitter<void>();
   @Output() switchToRegister = new EventEmitter<void>();
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {
+    this.loginForm = this.fb.group({
+      emailOrUsername: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      this.errorMessage = 'Please fill all fields.';
+      return;
+    }
+    const { emailOrUsername, password } = this.loginForm.value;
+    this.authService.login({ emailOrUsername, password }).subscribe({
+      next: () => {
+        this.errorMessage = '';
+        this.close.emit();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || 'Login failed';
+      }
+    });
+  }
   closeModal() {
     this.close.emit();
   }

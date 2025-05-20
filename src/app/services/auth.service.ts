@@ -35,8 +35,8 @@ export class AuthService {
   login(credentials: LoginData) {
     return this.http.post(`${this.apiUrl}/user/login`, credentials).pipe(
       tap((res: any) => {
-        localStorage.setItem('authToken', res.token);
-        this.router.navigate(['/profile']);
+        localStorage.setItem('authToken', res.value.token);
+        this.router.navigate(['/chat']);
       })
     );
   }

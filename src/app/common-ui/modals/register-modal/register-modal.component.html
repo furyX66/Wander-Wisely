@@ -2,7 +2,7 @@
 <div class="modal-wrapper">
   <div class="modal-content">
     <h1 class="modal-window-title">Registration</h1>
-    <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+    <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm" style="display: flex; flex-direction: column; gap: 36px;">
       <div class="modal-window-inputs">
         <div class="modal-window-input-field">
           <p class="list-of-chats-selected">Email</p>
@@ -35,7 +35,7 @@
           <p class="list-of-chats-selected">Repeat Password</p>
           <app-input formControlName="repeatPassword" type="password"/>
           @if (registrationForm.get('repeatPassword')?.errors?.['required'] && registrationForm.get('repeatPassword')?.touched) {
-            <div class="error-message">Повторите пароль</div>
+            <div class="error-message">Repeat password</div>
           }
           @if (
             registrationForm.get('repeatPassword')?.touched &&
@@ -45,8 +45,11 @@
             <div class="error-message">Password do not match</div>
           }
         </div>
-      <app-button text="Continue" type="submit"/>
       </div>
+      @if (errorMessage) {
+        <div class="error-message" style="text-align: center">{{ errorMessage }}</div>
+      }
+      <app-button text="Continue" type="submit"/>
     </form>
       <div class="thin-divider"></div>
       <a class="poppins-light" style="cursor: pointer" (click)="switchToLogin.emit()">Already have an account?</a>
