@@ -29,16 +29,18 @@
       </div>
     </div>
   </div>
-  <p class="not-login-massege">Sign up or login to get access to history, more chats etc.</p>
+  @if (!(isLoggedIn$  | async)) {
+    <p class="not-login-massage">Sign up or login to get access to history, more chats etc.</p>
+  }
   <section class="bottom-bar">
     <app-login-button (click)="openLoginModal()"/>
     <app-sign-up-button (click)="openRegistrationModal()"/>
     <app-color-scheme-switch/>
   </section>
 </div>
-@if(showRegistrationModal){
+@if (showRegistrationModal) {
   <app-register-modal (switchToLogin)="handleSwitchToLogin()" (close)="closeModals()"/>
 }
-@if(showLoginModal){
-  <app-login-modal  (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()" />
+@if (showLoginModal) {
+  <app-login-modal (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()"/>
 }
