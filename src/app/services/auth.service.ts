@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {tap} from 'rxjs';
+import {UserType} from '../../types/UserType';
 
 interface RegistrationData {
   username: string;
@@ -21,6 +22,8 @@ interface LoginData {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
+  private currentUserSubject = new BehaviorSubject<UserType | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
 
@@ -45,8 +48,10 @@ export class AuthService {
     );
   }
 
-  getCurrentUser() {
-    return this.http.get(`${this.apiUrl}/user/me`);
+  getCurrentUser(): Observable<UserType> {
+    return this.http.get<UserType>(`${this.apiUrl}/user/me`).pipe(
+      tap(user => this.currentUserSubject.next(user))
+    );
   }
 
   logout() {

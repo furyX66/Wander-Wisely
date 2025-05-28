@@ -8,6 +8,9 @@ import {RegisterModalComponent} from '../../modals/register-modal/register-modal
 import {AuthService} from '../../../services/auth.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
+import {UserType} from '../../../../types/UserType';
+import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
+import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 
 @Component({
   selector: 'app-side-bar',
@@ -18,37 +21,31 @@ import {AsyncPipe} from '@angular/common';
     LogoComponent,
     LoginModalComponent,
     RegisterModalComponent,
-    AsyncPipe
+    AsyncPipe,
+    ProfileIcon,
+    UserMenuComponent
   ],
   templateUrl: './side-bar.component.html',
   standalone: true,
   styleUrl: './side-bar.component.scss'
 })
+
 export class SideBarComponent implements OnInit {
-  userData: any;
   showRegistrationModal = false;
   showLoginModal = false;
+  showUserMenu = false;
+
+  user$: Observable<UserType | null>;
   isLoggedIn$: Observable<boolean>;
+
   constructor(public authService: AuthService) {
+    this.user$ = this.authService.currentUser$;
     this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
 
   ngOnInit() {
-    this.checkUserAuth();
-    console.log(this.userData);
-  }
-
-  private checkUserAuth() {
     if (this.authService.isLoggedIn()) {
-      this.authService.getCurrentUser().subscribe({
-        next: (user: any) => {
-          this.userData = user;
-        },
-        error: (err) => {
-          console.error('Failed to fetch user:', err);
-          this.authService.logout();
-        }
-      });
+      this.authService.getCurrentUser().subscribe();
     }
   }
 
@@ -68,6 +65,10 @@ export class SideBarComponent implements OnInit {
 
   handleSwitchToRegister() {
     this.openRegistrationModal();
+  }
+
+  toggleUserMenu() {
+    this.showUserMenu = !this.showUserMenu;
   }
 
   closeModals() {

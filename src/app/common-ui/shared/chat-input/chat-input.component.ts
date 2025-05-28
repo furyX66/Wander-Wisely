@@ -24,10 +24,8 @@ export class ChatInputComponent {
     if (this.link) {
       this.router.navigate([this.link]);
       this.onClick.emit(this.inputValue);
-      console.log(this.inputValue);
     } else {
       this.onClick.emit(this.inputValue);
-      console.log(this.inputValue);
     }
   }
 }

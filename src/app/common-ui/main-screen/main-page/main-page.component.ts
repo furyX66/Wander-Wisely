@@ -13,6 +13,5 @@ import {ChatInputComponent} from "../../shared/chat-input/chat-input.component";
 export class MainPageComponent {
 
   handleChatInput(value: string) {
-    console.log('User input', value);
   }
 }
