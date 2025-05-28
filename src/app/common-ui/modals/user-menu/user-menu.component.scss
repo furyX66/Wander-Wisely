@@ -1,0 +1,15 @@
+.menu-wrapper{
+  display: inline-flex;
+  height: 80px;
+  padding: 16px 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  border-radius: 16px;
+  border: 1px solid var(--light--gray);
+  background: var(--background);
+  position: absolute;
+  bottom: 48px;
+  left: 46px;
+}
