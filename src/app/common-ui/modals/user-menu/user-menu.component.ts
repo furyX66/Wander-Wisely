@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
 
 @Component({
@@ -8,8 +8,10 @@ import {AuthService} from '../../../services/auth.service';
   styleUrl: './user-menu.component.scss'
 })
 export class UserMenuComponent {
+  @Output() closeMenu = new EventEmitter<void>();
   constructor(private authService: AuthService) {}
   logout() {
     this.authService.logout();
+    this.closeMenu.emit();
   }
 }
