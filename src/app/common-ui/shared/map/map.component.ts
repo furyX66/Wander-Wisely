@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import {Component, AfterViewInit} from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -8,6 +8,15 @@ import * as L from 'leaflet';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements AfterViewInit {
+  constructor() {
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'assets/marker-icon-2x.png',
+      iconUrl: 'assets/marker-icon.png',
+      shadowUrl: 'assets/marker-shadow.png'
+    });
+  }
+
   private map!: L.Map;
   private tilesLight = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
@@ -34,8 +43,6 @@ export class MapComponent implements AfterViewInit {
 
   private currentTiles!: L.TileLayer;
 
-  constructor() {}
-
   ngAfterViewInit(): void {
     this.initMap();
     this.tryLocateUser();
@@ -49,7 +56,7 @@ export class MapComponent implements AfterViewInit {
       zoom: 3
     });
 
-    this.applyTheme(this.isDarkMode()); // ставим правильную тему на старте
+    this.applyTheme(this.isDarkMode());
   }
 
   private applyTheme(isDark: boolean): void {
@@ -88,7 +95,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   private setDefaultMarker(): void {
-    const warsawLatLng = L.latLng(52.2297, 21.0122); // Варшава
+    const warsawLatLng = L.latLng(52.2297, 21.0122);
     this.map.setView(warsawLatLng, 13);
     L.marker(warsawLatLng)
       .addTo(this.map)
