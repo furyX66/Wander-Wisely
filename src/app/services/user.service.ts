@@ -29,12 +29,4 @@ export class UserService {
   getUserById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
-
-  registerUser(dto: RegistrationUserDto): Observable<any> {
-    return this.http.post(`${this.apiUrl}/registration`, dto);
-  }
-
-  loginUser(dto: LoginUserDto): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, dto);
-  }
 }

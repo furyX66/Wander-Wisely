@@ -1,0 +1,26 @@
+<div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="modal-wrapper">
+  <ul class="settings-menu list-of-chats-font">
+    <li>Edit profile</li>
+    <li>Preferences</li>
+  </ul>
+  <section class="edit-profile-content">
+    <icon-profile size="180" strokeWidth="0.2"/>
+    <div class="modal-window-input-field">
+      <p class="list-of-chats-selected">Name</p>
+      <app-input/>
+    </div>
+    <div class="modal-window-input-field">
+      <p class="list-of-chats-selected">Email</p>
+      <app-input type="email"/>
+    </div>
+    <div class="modal-window-input-field" style="gap:12px">
+      <p class="list-of-chats-selected">Password</p>
+      <app-input placeholder="Current password" type="password"/>
+      <app-input placeholder="New password" type="password"/>
+      <app-input placeholder="Repeat new password" type="password"/>
+    </div>
+    <app-button text="Save information"/>
+  </section>
+</div>
+

@@ -5,6 +5,9 @@ import { MapComponent } from '../../shared/map/map.component';
 import { UserMessageComponent } from '../user-message/user-message.component';
 import { NgForOf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import {SettingsWindowComponent} from '../../modals/settings-window/settings-window.component';
+import {ModalService} from '../../../services/modal.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-chat-page',
@@ -13,16 +16,29 @@ import { HttpClient } from '@angular/common/http';
     ChatInputComponent,
     MapComponent,
     UserMessageComponent,
-    NgForOf
+    NgForOf,
+    SettingsWindowComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
   styleUrl: './chat-page.component.scss'
 })
 export class ChatPageComponent {
+  showEditProfileModal = false;
   messages: string[] = [];
+  private modalSub?: Subscription;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, protected modalService: ModalService) {}
+
+  ngOnInit() {
+    this.modalSub = this.modalService.editProfileModal$.subscribe(open => {
+      this.showEditProfileModal = open;
+    });
+  }
+
+  ngOnDestroy() {
+    this.modalSub?.unsubscribe();
+  }
 
   handleChatInput(value: string) {
     if (value.trim()) {

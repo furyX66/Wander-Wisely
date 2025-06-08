@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
+import {ModalService} from '../../../services/modal.service';
 
 @Component({
   selector: 'app-user-menu',
@@ -9,9 +10,15 @@ import {AuthService} from '../../../services/auth.service';
 })
 export class UserMenuComponent {
   @Output() closeMenu = new EventEmitter<void>();
-  constructor(private authService: AuthService) {}
+
+  constructor(private authService: AuthService, protected modalService: ModalService) {}
+
   logout() {
     this.authService.logout();
     this.closeMenu.emit();
+  }
+
+  openUserSettingsModal() {
+    this.modalService.openEditProfileModal();
   }
 }
