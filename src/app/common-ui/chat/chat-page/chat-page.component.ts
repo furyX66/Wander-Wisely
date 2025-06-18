@@ -28,14 +28,15 @@ export class ChatPageComponent {
     if (value.trim()) {
       this.messages.push(`Ty: ${value}`);
 
-      this.http.post<{ reply: string }>('http://localhost:3000/chat', { message: value }).subscribe({
+      this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
         next: res => {
           this.messages.push(`AI: ${res.reply}`);
         },
         error: err => {
-          this.messages.push('AI: Wystąpił błąd');
+          this.messages.push('AI: Wystąpił błąd po stronie serwera');
         }
       });
+
     }
   }
 }
