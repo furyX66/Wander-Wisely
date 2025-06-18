@@ -1,9 +1,10 @@
 @media (max-width: 768px){
   .input-container{
-    max-width: calc(100vw/1.2);
+    margin: 0 4px;
+    max-width: 100%;
   }
   .input-container input {
-    max-width: calc(100vw/1.2);
+    max-width: 100%;
   }
 }
 

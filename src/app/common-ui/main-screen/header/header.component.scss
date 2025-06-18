@@ -13,10 +13,20 @@
   gap: 20px;
 }
 
+.user-signed{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+app-user-menu{
+  position: absolute;
+  top: 58px;
+  right: 24px;
+}
+
 @media (max-width: 768px){
-  app-color-scheme-switch{
-    display: none;
-  }
   .header{
     padding: 12px;
   }
