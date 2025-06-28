@@ -45,8 +45,11 @@ app-map {
   }
   :host{
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
   }
   .chat-area{
+    padding: 0;
+    margin: 0;
     grid-column: 1;
     align-self: end;
   }

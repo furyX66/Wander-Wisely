@@ -11,6 +11,7 @@ import {AuthService} from '../../../services/auth.service';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
+import {UserService} from '../../../services/user.service';
 
 
 @Component({
@@ -35,8 +36,8 @@ export class HeaderComponent implements OnInit{
   showLoginModal = false;
   showUserMenu = false;
 
-  constructor(public authService: AuthService) {
-    this.user$ = this.authService.currentUser$;
+  constructor(public authService: AuthService, private userService: UserService) {
+    this.user$ = this.userService.currentUser$;
     this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
 
@@ -45,7 +46,7 @@ export class HeaderComponent implements OnInit{
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.authService.getCurrentUser().subscribe();
+      this.userService.getCurrentUser().subscribe();
     }
   }
 
