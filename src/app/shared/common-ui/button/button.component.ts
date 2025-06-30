@@ -9,7 +9,7 @@ import {Component, input, output} from '@angular/core';
 export class ButtonComponent {
   text = input<string>('');
   className = input<string>('btn');
-  type = input<"button" | "submit"|"reset">('button');
+  type = input<"button" | "submit" | "reset">('button');
 
   btnClick = output<Event>();
 

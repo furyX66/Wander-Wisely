@@ -36,6 +36,14 @@ app-map {
   justify-content: flex-end;
 }
 
+.user-message {
+  align-self: flex-end;
+}
+
+.assistant-message {
+  align-self: flex-start;
+}
+
 @media (max-width: 768px) {
   app-side-bar{
     display: none;

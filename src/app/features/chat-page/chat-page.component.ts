@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { SideBarComponent } from '../../shared/chat/side-bar/side-bar.component';
-import { ChatInputComponent } from '../../shared/common-ui/chat-input/chat-input.component';
-import { MapComponent } from '../../shared/common-ui/map/map.component';
-import { UserMessageComponent } from '../../shared/chat/user-message/user-message.component';
-import { NgForOf } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
+import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
+import {MapComponent} from '../../shared/common-ui/map/map.component';
+import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
+import {HttpClient} from '@angular/common/http';
 import {SettingsWindowComponent} from '../../shared/modals/settings-window/settings-window.component';
 import {ModalService} from '../../core/services/modal.service';
 import {Subscription} from 'rxjs';
+import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
+import {ChatMessage} from '../../../types/ChatMessageType';
 
 @Component({
   selector: 'app-chat-page',
@@ -16,16 +17,16 @@ import {Subscription} from 'rxjs';
     ChatInputComponent,
     MapComponent,
     UserMessageComponent,
-    NgForOf,
-    SettingsWindowComponent
+    SettingsWindowComponent,
+    AssistantMessageComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
   styleUrl: './chat-page.component.scss'
 })
-export class ChatPageComponent {
+export class ChatPageComponent implements OnInit, OnDestroy {
   showEditProfileModal = false;
-  messages: string[] = [];
+  messages: ChatMessage[] = [];
   private modalSub?: Subscription;
 
   constructor(private http: HttpClient, protected modalService: ModalService) {}
@@ -42,14 +43,16 @@ export class ChatPageComponent {
 
   handleChatInput(value: string) {
     if (value.trim()) {
-      this.messages.push(`Ty: ${value}`);
+      this.messages.push({ text: `Ту: ${value}`, author: 'user' });
 
       this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
         next: res => {
-          this.messages.push(`AI: ${res.reply}`);
+          this.messages.push({ text: `Ту: ${value}`, author: 'user' });
+          console.log(res)
         },
         error: err => {
-          this.messages.push('AI: Wystąpił błąd po stronie serwera');
+          this.messages.push({ text: `AI: Wystąpił błąd po stronie serwera`, author: 'assistant' });
+          console.log(err);
         }
       });
 

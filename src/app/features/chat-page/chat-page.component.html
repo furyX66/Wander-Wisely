@@ -1,17 +1,27 @@
 <app-side-bar/>
-  <section class="chat-area">
-    <div class="chat-messages">
-      <app-user-message
-        *ngFor="let msg of messages"
-        [text]="msg"
-      ></app-user-message>
-    </div>
-    <app-chat-input
-      (onClick)="handleChatInput($event)"
-    ></app-chat-input>
-  </section>
+<section class="chat-area">
+  <div class="chat-messages">
+    @for (msg of messages; track msg) {
+      @if (msg.author === 'user') {
+        <app-user-message
+          [text]="msg.text"
+          class="user-message"
+        ></app-user-message>
+      }
+      @if (msg.author === 'assistant') {
+        <app-assistant-message
+          [text]="msg.text"
+          class="assistant-message"
+        ></app-assistant-message>
+      }
+    }
+  </div>
+  <app-chat-input
+    (onClick)="handleChatInput($event)"
+  ></app-chat-input>
+</section>
 <app-map/>
 
-@if(showEditProfileModal){
+@if (showEditProfileModal) {
   <app-settings-window (close)="modalService.closeEditProfileModal()"/>
 }
