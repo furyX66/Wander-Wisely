@@ -28,12 +28,18 @@ app-map {
 }
 
 .chat-messages{
+  height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
   align-items: flex-end;
-  justify-content: flex-end;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.chat-messages::-webkit-scrollbar {
+  display: none;
 }
 
 .user-message {
