@@ -1,14 +1,14 @@
 <div class="input-wrapper" style="position: relative;">
   <input
-    [type]="type === 'password' && !showPassword ? 'password' : 'text'"
-    [placeholder]="placeholder"
-    [name]="name"
-    [required]="required"
+    [type]="type() === 'password' && !showPassword ? 'password' : 'text'"
+    [placeholder]="placeholder()"
+    [name]="name()"
+    [required]="required()"
     [value]="internalValue"
     (input)="onInput($event)"
     class="custom-input list-of-chats-font"
   />
-  @if (type === 'password') {
+  @if (type() === 'password') {
     <button
       type="button"
       class="show-password-btn"

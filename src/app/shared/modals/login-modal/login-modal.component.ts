@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, output} from '@angular/core';
 import {ButtonComponent} from "../../common-ui/button/button.component";
 import {InputComponent} from "../../common-ui/input/input.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -19,8 +19,8 @@ export class LoginModalComponent {
   loginForm: FormGroup;
   errorMessage = '';
 
-  @Output() close = new EventEmitter<void>();
-  @Output() switchToRegister = new EventEmitter<void>();
+  close = output<void>();
+  switchToRegister = output<void>();
 
   constructor(
     private fb: FormBuilder,

@@ -1,5 +1,5 @@
-import { Component, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {Component, forwardRef, input} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
   selector: 'app-input',
@@ -16,10 +16,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class InputComponent implements ControlValueAccessor {
-  @Input() type: string = 'text';
-  @Input() placeholder: string = '';
-  @Input() name: string = '';
-  @Input() required: boolean = false;
+  type = input<string>('text');
+  placeholder = input<string>('');
+  name = input<string>('');
+  required = input<boolean>(false);
 
   internalValue: string = '';
   showPassword: boolean = false;

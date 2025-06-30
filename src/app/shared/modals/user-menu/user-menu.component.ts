@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, output} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
 import {ModalService} from '../../../core/services/modal.service';
 
@@ -9,7 +9,7 @@ import {ModalService} from '../../../core/services/modal.service';
   styleUrl: './user-menu.component.scss'
 })
 export class UserMenuComponent {
-  @Output() closeMenu = new EventEmitter<void>();
+  closeMenu = output<void>();
 
   constructor(private authService: AuthService, protected modalService: ModalService) {}
 

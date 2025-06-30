@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
@@ -11,18 +11,18 @@ import {Router} from '@angular/router';
   styleUrl: './chat-input.component.scss'
 })
 export class ChatInputComponent {
-  @Input() placeholder: string = 'Enter your wishes for the trip';
-  @Input() link: string | null = null;
+  placeholder = input<string>('Enter your wishes for the trip');
+  link = input<string | null>(null);
 
-  @Output() onClick = new EventEmitter<string>();
+  onClick = output<string>();
 
   inputValue: string = '';
 
   constructor(private router: Router) {}
 
   onSendClick() {
-    if (this.link) {
-      this.router.navigate([this.link]);
+    if (this.link()) {
+      this.router.navigate([this.link()]);
       this.onClick.emit(this.inputValue);
     } else {
       this.onClick.emit(this.inputValue);

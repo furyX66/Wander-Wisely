@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, output} from '@angular/core';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {InputComponent} from '../../common-ui/input/input.component';
 import {ButtonComponent} from '../../common-ui/button/button.component';
@@ -15,7 +15,7 @@ import {ButtonComponent} from '../../common-ui/button/button.component';
   standalone: true,
 })
 export class SettingsWindowComponent {
-  @Output() close = new EventEmitter<void>();
+  close = output<void>();
 
   closeModal() {
     this.close.emit();

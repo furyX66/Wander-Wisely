@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './user-message.component.scss'
 })
 export class UserMessageComponent {
-  @Input() text: string = '';
+  text = input<string>('');
 }

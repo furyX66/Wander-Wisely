@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, output} from '@angular/core';
 import {InputComponent} from '../../common-ui/input/input.component';
 import {ButtonComponent} from '../../common-ui/button/button.component';
 import {AuthService} from '../../../core/services/auth.service';
@@ -27,8 +27,8 @@ export class RegisterModalComponent {
   registrationForm: FormGroup;
   errorMessage = '';
 
-  @Output() close = new EventEmitter<void>();
-  @Output() switchToLogin = new EventEmitter<void>();
+  close = output<void>();
+  switchToLogin = output<void>();
 
   constructor(
     private authService: AuthService,
