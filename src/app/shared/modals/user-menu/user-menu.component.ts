@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {AuthService} from '../../../services/auth.service';
-import {ModalService} from '../../../services/modal.service';
+import {AuthService} from '../../../core/services/auth.service';
+import {ModalService} from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-user-menu',

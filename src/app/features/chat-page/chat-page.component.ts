@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { SideBarComponent } from '../side-bar/side-bar.component';
-import { ChatInputComponent } from '../../shared/chat-input/chat-input.component';
-import { MapComponent } from '../../shared/map/map.component';
-import { UserMessageComponent } from '../user-message/user-message.component';
+import { SideBarComponent } from '../../shared/chat/side-bar/side-bar.component';
+import { ChatInputComponent } from '../../shared/common-ui/chat-input/chat-input.component';
+import { MapComponent } from '../../shared/common-ui/map/map.component';
+import { UserMessageComponent } from '../../shared/chat/user-message/user-message.component';
 import { NgForOf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import {SettingsWindowComponent} from '../../modals/settings-window/settings-window.component';
-import {ModalService} from '../../../services/modal.service';
+import {SettingsWindowComponent} from '../../shared/modals/settings-window/settings-window.component';
+import {ModalService} from '../../core/services/modal.service';
 import {Subscription} from 'rxjs';
 
 @Component({

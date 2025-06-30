@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
-import {UserType} from '../../types/UserType';
-import {environment} from '../../environments/environment';
+import {UserType} from '../../../types/UserType';
+import {environment} from '../../../environments/environment';
 
 export interface RegistrationUserDto {
   username: string;

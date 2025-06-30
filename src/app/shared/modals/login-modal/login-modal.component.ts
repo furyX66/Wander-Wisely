@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {ButtonComponent} from "../../shared/button/button.component";
-import {InputComponent} from "../../shared/input/input.component";
+import {ButtonComponent} from "../../common-ui/button/button.component";
+import {InputComponent} from "../../common-ui/input/input.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../../services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login-modal',

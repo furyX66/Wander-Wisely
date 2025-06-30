@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {InputComponent} from '../../shared/input/input.component';
-import {ButtonComponent} from '../../shared/button/button.component';
-import {AuthService} from '../../../services/auth.service';
+import {InputComponent} from '../../common-ui/input/input.component';
+import {ButtonComponent} from '../../common-ui/button/button.component';
+import {AuthService} from '../../../core/services/auth.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;

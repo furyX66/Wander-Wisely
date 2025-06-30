@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import {MainPageComponent} from './common-ui/main-screen/main-page/main-page.component';
-import {ChatPageComponent} from './common-ui/chat/chat-page/chat-page.component';
+import {MainPageComponent} from './features/main-page/main-page.component';
+import {ChatPageComponent} from './features/chat-page/chat-page.component';
 
 export const routes: Routes = [
   {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {MainTitleComponent} from '../main-title/main-title.component';
-import {HeaderComponent} from '../header/header.component';
-import {ChatInputComponent} from "../../shared/chat-input/chat-input.component";
+import {MainTitleComponent} from '../../shared/main-screen/main-title/main-title.component';
+import {HeaderComponent} from '../../shared/main-screen/header/header.component';
+import {ChatInputComponent} from "../../shared/common-ui/chat-input/chat-input.component";
 
 @Component({
   selector: 'app-main-page',

@@ -1,48 +1,48 @@
 import {Component, OnInit} from '@angular/core';
-import {ColorSchemeSwitchComponent} from '../../shared/color-scheme-switch/color-scheme-switch.component';
-import {SignUpButtonComponent} from '../../shared/sign-up-button/sign-up-button.component';
-import {LoginButtonComponent} from '../../shared/login-button/login-button.component';
-import {LogoComponent} from '../../shared/logo/logo.component';
-import {RegisterModalComponent} from '../../modals/register-modal/register-modal.component';
+import {LoginButtonComponent} from '../../common-ui/login-button/login-button.component';
+import {SignUpButtonComponent} from '../../common-ui/sign-up-button/sign-up-button.component';
+import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
+import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {LoginModalComponent} from '../../modals/login-modal/login-modal.component';
+import {RegisterModalComponent} from '../../modals/register-modal/register-modal.component';
+import {AuthService} from '../../../core/services/auth.service';
 import {Observable} from 'rxjs';
-import {UserType} from '../../../../types/UserType';
-import {AuthService} from '../../../services/auth.service';
 import {AsyncPipe} from '@angular/common';
+import {UserType} from '../../../../types/UserType';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
-import {UserService} from '../../../services/user.service';
-
+import {UserService} from '../../../core/services/user.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-side-bar',
   imports: [
-    ColorSchemeSwitchComponent,
-    SignUpButtonComponent,
     LoginButtonComponent,
+    SignUpButtonComponent,
+    ColorSchemeSwitchComponent,
     LogoComponent,
-    RegisterModalComponent,
     LoginModalComponent,
+    RegisterModalComponent,
     AsyncPipe,
     ProfileIcon,
-    UserMenuComponent,
+    UserMenuComponent
   ],
-  templateUrl: './header.component.html',
+  templateUrl: './side-bar.component.html',
   standalone: true,
-  styleUrl: './header.component.scss'
+  styleUrl: './side-bar.component.scss'
 })
-export class HeaderComponent implements OnInit{
+
+export class SideBarComponent implements OnInit {
   showRegistrationModal = false;
   showLoginModal = false;
   showUserMenu = false;
 
-  constructor(public authService: AuthService, private userService: UserService) {
+  user$: Observable<UserType | null>;
+  isLoggedIn$: Observable<boolean>;
+
+  constructor(private authService: AuthService, private userService : UserService) {
     this.user$ = this.userService.currentUser$;
     this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
-
-  user$: Observable<UserType | null>;
-  isLoggedIn$: Observable<boolean>;
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
@@ -70,10 +70,6 @@ export class HeaderComponent implements OnInit{
 
   toggleUserMenu() {
     this.showUserMenu = !this.showUserMenu;
-  }
-
-  closeUserMenu() {
-    this.showUserMenu = false;
   }
 
   closeModals() {

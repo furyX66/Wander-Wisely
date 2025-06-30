@@ -7,8 +7,8 @@ import {
   provideHttpClient,
   withInterceptorsFromDi
 } from '@angular/common/http';
-import { JwtInterceptor } from './interceptors/jwt.interceptor';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { JwtInterceptor } from './app/core/interceptors/jwt.interceptor';
+import { AuthInterceptor } from './app/core/interceptors/auth.interceptor';
 
 bootstrapApplication(AppComponent, {
   ...appConfig,
