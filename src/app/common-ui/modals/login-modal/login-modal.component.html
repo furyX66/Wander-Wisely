@@ -2,26 +2,27 @@
 <div class="modal-wrapper">
   <div class="modal-content">
     <h1 class="modal-window-title">Login</h1>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 36px; width:100%">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+          style="display: flex; flex-direction: column; gap: 36px; width:100%">
       <div class="modal-window-inputs">
         <div class="modal-window-input-field">
           <p class="list-of-chats-selected">Email or username</p>
-          <app-input formControlName="emailOrUsername" type="email"/>
+          <app-input formControlName="emailOrUsername"/>
           @if (loginForm.get('emailOrUsername')?.errors?.['required'] && loginForm.get('emailOrUsername')?.touched) {
             <div class="error-message">Email or username is required</div>
           }
         </div>
         <div class="modal-window-input-field">
           <p class="list-of-chats-selected">Password</p>
-          <app-input formControlName="password" type="password" />
+          <app-input formControlName="password" type="password"/>
           @if (loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched) {
             <div class="error-message">Password is required</div>
           }
         </div>
       </div>
-    @if (errorMessage) {
-      <div class="error-message" style="text-align: center">{{ errorMessage }}</div>
-    }
+      @if (errorMessage) {
+        <div class="error-message" style="text-align: center">{{ errorMessage }}</div>
+      }
       <app-button text="Login" type="submit"/>
     </form>
     <p class="poppins-light">Forgot Password?</p>

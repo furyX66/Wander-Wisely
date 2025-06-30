@@ -1,16 +1,28 @@
 <div class="header">
   <app-logo/>
   <div class="menu-buttons">
+    @if (!(isLoggedIn$  | async)) {
     <app-color-scheme-switch/>
     <app-login-button (click)="openLoginModal()"/>
     <app-sign-up-button (click)="openRegistrationModal()"/>
+    } @else {
+      <section class="user-signed">
+        <app-color-scheme-switch/>
+        <p (click)="toggleUserMenu()" style="cursor:pointer" >{{ (user$ | async)?.username }}</p>
+        <icon-profile/>
+      </section>
+    }
   </div>
 </div>
+@if (showUserMenu){
+  <app-user-menu (closeMenu)="closeUserMenu()"/>
+}
 @if(showRegistrationModal){
   <app-register-modal (switchToLogin)="handleSwitchToLogin()" (close)="closeModals()"/>
 }
 @if(showLoginModal){
   <app-login-modal  (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()" />
 }
+
 
 

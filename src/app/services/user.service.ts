@@ -1,7 +1,8 @@
-// src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {UserType} from '../../types/UserType';
+import {environment} from '../../environments/environment';
 
 export interface RegistrationUserDto {
   username: string;
@@ -18,7 +19,9 @@ export interface LoginUserDto {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:5000/api/user';
+  private apiUrl = environment.apiUrl;
+  private currentUserSubject = new BehaviorSubject<UserType | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -26,15 +29,13 @@ export class UserService {
     return this.http.get(this.apiUrl);
   }
 
+  getCurrentUser(): Observable<UserType> {
+    return this.http.get<UserType>(`${this.apiUrl}/user/me`).pipe(
+      tap(user => this.currentUserSubject.next(user))
+    );
+  }
+
   getUserById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
-  }
-
-  registerUser(dto: RegistrationUserDto): Observable<any> {
-    return this.http.post(`${this.apiUrl}/registration`, dto);
-  }
-
-  loginUser(dto: LoginUserDto): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, dto);
   }
 }

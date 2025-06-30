@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
-import {SideBarComponent} from '../side-bar/side-bar.component';
-import {ChatInputComponent} from '../../shared/chat-input/chat-input.component';
-import {MapComponent} from '../../shared/map/map.component';
-import {UserMessageComponent} from '../user-message/user-message.component';
-import {NgForOf} from '@angular/common';
+import { SideBarComponent } from '../side-bar/side-bar.component';
+import { ChatInputComponent } from '../../shared/chat-input/chat-input.component';
+import { MapComponent } from '../../shared/map/map.component';
+import { UserMessageComponent } from '../user-message/user-message.component';
+import { NgForOf } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import {SettingsWindowComponent} from '../../modals/settings-window/settings-window.component';
+import {ModalService} from '../../../services/modal.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-chat-page',
@@ -12,19 +16,43 @@ import {NgForOf} from '@angular/common';
     ChatInputComponent,
     MapComponent,
     UserMessageComponent,
-    NgForOf
+    NgForOf,
+    SettingsWindowComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
   styleUrl: './chat-page.component.scss'
 })
 export class ChatPageComponent {
+  showEditProfileModal = false;
   messages: string[] = [];
+  private modalSub?: Subscription;
+
+  constructor(private http: HttpClient, protected modalService: ModalService) {}
+
+  ngOnInit() {
+    this.modalSub = this.modalService.editProfileModal$.subscribe(open => {
+      this.showEditProfileModal = open;
+    });
+  }
+
+  ngOnDestroy() {
+    this.modalSub?.unsubscribe();
+  }
 
   handleChatInput(value: string) {
-    console.log('User input', value);
     if (value.trim()) {
-      this.messages.push(value);
+      this.messages.push(`Ty: ${value}`);
+
+      this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
+        next: res => {
+          this.messages.push(`AI: ${res.reply}`);
+        },
+        error: err => {
+          this.messages.push('AI: Wystąpił błąd po stronie serwera');
+        }
+      });
+
     }
   }
 }

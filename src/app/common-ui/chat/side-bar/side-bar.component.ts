@@ -11,6 +11,7 @@ import {AsyncPipe} from '@angular/common';
 import {UserType} from '../../../../types/UserType';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -38,14 +39,14 @@ export class SideBarComponent implements OnInit {
   user$: Observable<UserType | null>;
   isLoggedIn$: Observable<boolean>;
 
-  constructor(public authService: AuthService) {
-    this.user$ = this.authService.currentUser$;
+  constructor(private authService: AuthService, private userService : UserService) {
+    this.user$ = this.userService.currentUser$;
     this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.authService.getCurrentUser().subscribe();
+      this.userService.getCurrentUser().subscribe();
     }
   }
 

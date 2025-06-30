@@ -12,3 +12,7 @@
     ></app-chat-input>
   </section>
 <app-map/>
+
+@if(showEditProfileModal){
+  <app-settings-window (close)="modalService.closeEditProfileModal()"/>
+}

@@ -18,6 +18,6 @@ export class ColorSchemeSwitchComponent {
   }
 
   get iconPath() {
-    return this.isDarkTheme ? '/assets/icons/moon-icon.svg' : '/assets/icons/sun-icon.svg';
+    return this.isDarkTheme ? 'assets/icons/moon-icon.svg' : 'assets/icons/sun-icon.svg';
   }
 }
