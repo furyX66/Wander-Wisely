@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 
 @Component({
@@ -8,13 +8,27 @@ import {NgOptimizedImage} from '@angular/common';
   standalone: true,
   styleUrl: './color-scheme-switch.component.scss'
 })
-export class ColorSchemeSwitchComponent {
+export class ColorSchemeSwitchComponent implements OnInit {
   isDarkTheme = false;
+
+  ngOnInit() {
+    const saved = localStorage.getItem('isDarkTheme');
+    if (saved !== null) {
+      this.isDarkTheme = saved === 'true';
+    } else {
+      this.isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    this.updateBodyClass();
+  }
 
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
-    const body = document.body;
-    body.classList.toggle('dark-mode');
+    localStorage.setItem('isDarkTheme', String(this.isDarkTheme));
+    this.updateBodyClass();
+  }
+
+  updateBodyClass() {
+    document.body.classList.toggle('dark-mode', this.isDarkTheme);
   }
 
   get iconPath() {
