@@ -20,6 +20,7 @@ export class InputComponent implements ControlValueAccessor {
   placeholder = input<string>('');
   name = input<string>('');
   required = input<boolean>(false);
+  autocomplete = input<string>('');
 
   internalValue: string = '';
   showPassword: boolean = false;

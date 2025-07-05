@@ -2,7 +2,7 @@ import {Component, OnInit, output} from '@angular/core';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {InputComponent} from '../../common-ui/input/input.component';
 import {ButtonComponent} from '../../common-ui/button/button.component';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services/user.service';
 
 @Component({
@@ -20,8 +20,11 @@ import {UserService} from '../../../core/services/user.service';
 export class SettingsWindowComponent implements OnInit {
   close = output<void>();
   personalInfoForm!: FormGroup;
-  successMessage = '';
-  errorMessage = '';
+  passwordForm!: FormGroup;
+  userInfoSuccessMessage = '';
+  userInfoErrorMessage = '';
+  passwordSuccessMessage='';
+  passwordErrorMessage = '';
   userId!: number;
   oldUser: any;
 
@@ -36,28 +39,63 @@ export class SettingsWindowComponent implements OnInit {
         email: [user.email],
       });
     });
+    this.passwordForm = this.fb.group({
+      currentPassword: ["", Validators.required],
+      newPassword: ["", Validators.required],
+      repeatPassword: ["", Validators.required],
+    })
   }
 
   onPersonalInfoFormSubmit() {
-    this.successMessage = '';
-    this.errorMessage = '';
+    this.userInfoSuccessMessage = '';
+    this.userInfoErrorMessage = '';
     if (this.personalInfoForm.valid) {
       const patch = this.createPatch();
 
       if (patch.length > 0) {
         this.userService.updateUser(this.userId, patch).subscribe({
           next: updatedUser => {
-            this.successMessage = 'User updated successfully';
+            this.userInfoSuccessMessage = 'User updated successfully';
             console.log('User updated successfully:', updatedUser);
             this.oldUser = updatedUser;
           },
           error: error => {
-            this.errorMessage = 'Error updating user';
+            this.userInfoErrorMessage = 'Error updating user';
             console.error('Error updating user', error);
           }
         });
       }
     }
+  }
+
+  onPasswordFormSubmit() {
+    this.passwordSuccessMessage = '';
+    this.passwordErrorMessage = '';
+
+    if (this.passwordForm.invalid) {
+      this.passwordSuccessMessage = 'Please fill all fields correctly';
+      return;
+    }
+
+    const { currentPassword, newPassword, repeatPassword } = this.passwordForm.value;
+
+    if (newPassword !== repeatPassword) {
+      this.passwordErrorMessage = 'Passwords do not match';
+      return;
+    }
+
+    this.userService.changePassword({
+      currentPassword,
+      newPassword
+    }).subscribe({
+      next: () => {
+        this.passwordSuccessMessage = 'Password changed successfully';
+        this.passwordForm.reset();
+      },
+      error: err => {
+        this.passwordErrorMessage = err.error?.message || 'Error updating password';
+      }
+    });
   }
 
   private createPatch(): any[] {

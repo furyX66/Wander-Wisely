@@ -4,17 +4,6 @@ import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {UserType} from '../../../types/UserType';
 import {environment} from '../../../environments/environment';
 
-export interface RegistrationUserDto {
-  username: string;
-  email: string;
-  password: string;
-}
-
-export interface LoginUserDto {
-  emailOrUsername: string;
-  password: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -39,6 +28,10 @@ export class UserService {
     return this.http.patch(`${this.apiUrl}/user/${id}`, patch, {
       headers: { 'Content-Type': 'application/json-patch+json' }
     });
+  }
+
+  changePassword(data: { currentPassword: string; newPassword: string }) {
+    return this.http.post(`${this.apiUrl}/user/change-password`, data);
   }
 
   getUserById(id: number): Observable<any> {

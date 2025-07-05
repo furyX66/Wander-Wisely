@@ -6,6 +6,7 @@
   </ul>
   <section class="edit-profile-content">
     <icon-profile size="180" strokeWidth="0.2"/>
+    @if(personalInfoForm){
     <form [formGroup]="personalInfoForm" (ngSubmit)="onPersonalInfoFormSubmit()" class="form">
       <div class="modal-window-input-field">
         <p class="list-of-chats-selected">Username</p>
@@ -16,20 +17,30 @@
         <app-input formControlName="email" type="email"/>
       </div>
       <app-button type="submit" text="Save information"/>
-      @if(errorMessage){
-        <p class="error-message" style="text-align: center">{{errorMessage}}</p>
+      @if (userInfoSuccessMessage) {
+        <p class="error-message" style="text-align: center">{{ userInfoSuccessMessage }}</p>
       }
-      @if(successMessage){
-        <p class="list-of-chats-font" style="text-align: center">{{successMessage}}</p>
+      @if (userInfoErrorMessage) {
+        <p class="list-of-chats-font" style="text-align: center">{{ userInfoErrorMessage }}</p>
       }
     </form>
-    <div class="modal-window-input-field" style="gap:12px">
+    }
+    @if(passwordForm){
+    <form [formGroup]="passwordForm" (ngSubmit)="onPasswordFormSubmit()" class="modal-window-input-field"
+          style="gap:12px">
       <p class="list-of-chats-selected">Password</p>
-      <app-input placeholder="Current password" type="password"/>
-      <app-input placeholder="New password" type="password"/>
-      <app-input placeholder="Repeat new password" type="password"/>
-    </div>
-    <app-button text="Save information"/>
+      <app-input formControlName="currentPassword"  placeholder="Current password" type="password"/>
+      <app-input formControlName="newPassword"  placeholder="New password" type="password"/>
+      <app-input formControlName="repeatPassword" placeholder="Repeat new password" type="password"/>
+      <app-button type="submit" text="Save information"/>
+      @if (passwordErrorMessage) {
+        <p class="error-message" style="text-align: center">{{ passwordErrorMessage }}</p>
+      }
+      @if (passwordSuccessMessage) {
+        <p class="list-of-chats-font" style="text-align: center">{{ passwordSuccessMessage }}</p>
+      }
+    </form>
+    }
   </section>
 </div>
 
