@@ -1,0 +1,19 @@
+@if(personalInfoForm){
+  <form [formGroup]="personalInfoForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="modal-window-input-field">
+      <p class="list-of-chats-selected">Username</p>
+      <app-input formControlName="username"/>
+    </div>
+    <div class="modal-window-input-field">
+      <p class="list-of-chats-selected">Email</p>
+      <app-input formControlName="email" type="email"/>
+    </div>
+    <app-button type="submit" text="Save information"/>
+    @if (successMessage) {
+      <p class="list-of-chats-font" style="text-align: center">{{ successMessage }}</p>
+    }
+    @if (errorMessage) {
+      <p class="error-message" style="text-align: center">{{ errorMessage }}</p>
+    }
+  </form>
+}
