@@ -6,14 +6,23 @@
   </ul>
   <section class="edit-profile-content">
     <icon-profile size="180" strokeWidth="0.2"/>
-    <div class="modal-window-input-field">
-      <p class="list-of-chats-selected">Name</p>
-      <app-input/>
-    </div>
-    <div class="modal-window-input-field">
-      <p class="list-of-chats-selected">Email</p>
-      <app-input type="email"/>
-    </div>
+    <form [formGroup]="personalInfoForm" (ngSubmit)="onPersonalInfoFormSubmit()" class="form">
+      <div class="modal-window-input-field">
+        <p class="list-of-chats-selected">Username</p>
+        <app-input formControlName="username"/>
+      </div>
+      <div class="modal-window-input-field">
+        <p class="list-of-chats-selected">Email</p>
+        <app-input formControlName="email" type="email"/>
+      </div>
+      <app-button type="submit" text="Save information"/>
+      @if(errorMessage){
+        <p class="error-message" style="text-align: center">{{errorMessage}}</p>
+      }
+      @if(successMessage){
+        <p class="list-of-chats-font" style="text-align: center">{{successMessage}}</p>
+      }
+    </form>
     <div class="modal-window-input-field" style="gap:12px">
       <p class="list-of-chats-selected">Password</p>
       <app-input placeholder="Current password" type="password"/>

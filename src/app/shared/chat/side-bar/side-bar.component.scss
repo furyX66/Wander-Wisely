@@ -97,6 +97,7 @@
   display: flex;
   width: calc(100% - 20px);
   justify-content: space-between;
+  gap: 20px;
   align-items: center;
   padding-left: 20px;
   padding-bottom: 16px;
@@ -112,5 +113,9 @@ app-user-menu{
   position: absolute;
   bottom: 48px;
   left: 46px;
+}
+
+icon-profile{
+  cursor: pointer;
 }
 

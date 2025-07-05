@@ -26,8 +26,13 @@ app-user-menu{
   right: 24px;
 }
 
+icon-profile{
+  cursor: pointer;
+}
+
 @media (max-width: 768px){
   .header{
     padding: 12px;
   }
 }
+

@@ -32,6 +32,12 @@
   align-self: stretch;
 }
 
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 li{
   cursor: pointer;
 }

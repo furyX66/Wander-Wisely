@@ -38,7 +38,7 @@
     </section>
   } @else {
     <section class="bottom-bar">
-      <icon-profile/>
+      <icon-profile (click)="toggleUserMenu()"/>
       <p (click)="toggleUserMenu()" style="cursor:pointer" >{{ (user$ | async)?.username }}</p>
       <app-color-scheme-switch/>
     </section>

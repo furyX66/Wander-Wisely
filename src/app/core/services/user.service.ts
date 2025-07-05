@@ -35,6 +35,12 @@ export class UserService {
     );
   }
 
+  updateUser(id: number, patch: any[]) {
+    return this.http.patch(`${this.apiUrl}/user/${id}`, patch, {
+      headers: { 'Content-Type': 'application/json-patch+json' }
+    });
+  }
+
   getUserById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }

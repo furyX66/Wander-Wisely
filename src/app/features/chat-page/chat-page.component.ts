@@ -43,15 +43,15 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   handleChatInput(value: string) {
     if (value.trim()) {
-      this.messages.push({ text: `Ту: ${value}`, author: 'user' });
+      this.messages.push({ text: `${value}`, author: 'user' });
 
       this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
         next: res => {
-          this.messages.push({ text: `Ту: ${value}`, author: 'user' });
+          this.messages.push({ text: `${value}`, author: 'user' });
           console.log(res)
         },
         error: err => {
-          this.messages.push({ text: `AI: Wystąpił błąd po stronie serwera`, author: 'assistant' });
+          this.messages.push({ text: `Wystąpił błąd po stronie serwera`, author: 'assistant' });
           console.log(err);
         }
       });

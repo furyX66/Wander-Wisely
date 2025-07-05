@@ -9,7 +9,7 @@
       <section class="user-signed">
         <app-color-scheme-switch/>
         <p (click)="toggleUserMenu()" style="cursor:pointer" >{{ (user$ | async)?.username }}</p>
-        <icon-profile/>
+        <icon-profile (click)="toggleUserMenu()"/>
       </section>
     }
   </div>
