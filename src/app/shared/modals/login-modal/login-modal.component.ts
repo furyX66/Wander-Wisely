@@ -41,6 +41,7 @@ export class LoginModalComponent {
       next: () => {
         this.errorMessage = '';
         this.close.emit();
+        // window.location.reload()
       },
       error: err => {
         this.errorMessage = err.error?.message || 'Login failed';

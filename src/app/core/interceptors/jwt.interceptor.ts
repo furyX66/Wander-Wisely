@@ -15,15 +15,11 @@ export class JwtInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     if (request.url.startsWith(environment.apiUrl)) {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        request = request.clone({
-          setHeaders: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-      }
+      request = request.clone({
+        withCredentials: true
+      });
     }
+
     return next.handle(request);
   }
 }

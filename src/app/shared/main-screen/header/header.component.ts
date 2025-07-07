@@ -15,69 +15,67 @@ import {UserService} from '../../../core/services/user.service';
 
 
 @Component({
-  selector: 'app-header',
-  imports: [
-    ColorSchemeSwitchComponent,
-    SignUpButtonComponent,
-    LoginButtonComponent,
-    LogoComponent,
-    RegisterModalComponent,
-    LoginModalComponent,
-    AsyncPipe,
-    ProfileIcon,
-    UserMenuComponent,
-  ],
-  templateUrl: './header.component.html',
-  standalone: true,
-  styleUrl: './header.component.scss'
+    selector: 'app-header',
+    imports: [
+        ColorSchemeSwitchComponent,
+        SignUpButtonComponent,
+        LoginButtonComponent,
+        LogoComponent,
+        RegisterModalComponent,
+        LoginModalComponent,
+        AsyncPipe,
+        ProfileIcon,
+        UserMenuComponent,
+    ],
+    templateUrl: './header.component.html',
+    standalone: true,
+    styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit{
-  showRegistrationModal = false;
-  showLoginModal = false;
-  showUserMenu = false;
+export class HeaderComponent implements OnInit {
+    showRegistrationModal = false;
+    showLoginModal = false;
+    showUserMenu = false;
 
-  constructor(public authService: AuthService, private userService: UserService) {
-    this.user$ = this.userService.currentUser$;
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
-  }
-
-  user$: Observable<UserType | null>;
-  isLoggedIn$: Observable<boolean>;
-
-  ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.userService.getCurrentUser().subscribe();
+    constructor(public authService: AuthService, private userService: UserService) {
+        this.user$ = this.userService.currentUser$;
+        this.isLoggedIn$ = this.authService.isLoggedIn$;
     }
-  }
 
-  openRegistrationModal() {
-    this.showLoginModal = false;
-    this.showRegistrationModal = true;
-  }
+    user$: Observable<UserType | null>;
+    isLoggedIn$: Observable<boolean>;
 
-  openLoginModal() {
-    this.showRegistrationModal = false;
-    this.showLoginModal = true;
-  }
+    ngOnInit() {
+        this.userService.getCurrentUser().subscribe();
+    }
 
-  handleSwitchToLogin() {
-    this.openLoginModal();
-  }
+    openRegistrationModal() {
+        this.showLoginModal = false;
+        this.showRegistrationModal = true;
+    }
 
-  handleSwitchToRegister() {
-    this.openRegistrationModal();
-  }
+    openLoginModal() {
+        this.showRegistrationModal = false;
+        this.showLoginModal = true;
+    }
 
-  toggleUserMenu() {
-    this.showUserMenu = !this.showUserMenu;
-  }
+    handleSwitchToLogin() {
+        this.openLoginModal();
+    }
 
-  closeUserMenu() {
-    this.showUserMenu = false;
-  }
+    handleSwitchToRegister() {
+        this.openRegistrationModal();
+    }
 
-  closeModals() {
-    this.showRegistrationModal = false;
-    this.showLoginModal = false;
-  }
+    toggleUserMenu() {
+        this.showUserMenu = !this.showUserMenu;
+    }
+
+    closeUserMenu() {
+        this.showUserMenu = false;
+    }
+
+    closeModals() {
+        this.showRegistrationModal = false;
+        this.showLoginModal = false;
+    }
 }

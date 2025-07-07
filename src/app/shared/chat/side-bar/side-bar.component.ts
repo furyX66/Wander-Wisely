@@ -14,66 +14,64 @@ import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
 
 @Component({
-  selector: 'app-side-bar',
-  imports: [
-    LoginButtonComponent,
-    SignUpButtonComponent,
-    ColorSchemeSwitchComponent,
-    LogoComponent,
-    LoginModalComponent,
-    RegisterModalComponent,
-    AsyncPipe,
-    ProfileIcon,
-    UserMenuComponent
-  ],
-  templateUrl: './side-bar.component.html',
-  standalone: true,
-  styleUrl: './side-bar.component.scss'
+    selector: 'app-side-bar',
+    imports: [
+        LoginButtonComponent,
+        SignUpButtonComponent,
+        ColorSchemeSwitchComponent,
+        LogoComponent,
+        LoginModalComponent,
+        RegisterModalComponent,
+        AsyncPipe,
+        ProfileIcon,
+        UserMenuComponent
+    ],
+    templateUrl: './side-bar.component.html',
+    standalone: true,
+    styleUrl: './side-bar.component.scss'
 })
 
 export class SideBarComponent implements OnInit {
-  showRegistrationModal = false;
-  showLoginModal = false;
-  showUserMenu = false;
+    showRegistrationModal = false;
+    showLoginModal = false;
+    showUserMenu = false;
 
-  user$: Observable<UserType | null>;
-  isLoggedIn$: Observable<boolean>;
+    user$: Observable<UserType | null>;
+    isLoggedIn$: Observable<boolean>;
 
-  constructor(private authService: AuthService, private userService : UserService) {
-    this.user$ = this.userService.currentUser$;
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
-  }
-
-  ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.userService.getCurrentUser().subscribe();
+    constructor(private authService: AuthService, private userService: UserService) {
+        this.user$ = this.userService.currentUser$;
+        this.isLoggedIn$ = this.authService.isLoggedIn$;
     }
-  }
 
-  openRegistrationModal() {
-    this.showLoginModal = false;
-    this.showRegistrationModal = true;
-  }
+    ngOnInit() {
+        this.userService.getCurrentUser().subscribe();
+    }
 
-  openLoginModal() {
-    this.showRegistrationModal = false;
-    this.showLoginModal = true;
-  }
+    openRegistrationModal() {
+        this.showLoginModal = false;
+        this.showRegistrationModal = true;
+    }
 
-  handleSwitchToLogin() {
-    this.openLoginModal();
-  }
+    openLoginModal() {
+        this.showRegistrationModal = false;
+        this.showLoginModal = true;
+    }
 
-  handleSwitchToRegister() {
-    this.openRegistrationModal();
-  }
+    handleSwitchToLogin() {
+        this.openLoginModal();
+    }
 
-  toggleUserMenu() {
-    this.showUserMenu = !this.showUserMenu;
-  }
+    handleSwitchToRegister() {
+        this.openRegistrationModal();
+    }
 
-  closeModals() {
-    this.showRegistrationModal = false;
-    this.showLoginModal = false;
-  }
+    toggleUserMenu() {
+        this.showUserMenu = !this.showUserMenu;
+    }
+
+    closeModals() {
+        this.showRegistrationModal = false;
+        this.showLoginModal = false;
+    }
 }
