@@ -55,7 +55,8 @@ export class PasswordFormPartComponent implements OnInit {
         this.passwordForm.reset();
       },
       error: err => {
-        this.errorMessage = err.error?.message || 'Error updating password';
+        console.log(err);
+        this.errorMessage = err.error || 'Error updating password';
       }
     });
   }

@@ -9,7 +9,7 @@ import {environment} from '../../../environments/environment';
 })
 export class UserService {
   private apiUrl = environment.apiUrl;
-  private currentUserSubject = new BehaviorSubject<UserType | null>(null);
+  currentUserSubject = new BehaviorSubject<any | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {}
@@ -25,7 +25,7 @@ export class UserService {
   }
 
   updateUser(id: number, patch: any[]) {
-    return this.http.patch(`${this.apiUrl}/user/${id}`, patch, {
+    return this.http.patch<UserType>(`${this.apiUrl}/user/${id}`, patch, {
       headers: { 'Content-Type': 'application/json-patch+json' }
     });
   }
