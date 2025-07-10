@@ -7,12 +7,14 @@
   padding: 0;
 
   /* Color scheme */
-  --background: var(--white);
+  --background-color: var(--white);
+  --assistant-message-color: var(--white);
+  --assistant-message-border: 1px solid var(--light-gray);
   --text-color: var(--black);
   --main-page-color: var(--yellow-gradient);
 
   /* Color styles */
-  --dark-gray: #272727;
+  --dark-gray: #303030;
   --black: #222222;
   --red: #ED1C24;
   --yellow: #FFBA08;
@@ -31,9 +33,11 @@
 
 /* Dark mode */
 .dark-mode {
-  --background: var(--black);
+  --background-color: var(--black);
+  --assistant-message-color: var(--dark-gray);
   --text-color: var(--white);
   --main-page-color: var(--black);
+  --assistant-message-border: none;
   background-size: 100% 100%;
 }
 *{
@@ -188,7 +192,7 @@
 }
 
 body {
-  background: var(--background);
+  background: var(--background-color);
   font-family: var(--main-font), sans-serif;
   color: var(--text-color);
   width: 100%;

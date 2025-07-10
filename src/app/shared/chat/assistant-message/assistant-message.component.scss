@@ -11,17 +11,12 @@
   justify-content: center;
   align-items: center;
   border-radius: 0 30px 30px 30px;
-  background: var(--white);
-  color: var(--black);
-  border: 1px solid var(--light-gray);
+  background: var(--assistant-message-color);
+  color: var(--text-color);
+  border: var(--assistant-message-border);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-}
-
-.assistant-icon{
-  width: 26px;
-  height: 26px;
 }
 

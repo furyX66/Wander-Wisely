@@ -27,5 +27,6 @@ export class ChatInputComponent {
     } else {
       this.onClick.emit(this.inputValue);
     }
+    this.inputValue = '';
   }
 }

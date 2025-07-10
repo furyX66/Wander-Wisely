@@ -28,10 +28,10 @@ app-map {
 
 .chat-messages{
   scroll-behavior: smooth;
-  height: 90vh;
+  height: 83vh;
   overflow-y: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 8px;
   align-items: flex-end;
   -ms-overflow-style: none;

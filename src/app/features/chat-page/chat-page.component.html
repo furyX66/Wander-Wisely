@@ -1,7 +1,7 @@
 <app-side-bar/>
 <section class="chat-area">
   <div class="chat-messages">
-    @for (msg of messages; track msg) {
+    @for (msg of messages.reverse(); track msg) {
       @if (msg.author === 'user') {
         <app-user-message
           [text]="msg.text"

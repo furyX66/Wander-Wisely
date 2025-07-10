@@ -40,9 +40,6 @@ export class InputComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
-
-  }
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
