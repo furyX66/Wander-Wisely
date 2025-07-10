@@ -12,20 +12,24 @@ import {UserType} from '../../../../types/UserType';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
+import {ChatIconComponent} from '../../../../../public/assets/icons/chat-icon';
+import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-icon';
 
 @Component({
     selector: 'app-side-bar',
-    imports: [
-        LoginButtonComponent,
-        SignUpButtonComponent,
-        ColorSchemeSwitchComponent,
-        LogoComponent,
-        LoginModalComponent,
-        RegisterModalComponent,
-        AsyncPipe,
-        ProfileIcon,
-        UserMenuComponent
-    ],
+  imports: [
+    LoginButtonComponent,
+    SignUpButtonComponent,
+    ColorSchemeSwitchComponent,
+    LogoComponent,
+    LoginModalComponent,
+    RegisterModalComponent,
+    AsyncPipe,
+    ProfileIcon,
+    UserMenuComponent,
+    ChatIconComponent,
+    NewChatIconComponent,
+  ],
     templateUrl: './side-bar.component.html',
     standalone: true,
     styleUrl: './side-bar.component.scss'

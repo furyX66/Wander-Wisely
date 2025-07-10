@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {MainScreenLogo} from '../../../../../public/assets/icons/main-screen-logo';
 
 @Component({
   selector: 'app-main-title',
   templateUrl: './main-title.component.html',
   styleUrls: ['./main-title.component.scss'],
   imports: [
-    CommonModule
+    CommonModule,
+    MainScreenLogo
   ],
   standalone: true
 })

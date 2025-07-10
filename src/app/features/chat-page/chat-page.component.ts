@@ -24,10 +24,11 @@ import {ChatMessage} from '../../../types/ChatMessageType';
   standalone: true,
   styleUrl: './chat-page.component.scss'
 })
-export class ChatPageComponent implements OnInit, OnDestroy {
+export class ChatPageComponent implements OnInit, OnDestroy  {
   showEditProfileModal = false;
   messages: ChatMessage[] = [];
   private modalSub?: Subscription;
+  private nextId = 0;
 
   constructor(private http: HttpClient, protected modalService: ModalService) {}
 
@@ -41,18 +42,21 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.modalSub?.unsubscribe();
   }
 
+  get reversedMessages(): ChatMessage[] {
+    return this.messages.slice().reverse();
+  }
+
   handleChatInput(value: string) {
     if (value.trim()) {
-      this.messages.push({ text: `${value}`, author: 'user' });
-
+      this.messages.push({ id: this.nextId++, text: `${value}`, author: 'user' });
       this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
         next: res => {
-          this.messages.push({ text: `${value}`, author: 'user' });
+          this.messages.push({id: this.nextId++, text: `${value}`, author: 'user' });
           console.log(res)
         },
         error: err => {
-          this.messages.push({ text: `Wystąpił błąd po stronie serwera`, author: 'assistant' });
-          console.log(err);
+          this.messages.push({id: this.nextId++, text: `Wystąpił błąd po stronie serwera`, author: 'assistant' });
+          console.error("Server error:",err.message);
         }
       });
 

@@ -1,7 +1,7 @@
 import {Component, input} from '@angular/core';
 
 @Component({
-  selector: 'icon-assistant-icon',
+  selector: 'icon-assistant',
   imports: [],
   template: `
     <svg xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ import {Component, input} from '@angular/core';
     }
   `
 })
-export class ProfileIcon {
+export class AssesstantIconComponent {
   width = input<number | string>(24);
   height = input<number | string>(21);
   strokeWidth = input<number | string>(1);
