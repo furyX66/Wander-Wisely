@@ -9,9 +9,7 @@ export class ModalService {
   openEditProfileModal() {
     this.editProfileModalSource.next(true);
   }
-
   closeEditProfileModal() {
     this.editProfileModalSource.next(false);
   }
-
 }

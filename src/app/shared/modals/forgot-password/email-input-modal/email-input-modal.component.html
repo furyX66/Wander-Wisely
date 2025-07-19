@@ -1,0 +1,17 @@
+<div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="modal-wrapper">
+  <div class="modal-content">
+    <h1 class="modal-window-title" style="color: var(--blue)">Change password</h1>
+    <p class="list-of-chats-font" style="text-align: center">Enter your email. We will send you verification code</p>
+    <form [formGroup]="emailInputForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 36px; width:100%">
+      <div class="modal-window-input-field">
+        <p class="list-of-chats-selected text-center">Email or username</p>
+        <app-input formControlName="email"/>
+        @if (emailInputForm.get('email')?.errors?.['required'] && emailInputForm.get('email')?.touched) {
+          <div class="error-message">Email is required</div>
+        }
+      </div>
+      <app-button text="Send code" type="submit"/>
+    </form>
+  </div>
+</div>

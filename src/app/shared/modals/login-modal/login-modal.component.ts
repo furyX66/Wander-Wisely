@@ -21,6 +21,7 @@ export class LoginModalComponent {
 
   close = output<void>();
   switchToRegister = output<void>();
+  switchToEmailInput = output<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +42,7 @@ export class LoginModalComponent {
       next: () => {
         this.errorMessage = '';
         this.close.emit();
-        // window.location.reload()
+        window.location.reload()
       },
       error: err => {
         this.errorMessage = err.error?.message || 'Login failed';

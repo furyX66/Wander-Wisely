@@ -14,6 +14,7 @@ import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
 import {ChatIconComponent} from '../../../../../public/assets/icons/chat-icon';
 import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-icon';
+import {EmailInputModalComponent} from '../../modals/forgot-password/email-input-modal/email-input-modal.component';
 
 @Component({
     selector: 'app-side-bar',
@@ -29,6 +30,7 @@ import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-
     UserMenuComponent,
     ChatIconComponent,
     NewChatIconComponent,
+    EmailInputModalComponent,
   ],
     templateUrl: './side-bar.component.html',
     standalone: true,
@@ -38,6 +40,7 @@ import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-
 export class SideBarComponent implements OnInit {
     showRegistrationModal = false;
     showLoginModal = false;
+    showEmailInputModal = false;
     showUserMenu = false;
 
     user$: Observable<UserType | null>;
@@ -54,12 +57,20 @@ export class SideBarComponent implements OnInit {
 
     openRegistrationModal() {
         this.showLoginModal = false;
+        this.showEmailInputModal = false;
         this.showRegistrationModal = true;
     }
 
     openLoginModal() {
         this.showRegistrationModal = false;
+        this.showEmailInputModal = false;
         this.showLoginModal = true;
+    }
+
+    openEmailInputModal() {
+      this.showLoginModal = false;
+      this.showRegistrationModal = false;
+      this.showEmailInputModal = true;
     }
 
     handleSwitchToLogin() {
@@ -70,6 +81,10 @@ export class SideBarComponent implements OnInit {
         this.openRegistrationModal();
     }
 
+    handleSwitchToEmailInput() {
+      this.openEmailInputModal();
+    }
+
     toggleUserMenu() {
         this.showUserMenu = !this.showUserMenu;
     }
@@ -77,5 +92,6 @@ export class SideBarComponent implements OnInit {
     closeModals() {
         this.showRegistrationModal = false;
         this.showLoginModal = false;
+        this.showEmailInputModal = false;
     }
 }

@@ -36,5 +36,8 @@
   <app-register-modal (switchToLogin)="handleSwitchToLogin()" (close)="closeModals()"/>
 }
 @if (showLoginModal) {
-  <app-login-modal (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()"/>
+  <app-login-modal (switchToEmailInput)="handleSwitchToEmailInput()" (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()"/>
+}
+@if (showEmailInputModal){
+  <app-email-input (close)="closeModals()"/>
 }

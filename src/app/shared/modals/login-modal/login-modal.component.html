@@ -25,10 +25,9 @@
       }
       <app-button text="Login" type="submit"/>
     </form>
-    <p class="poppins-light">Forgot Password?</p>
+    <a (click)="switchToEmailInput.emit()" style="cursor: pointer" class="poppins-light">Forgot Password?</a>
     <div class="thin-divider"></div>
-    <p class="acc-font">Don’t have an account? <a (click)="switchToRegister.emit()"
-                                                  style="font-weight: 600; cursor: pointer">Sign up</a></p>
+    <p class="acc-font">Don’t have an account? <a (click)="switchToRegister.emit()" style="font-weight: 600; cursor: pointer">Sign up</a></p>
   </div>
 </div>
 
