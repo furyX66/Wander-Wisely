@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, distinctUntilChanged, Observable} from 'rxjs';
 
 interface ModalState {
   id: string;
@@ -20,6 +20,7 @@ export class ModalService {
     return new Observable(observer => {
       this.modalState$.subscribe(state => {
         observer.next(state[modalId]?.isOpen || false);
+        distinctUntilChanged()
       });
     });
   }

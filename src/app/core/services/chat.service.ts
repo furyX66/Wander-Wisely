@@ -13,7 +13,7 @@ interface ChatResponseDto {
     providedIn: 'root'
 })
 export class ChatService {
-    private apiUrl = '/api/chat'; // dopasuj jeśli potrzebujesz pełny URL
+    private apiUrl = '/api/chat';
 
     constructor(private http: HttpClient) { }
 

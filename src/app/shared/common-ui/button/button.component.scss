@@ -2,6 +2,7 @@
   width: 100%;
 }
 .btn{
+  position: relative;
   display: flex;
   height: 40px;
   padding: 8px 16px;
@@ -22,3 +23,24 @@
   font-weight: 500;
   line-height: normal;
 }
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(0);
+  opacity: 0;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+  z-index: -1;
+}
+
+.btn:hover::before {
+  filter: blur(6px);
+  opacity: 0.6;
+}
+
