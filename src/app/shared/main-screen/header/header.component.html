@@ -15,14 +15,9 @@
   </div>
 </div>
 @if (showUserMenu){
-  <app-user-menu (closeMenu)="closeUserMenu()"/>
+  <app-user-menu/>
 }
-@if(showRegistrationModal){
-  <app-register-modal (switchToLogin)="handleSwitchToLogin()" (close)="closeModals()"/>
-}
-@if(showLoginModal){
-  <app-login-modal  (switchToRegister)="handleSwitchToRegister()" (close)="closeModals()" />
-}
+
 
 
 

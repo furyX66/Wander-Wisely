@@ -1,0 +1,15 @@
+@if (modalService.getModalState$(ModalType.LOGIN) | async) {
+  <app-login-modal (close)="modalService.closeModal(ModalType.LOGIN)" (switchToRegister)="switchToRegister()" (switchToEmailInput)="switchToEmailInput()"/>
+}
+
+@if (modalService.getModalState$(ModalType.REGISTER) | async){
+  <app-register-modal (close)="modalService.closeModal(ModalType.REGISTER)" (switchToLogin)="switchToLogin()"/>
+}
+
+@if (modalService.getModalState$(ModalType.EDIT_PROFILE) | async) {
+  <app-settings-window (close)="modalService.closeModal(ModalType.EDIT_PROFILE)"/>
+}
+
+@if (modalService.getModalState$(ModalType.FORGOT_PASSWORD) | async){
+  <app-email-input (close)="modalService.closeModal(ModalType.FORGOT_PASSWORD)"/>
+}

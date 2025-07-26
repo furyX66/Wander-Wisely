@@ -1,10 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {SignUpButtonComponent} from '../../common-ui/sign-up-button/sign-up-button.component';
 import {LoginButtonComponent} from '../../common-ui/login-button/login-button.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
-import {RegisterModalComponent} from '../../modals/register-modal/register-modal.component';
-import {LoginModalComponent} from '../../modals/login-modal/login-modal.component';
 import {Observable} from 'rxjs';
 import {UserType} from '../../../../types/UserType';
 import {AuthService} from '../../../core/services/auth.service';
@@ -12,70 +10,50 @@ import {AsyncPipe} from '@angular/common';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
+import {ModalType} from '../../../enums/ModalType';
+import {ModalService} from '../../../core/services/modal.service';
 
 
 @Component({
-    selector: 'app-header',
-    imports: [
-        ColorSchemeSwitchComponent,
-        SignUpButtonComponent,
-        LoginButtonComponent,
-        LogoComponent,
-        RegisterModalComponent,
-        LoginModalComponent,
-        AsyncPipe,
-        ProfileIcon,
-        UserMenuComponent,
-    ],
-    templateUrl: './header.component.html',
-    standalone: true,
-    styleUrl: './header.component.scss'
+  selector: 'app-header',
+  imports: [
+    ColorSchemeSwitchComponent,
+    SignUpButtonComponent,
+    LoginButtonComponent,
+    LogoComponent,
+    AsyncPipe,
+    ProfileIcon,
+    UserMenuComponent,
+  ],
+  templateUrl: './header.component.html',
+  standalone: true,
+  styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-    showRegistrationModal = false;
-    showLoginModal = false;
-    showUserMenu = false;
+  private modalService = inject(ModalService);
+  showUserMenu = false;
 
-    constructor(public authService: AuthService, private userService: UserService) {
-        this.user$ = this.userService.currentUser$;
-        this.isLoggedIn$ = this.authService.isLoggedIn$;
-    }
+  constructor(public authService: AuthService, private userService: UserService) {
+    this.user$ = this.userService.currentUser$;
+    this.isLoggedIn$ = this.authService.isLoggedIn$;
+  }
 
-    user$: Observable<UserType | null>;
-    isLoggedIn$: Observable<boolean>;
+  user$: Observable<UserType | null>;
+  isLoggedIn$: Observable<boolean>;
 
-    ngOnInit() {
-        this.userService.getCurrentUser().subscribe();
-    }
+  ngOnInit() {
+    this.userService.getCurrentUser().subscribe();
+  }
 
-    openRegistrationModal() {
-        this.showLoginModal = false;
-        this.showRegistrationModal = true;
-    }
+  openLoginModal(): void {
+    this.modalService.openModal(ModalType.LOGIN);
+  }
 
-    openLoginModal() {
-        this.showRegistrationModal = false;
-        this.showLoginModal = true;
-    }
+  openRegistrationModal(): void {
+    this.modalService.openModal(ModalType.REGISTER);
+  }
 
-    handleSwitchToLogin() {
-        this.openLoginModal();
-    }
-
-    handleSwitchToRegister() {
-        this.openRegistrationModal();
-    }
-
-    toggleUserMenu() {
-        this.showUserMenu = !this.showUserMenu;
-    }
-
-    closeUserMenu() {
-        this.showUserMenu = false;
-    }
-
-    closeModals() {
-        this.showRegistrationModal = false;
-        this.showLoginModal = false;
-    }
+  toggleUserMenu() {
+    this.showUserMenu = !this.showUserMenu;
+  }
 }

@@ -1,10 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {AuthService} from './core/services/auth.service';
+import {
+  ModalContainerComponentComponent
+} from './shared/modals/modal-container-component/modal-container-component.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ModalContainerComponentComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.scss'
