@@ -42,7 +42,6 @@ export class SideBarComponent implements OnInit {
     showLoginModal = false;
     showEmailInputModal = false;
     showUserMenu = false;
-
     user$: Observable<UserType | null>;
     isLoggedIn$: Observable<boolean>;
 

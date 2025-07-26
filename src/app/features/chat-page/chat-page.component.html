@@ -22,10 +22,10 @@
 </section>
 <app-map/>
 
-@if (showEditProfileModal) {
-  <app-settings-window (close)="modalService.closeEditProfileModal()"/>
+@if (modalService.getModalState$(ModalType.EDIT_PROFILE) | async) {
+  <app-settings-window (close)="modalService.closeModal(ModalType.EDIT_PROFILE)"/>
 }
 
-@if (showEditProfileModal) {
-  <app-settings-window (close)="modalService.closeEditProfileModal()"/>
+@if (modalService.getModalState$(ModalType.LOGIN) | async) {
+  <app-login-modal (close)="modalService.closeModal(ModalType.LOGIN)"/>
 }

@@ -9,6 +9,9 @@ import {ModalService} from '../../core/services/modal.service';
 import {Subscription} from 'rxjs';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ChatMessage} from '../../../types/ChatMessageType';
+import {ModalType} from '../../enums/ModalType';
+import {AsyncPipe} from '@angular/common';
+import {LoginModalComponent} from '../../shared/modals/login-modal/login-modal.component';
 
 @Component({
   selector: 'app-chat-page',
@@ -18,28 +21,32 @@ import {ChatMessage} from '../../../types/ChatMessageType';
     MapComponent,
     UserMessageComponent,
     SettingsWindowComponent,
-    AssistantMessageComponent
+    AssistantMessageComponent,
+    AsyncPipe,
+    LoginModalComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
   styleUrl: './chat-page.component.scss'
 })
 export class ChatPageComponent implements OnInit, OnDestroy  {
-  showEditProfileModal = false;
   messages: ChatMessage[] = [];
-  private modalSub?: Subscription;
+  private modalSub = new Subscription();
   private nextId = 0;
 
   constructor(private http: HttpClient, protected modalService: ModalService) {}
 
   ngOnInit() {
-    this.modalSub = this.modalService.editProfileModal$.subscribe(open => {
-      this.showEditProfileModal = open;
-    });
+    this.modalSub.add(
+      this.modalService.getModalState$(ModalType.EDIT_PROFILE)
+        .subscribe(isOpen => {
+          console.log('Edit profile modal is:', isOpen ? 'open' : 'closed');
+        })
+    );
   }
 
   ngOnDestroy() {
-    this.modalSub?.unsubscribe();
+    this.modalSub.unsubscribe();
   }
 
   get reversedMessages(): ChatMessage[] {
@@ -51,7 +58,11 @@ export class ChatPageComponent implements OnInit, OnDestroy  {
       this.messages.push({ id: this.nextId++, text: `${value}`, author: 'user' });
       this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
         next: res => {
-          this.messages.push({id: this.nextId++, text: `${value}`, author: 'user' });
+          this.messages.push({
+            id: this.nextId++,
+            text: res.reply,
+            author: 'assistant'
+          });
           console.log(res)
         },
         error: err => {
@@ -62,4 +73,6 @@ export class ChatPageComponent implements OnInit, OnDestroy  {
 
     }
   }
+
+  protected readonly ModalType = ModalType;
 }

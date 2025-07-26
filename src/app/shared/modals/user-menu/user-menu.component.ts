@@ -1,6 +1,7 @@
 import {Component, output} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
 import {ModalService} from '../../../core/services/modal.service';
+import {ModalType} from '../../../enums/ModalType';
 
 @Component({
   selector: 'app-user-menu',
@@ -19,6 +20,6 @@ export class UserMenuComponent {
   }
 
   openUserSettingsModal() {
-    this.modalService.openEditProfileModal();
+    this.modalService.openModal(ModalType.EDIT_PROFILE);
   }
 }
