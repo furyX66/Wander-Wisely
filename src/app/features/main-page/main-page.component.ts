@@ -13,6 +13,7 @@ import {ChatInputComponent} from "../../shared/common-ui/chat-input/chat-input.c
 export class MainPageComponent {
 
   handleChatInput(value: string) {
+    console.log("Chat Input:", value);
   }
 
 }

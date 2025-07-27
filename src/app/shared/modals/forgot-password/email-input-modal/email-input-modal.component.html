@@ -7,6 +7,9 @@
       <div class="modal-window-input-field">
         <p class="list-of-chats-selected text-center">Email or username</p>
         <app-input formControlName="email"/>
+        @if (emailInputForm.get('email')?.errors?.['email'] && emailInputForm.get('email')?.touched) {
+          <div class="error-message">Email format is invalid</div>
+        }
         @if (emailInputForm.get('email')?.errors?.['required'] && emailInputForm.get('email')?.touched) {
           <div class="error-message">Email is required</div>
         }

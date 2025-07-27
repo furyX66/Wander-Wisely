@@ -42,6 +42,13 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string): Observable<string> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/forgot-password`, { email })
+      .pipe(
+        map(response => response.message)
+      );
+  }
+
   logout() {
     this.http.post(`${this.apiUrl}/auth/logout`, {}, { withCredentials: true }).subscribe(() => {
       this.isLoggedInSubject.next(false);

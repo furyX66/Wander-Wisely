@@ -1,4 +1,4 @@
-import {Component, output} from '@angular/core';
+import {Component, inject, output} from '@angular/core';
 import {ButtonComponent} from "../../common-ui/button/button.component";
 import {InputComponent} from "../../common-ui/input/input.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -16,6 +16,7 @@ import {AuthService} from '../../../core/services/auth.service';
   standalone: true,
 })
 export class LoginModalComponent {
+  private authService = inject(AuthService);
   loginForm: FormGroup;
   errorMessage = '';
 
@@ -25,7 +26,6 @@ export class LoginModalComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       emailOrUsername: ['', Validators.required],
