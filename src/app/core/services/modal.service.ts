@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, distinctUntilChanged, Observable} from 'rxjs';
+import {BehaviorSubject, distinctUntilChanged, filter, Observable} from 'rxjs';
+import {NavigationStart, Router} from '@angular/router';
 
 interface ModalState {
   id: string;
@@ -11,6 +12,14 @@ interface ModalState {
 @Injectable({ providedIn: 'root' })
 export class ModalService {
   private readonly modalState$ = new BehaviorSubject<Record<string, ModalState>>({});
+
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe(() => {
+        this.closeAllModals();
+      });
+  }
 
   get allModalsState$(): Observable<Record<string, ModalState>> {
     return this.modalState$.asObservable();
