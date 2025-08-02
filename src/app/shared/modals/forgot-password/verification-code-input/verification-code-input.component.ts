@@ -15,6 +15,7 @@ import {AuthService} from '../../../../core/services/auth.service';
   styleUrl: './verification-code-input.component.scss'
 })
 export class VerificationCodeInputComponent {
+  errorMessage? : string;
   private authService = inject(AuthService);
   verifyResetCodeForm: FormGroup;
 
@@ -29,6 +30,7 @@ export class VerificationCodeInputComponent {
   }
 
   onSubmit() {
+    this.errorMessage = "";
     if (this.verifyResetCodeForm.invalid) {
       return;
     }
@@ -44,7 +46,8 @@ export class VerificationCodeInputComponent {
         }
       },
       error: (error) => {
-        console.error('Error during verify code request:', error);
+        this.errorMessage = error.error.message;
+        console.error('Error during verify code request:', error.error.message);
       }
     });
   }
