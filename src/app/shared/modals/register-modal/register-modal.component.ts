@@ -3,14 +3,7 @@ import {InputComponent} from '../../common-ui/input/input.component';
 import {ButtonComponent} from '../../common-ui/button/button.component';
 import {AuthService} from '../../../core/services/auth.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-
-const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-function passwordValidator(control: import('@angular/forms').AbstractControl) {
-  if (!control.value) return null;
-  return passwordPattern.test(control.value)
-    ? null
-    : { invalidPassword: true };
-}
+import {passwordValidator} from '../../../core/helpers/validators/passwordValidator';
 
 @Component({
   selector: 'app-register-modal',

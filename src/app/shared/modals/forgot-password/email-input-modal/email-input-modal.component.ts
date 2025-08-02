@@ -18,7 +18,7 @@ import {AuthService} from '../../../../core/services/auth.service';
 export class EmailInputModalComponent {
   private authService = inject(AuthService);
   emailInputForm: FormGroup;
-  codeSuccess = output<{ email: string, resetCode: string }>();
+  codeSuccess = output<{ email: string, code: string }>();
 
   close = output<void>();
 
@@ -41,7 +41,7 @@ export class EmailInputModalComponent {
           console.error(response);
         } else {
           console.log('Reset code sent:', response);
-          this.codeSuccess.emit({ email, resetCode: response });
+          this.codeSuccess.emit({ email, code: response });
           this.emailInputForm.reset();
         }
       },

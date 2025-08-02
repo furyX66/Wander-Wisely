@@ -15,10 +15,10 @@ import {AuthService} from '../../../../core/services/auth.service';
   styleUrl: './verification-code-input.component.scss'
 })
 export class VerificationCodeInputComponent {
-  errorMessage? : string;
+  errorMessage = "";
   private authService = inject(AuthService);
   verifyResetCodeForm: FormGroup;
-
+  codeVerified = output<{ email: string, code: string }>();
   data = input<{email:string; code:string}>();
   close = output<void>();
   email = computed(() => this.data()?.email || '');
@@ -42,12 +42,13 @@ export class VerificationCodeInputComponent {
         }
         else {
           console.log('Verification code success:', response);
+          this.codeVerified.emit({ email: this.email(), code: this.verifyResetCodeForm.value.code });
           this.verifyResetCodeForm.reset();
         }
       },
       error: (error) => {
         this.errorMessage = error.error.message;
-        console.error('Error during verify code request:', error.error.message);
+        console.error('Error during verify code request:', error);
       }
     });
   }

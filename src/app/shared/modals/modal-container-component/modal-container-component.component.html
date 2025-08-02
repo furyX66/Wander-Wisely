@@ -15,5 +15,9 @@
 }
 
 @if (modalService.getModalState$(ModalType.CODE_INPUT) | async){
-  <app-verification-code-input (close)="modalService.closeModal(ModalType.CODE_INPUT)" [data]="modalService.getModalData(ModalType.CODE_INPUT)"/>
+  <app-verification-code-input (close)="modalService.closeModal(ModalType.CODE_INPUT)" [data]="modalService.getModalData(ModalType.CODE_INPUT)" (codeVerified)="switchToNewPasswordInput($event)"/>
+}
+
+@if (modalService.getModalState$(ModalType.NEW_PASSWORD_INPUT) | async){
+  <app-new-password (close)="modalService.closeModal(ModalType.NEW_PASSWORD_INPUT)" [data]="modalService.getModalData(ModalType.NEW_PASSWORD_INPUT)"/>
 }

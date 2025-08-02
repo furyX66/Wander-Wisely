@@ -27,7 +27,7 @@
           @if (registrationForm.get('password')?.errors?.['invalidPassword'] && registrationForm.get('password')?.touched
             ) {
             <div class="error-message">
-              Password must contain at least one uppercase letter, one lowercase letter, one number and one special character.
+              Password must contain at least 8 characters, one uppercase letter, one number, and one special character
             </div>
           }
         </div>
@@ -42,7 +42,7 @@
             registrationForm.get('repeatPassword')?.value &&
             registrationForm.get('repeatPassword')?.value !== registrationForm.get('password')?.value
             ) {
-            <div class="error-message">Password do not match</div>
+            <div class="error-message">Passwords do not match</div>
           }
         </div>
       </div>

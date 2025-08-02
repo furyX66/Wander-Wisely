@@ -9,6 +9,7 @@ import {ModalService} from '../../../core/services/modal.service';
 import {
   VerificationCodeInputComponent
 } from '../forgot-password/verification-code-input/verification-code-input.component';
+import {NewPasswordComponent} from '../forgot-password/new-password/new-password.component';
 
 @Component({
   selector: 'app-modal-container-component',
@@ -18,7 +19,8 @@ import {
     LoginModalComponent,
     RegisterModalComponent,
     SettingsWindowComponent,
-    VerificationCodeInputComponent
+    VerificationCodeInputComponent,
+    NewPasswordComponent
   ],
   templateUrl: './modal-container-component.component.html',
   styleUrl: './modal-container-component.component.scss'
@@ -42,8 +44,13 @@ export class ModalContainerComponentComponent {
     this.modalService.openModal(ModalType.FORGOT_PASSWORD);
   }
 
-  switchToVerificationCodeInput(data: { email: string, resetCode: string }) {
+  switchToVerificationCodeInput(data: { email: string, code: string }) {
     this.modalService.closeModal(ModalType.FORGOT_PASSWORD);
     this.modalService.openModal(ModalType.CODE_INPUT, data);
+  }
+
+  switchToNewPasswordInput(data: { email: string, code: string }) {
+    this.modalService.closeModal(ModalType.CODE_INPUT);
+    this.modalService.openModal(ModalType.NEW_PASSWORD_INPUT, data);
   }
 }

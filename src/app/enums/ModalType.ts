@@ -5,4 +5,5 @@ export enum ModalType {
   FORGOT_PASSWORD = 'forgotPassword',
   USER_MENU = 'userMenu',
   CODE_INPUT = 'codeInput',
+  NEW_PASSWORD_INPUT = 'newPasswordInput',
 }
