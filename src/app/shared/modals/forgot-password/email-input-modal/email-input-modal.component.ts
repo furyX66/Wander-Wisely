@@ -18,6 +18,7 @@ import {AuthService} from '../../../../core/services/auth.service';
 export class EmailInputModalComponent {
   private authService = inject(AuthService);
   emailInputForm: FormGroup;
+  codeSuccess = output<{ email: string, resetCode: string }>();
 
   close = output<void>();
 
@@ -37,8 +38,10 @@ export class EmailInputModalComponent {
     this.authService.forgotPassword(email).subscribe({
       next: (response: string) => {
         if (response === 'User does not exist.') {
+          console.error(response);
         } else {
           console.log('Reset code sent:', response);
+          this.codeSuccess.emit({ email, resetCode: response });
           this.emailInputForm.reset();
         }
       },

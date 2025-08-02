@@ -5,7 +5,7 @@
     <p class="list-of-chats-font" style="text-align: center">Enter your email. We will send you verification code</p>
     <form [formGroup]="emailInputForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 36px; width:100%">
       <div class="modal-window-input-field">
-        <p class="list-of-chats-selected text-center">Email or username</p>
+        <p class="list-of-chats-selected text-center">Email</p>
         <app-input formControlName="email"/>
         @if (emailInputForm.get('email')?.errors?.['email'] && emailInputForm.get('email')?.touched) {
           <div class="error-message">Email format is invalid</div>

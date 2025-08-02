@@ -1,1 +1,17 @@
-<p>verification-code-input works!</p>
+<div class="modal-backdrop"></div>
+<div class="modal-wrapper">
+  <div class="modal-content">
+    <h1 class="modal-window-title" style="color: var(--blue)">Change password</h1>
+    <p class="list-of-chats-font" style="text-align: center">We sent an email with verification code to your email</p>
+    <form [formGroup]="verifyResetCodeForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 36px; width:100%">
+      <div class="modal-window-input-field">
+        <p class="list-of-chats-selected text-center">Verification code</p>
+        <app-input formControlName="code"/>
+        @if (verifyResetCodeForm.get('code')?.errors?.['required'] && verifyResetCodeForm.get('code')?.touched) {
+          <div class="error-message">Code is required</div>
+        }
+      </div>
+      <app-button text="Verify" type="submit"/>
+    </form>
+  </div>
+</div>

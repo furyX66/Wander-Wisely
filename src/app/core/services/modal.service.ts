@@ -47,6 +47,7 @@ export class ModalService {
     });
   }
 
+
   closeModal(modalId: string): void {
     const currentState = this.modalState$.value;
     if (currentState[modalId]) {

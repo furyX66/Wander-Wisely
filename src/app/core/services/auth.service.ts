@@ -49,6 +49,18 @@ export class AuthService {
       );
   }
 
+  verifyResetCode(email: string, code: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/verify-reset-code`, { email, code });
+  }
+
+  resetPassword(email: string, code: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/reset-password`, {
+      email,
+      code,
+      newPassword
+    });
+  }
+
   logout() {
     this.http.post(`${this.apiUrl}/auth/logout`, {}, { withCredentials: true }).subscribe(() => {
       this.isLoggedInSubject.next(false);

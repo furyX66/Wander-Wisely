@@ -6,6 +6,9 @@ import {RegisterModalComponent} from '../register-modal/register-modal.component
 import {SettingsWindowComponent} from '../settings-window/settings-window.component';
 import {ModalType} from '../../../enums/ModalType';
 import {ModalService} from '../../../core/services/modal.service';
+import {
+  VerificationCodeInputComponent
+} from '../forgot-password/verification-code-input/verification-code-input.component';
 
 @Component({
   selector: 'app-modal-container-component',
@@ -14,7 +17,8 @@ import {ModalService} from '../../../core/services/modal.service';
     EmailInputModalComponent,
     LoginModalComponent,
     RegisterModalComponent,
-    SettingsWindowComponent
+    SettingsWindowComponent,
+    VerificationCodeInputComponent
   ],
   templateUrl: './modal-container-component.component.html',
   styleUrl: './modal-container-component.component.scss'
@@ -36,5 +40,10 @@ export class ModalContainerComponentComponent {
   switchToEmailInput() {
     this.modalService.closeModal(ModalType.LOGIN);
     this.modalService.openModal(ModalType.FORGOT_PASSWORD);
+  }
+
+  switchToVerificationCodeInput(data: { email: string, resetCode: string }) {
+    this.modalService.closeModal(ModalType.FORGOT_PASSWORD);
+    this.modalService.openModal(ModalType.CODE_INPUT, data);
   }
 }

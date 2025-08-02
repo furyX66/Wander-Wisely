@@ -4,4 +4,5 @@ export enum ModalType {
   REGISTER = 'register',
   FORGOT_PASSWORD = 'forgotPassword',
   USER_MENU = 'userMenu',
+  CODE_INPUT = 'codeInput',
 }

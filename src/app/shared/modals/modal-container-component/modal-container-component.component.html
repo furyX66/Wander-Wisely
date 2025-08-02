@@ -11,5 +11,9 @@
 }
 
 @if (modalService.getModalState$(ModalType.FORGOT_PASSWORD) | async){
-  <app-email-input (close)="modalService.closeModal(ModalType.FORGOT_PASSWORD)"/>
+  <app-email-input (close)="modalService.closeModal(ModalType.FORGOT_PASSWORD)" (codeSuccess)="switchToVerificationCodeInput($event)"/>
+}
+
+@if (modalService.getModalState$(ModalType.CODE_INPUT) | async){
+  <app-verification-code-input (close)="modalService.closeModal(ModalType.CODE_INPUT)" [data]="modalService.getModalData(ModalType.CODE_INPUT)"/>
 }
