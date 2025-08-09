@@ -26,28 +26,38 @@ export class ChatPageComponent  {
 
   constructor(private http: HttpClient) {}
 
-  get reversedMessages(): ChatMessage[] {
-    return this.messages.slice().reverse();
-  }
-
   handleChatInput(value: string) {
     if (value.trim()) {
-      this.messages.push({ id: this.nextId++, text: `${value}`, author: 'user' });
+      const userMessage: ChatMessage = {
+        id: this.nextId++,
+        text: value,
+        author: 'user'
+      };
+      this.messages.push(userMessage);
+
       this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
         next: res => {
-          this.messages.push({
+          const assistantMessage: ChatMessage = {
             id: this.nextId++,
             text: res.reply,
             author: 'assistant'
-          });
-          console.log(res)
+          };
+          const userIndex = this.messages.findIndex(msg => msg === userMessage);
+          this.messages.splice(userIndex + 1, 0, assistantMessage);
+          console.log(res);
         },
         error: err => {
-          this.messages.push({id: this.nextId++, text: `Wystąpił błąd po stronie serwera`, author: 'assistant' });
-          console.error("Server error:",err.message);
+          const errorMessage: ChatMessage = {
+            id: this.nextId++,
+            text: 'Wystąpił błąd po stronie serwera',
+            author: 'assistant'
+          };
+          const userIndex = this.messages.findIndex(msg => msg === userMessage);
+          this.messages.splice(userIndex + 1, 0, errorMessage);
+          console.error("Server error:", err.message);
         }
       });
-
     }
   }
+
 }

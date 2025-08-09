@@ -35,8 +35,6 @@ export class NewPasswordComponent {
       return;
     }
 
-    console.log("Code", this.code())
-
     const { newPassword, repeatNewPassword } = this.newPasswordForm.value;
 
     if (newPassword !== repeatNewPassword) {

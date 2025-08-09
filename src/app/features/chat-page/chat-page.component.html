@@ -1,7 +1,7 @@
 <app-side-bar/>
 <section class="chat-area">
   <div class="chat-messages" id="chatContainer">
-    @for (msg of reversedMessages; track msg.id) {
+    @for (msg of messages; track msg.id) {
       @if (msg.author === 'user') {
         <app-user-message
           [text]="msg.text"
@@ -16,9 +16,7 @@
       }
     }
   </div>
-  <app-chat-input
-    (onClick)="handleChatInput($event)"
-  ></app-chat-input>
+  <app-chat-input (onClick)="handleChatInput($event)"/>
 </section>
 <app-map/>
 
