@@ -25,7 +25,7 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router,) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   register(userData: RegistrationData) {
     return this.http.post(`${this.apiUrl}/auth/registration`, userData).pipe(

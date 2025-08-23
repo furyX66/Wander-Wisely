@@ -9,19 +9,13 @@ import {environment} from '../../../environments/environment';
 })
 export class UserService {
   private apiUrl = environment.apiUrl;
-  currentUserSubject = new BehaviorSubject<any | null>(null);
+  currentUserSubject = new BehaviorSubject<UserType | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  getAllUsers(): Observable<any> {
-    return this.http.get(this.apiUrl);
-  }
-
   getCurrentUser(): Observable<UserType> {
-    return this.http.get<UserType>(`${this.apiUrl}/user/me`, {
-      withCredentials: true
-    }).pipe(
+    return this.http.get<UserType>(`${this.apiUrl}/user/me`, {withCredentials: true}).pipe(
       tap(user => this.currentUserSubject.next(user))
     );
   }
@@ -37,6 +31,6 @@ export class UserService {
   }
 
   getUserById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.apiUrl}/user/${id}`);
   }
 }

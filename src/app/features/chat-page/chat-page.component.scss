@@ -30,21 +30,18 @@ app-map {
   padding-top: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   grid-column: 2;
   grid-row: 1 / -1;
   overflow: hidden;
 }
 
 .chat-messages{
-  justify-self: flex-end;
+  flex: 1;
   scroll-behavior: smooth;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  align-items: flex-end;
-  -ms-overflow-style: none;
+  gap: 16px;
   scrollbar-width: none;
 }
 
@@ -53,11 +50,26 @@ app-map {
 }
 
 .user-message {
+  max-width: 60%;
   align-self: flex-end;
 }
 
 .assistant-message {
+  max-width: 80%;
   align-self: flex-start;
+}
+
+.user-message, .assistant-message {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeInUp 0.4s cubic-bezier(.24,.56,.81,.89) forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -72,9 +84,13 @@ app-map {
     grid-template-rows: auto;
   }
   .chat-area{
-    padding: 0;
+    height: 100%;
     margin: 0;
     grid-column: 1;
     align-self: end;
+  }
+  .chat-messages{
+    flex: 1;
+    padding: 16px 8px;
   }
 }
