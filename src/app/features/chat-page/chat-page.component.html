@@ -1,6 +1,6 @@
 <app-side-bar/>
 <section class="chat-area">
-  <div class="chat-messages" id="chatContainer">
+  <div class="chat-messages" id="chatContainer" #chatContainer>
     @for (msg of messages; track msg.id) {
       @if (msg.author === 'user') {
         <app-user-message
