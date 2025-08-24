@@ -74,6 +74,18 @@ arrow-icon{
   transform: translateX(-50%);
 }
 
+.loading-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: fadeInUp 0.4s cubic-bezier(.24,.56,.81,.89) forwards;
+}
+
+.loading-message app-loading-animation{
+  height: 50px;
+  width: 50px;
+}
+
 @keyframes fadeInUp {
   to {
     opacity: 1;

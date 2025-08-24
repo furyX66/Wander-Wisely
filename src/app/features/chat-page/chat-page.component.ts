@@ -9,6 +9,10 @@ import {ChatMessage} from '../../../types/ChatMessageType';
 import {ProfileIcon} from '../../../../public/assets/icons/arrow-icon';
 import {exhaustMap, filter, finalize, of, Subject, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {
+  LoadingAnimationComponent
+} from '../../../../public/assets/animations/loading-animation/loading-animation.component';
+import {AssesstantIconComponent} from '../../../../public/assets/icons/assistant-icon';
 
 @Component({
   selector: 'app-chat-page',
@@ -18,7 +22,9 @@ import {catchError} from 'rxjs/operators';
     MapComponent,
     UserMessageComponent,
     AssistantMessageComponent,
-    ProfileIcon
+    ProfileIcon,
+    LoadingAnimationComponent,
+    AssesstantIconComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
