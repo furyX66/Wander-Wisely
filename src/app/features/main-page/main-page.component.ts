@@ -15,5 +15,4 @@ export class MainPageComponent {
   handleChatInput(value: string) {
     console.log("Chat Input:", value);
   }
-
 }

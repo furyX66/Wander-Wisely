@@ -23,10 +23,11 @@ export class ChatInputComponent {
   constructor(private router: Router) {}
 
   onSendClick() {
-    if (this.disabled() || !this.inputValue.trim()) return;
     if (this.link()) {
       this.router.navigate([this.link()]);
       this.onClick.emit(this.inputValue);
+    } else if (this.disabled() || !this.inputValue.trim()){
+      return;
     } else {
       this.onClick.emit(this.inputValue);
     }

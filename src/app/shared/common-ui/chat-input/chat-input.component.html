@@ -7,7 +7,7 @@
   />
   <button type="button"
           (click) ="onSendClick()"
-          [disabled]="disabled() || !inputValue.trim()"
+          [disabled]="disabled()"
           [class.loading]="disabled()">
     <icon-send/>
   </button>
