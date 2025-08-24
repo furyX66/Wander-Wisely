@@ -12,6 +12,7 @@ import {SendIconComponent} from '../../../../../public/assets/icons/send-icon';
   styleUrl: './chat-input.component.scss'
 })
 export class ChatInputComponent {
+  disabled = input<boolean>(false);
   placeholder = input<string>('Enter your wishes for the trip');
   link = input<string | null>(null);
 
@@ -22,6 +23,7 @@ export class ChatInputComponent {
   constructor(private router: Router) {}
 
   onSendClick() {
+    if (this.disabled() || !this.inputValue.trim()) return;
     if (this.link()) {
       this.router.navigate([this.link()]);
       this.onClick.emit(this.inputValue);

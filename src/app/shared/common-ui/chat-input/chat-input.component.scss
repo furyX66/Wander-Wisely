@@ -39,6 +39,11 @@
   font-family: var(--main-font), sans-serif;
 }
 
+.loading icon-send{
+  opacity: 0.2;
+  cursor: default;
+}
+
 .input-container button {
   background: none;
   border: none;

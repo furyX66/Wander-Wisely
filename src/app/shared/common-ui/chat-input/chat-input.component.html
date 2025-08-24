@@ -5,7 +5,10 @@
     [(ngModel)]="inputValue"
     (keydown.enter)="onSendClick()"
   />
-  <button type="button" (click) ="onSendClick()" >
+  <button type="button"
+          (click) ="onSendClick()"
+          [disabled]="disabled() || !inputValue.trim()"
+          [class.loading]="disabled()">
     <icon-send/>
   </button>
 </div>

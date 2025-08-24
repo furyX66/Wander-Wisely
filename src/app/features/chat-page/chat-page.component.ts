@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, ViewChild} from '@angular/core';
 import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
 import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
 import {MapComponent} from '../../shared/common-ui/map/map.component';
@@ -6,6 +6,9 @@ import {UserMessageComponent} from '../../shared/chat/user-message/user-message.
 import {HttpClient} from '@angular/common/http';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ChatMessage} from '../../../types/ChatMessageType';
+import {ProfileIcon} from '../../../../public/assets/icons/arrow-icon';
+import {exhaustMap, filter, finalize, of, Subject, tap} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat-page',
@@ -14,7 +17,8 @@ import {ChatMessage} from '../../../types/ChatMessageType';
     ChatInputComponent,
     MapComponent,
     UserMessageComponent,
-    AssistantMessageComponent
+    AssistantMessageComponent,
+    ProfileIcon
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
@@ -25,59 +29,87 @@ export class ChatPageComponent implements AfterViewChecked {
 
   messages: ChatMessage[] = [];
   private nextId = 0;
+  showScrollButton = false;
   private shouldScrollToBottom = false;
+  private isUserScrolledUp = false;
 
-  constructor(private http: HttpClient) {}
+  private messageSend$ = new Subject<string>();
+  isLoading = false;
+
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
+    this.messageSend$.pipe(
+      filter(msg => !!msg.trim()),
+      tap(() => this.isLoading = true),
+      exhaustMap(message =>
+        this.http.post<{ reply: string }>('/api/chat', { message }).pipe(
+          tap(res => this.addAssistantMessage(res.reply)),
+          catchError(() => {
+            this.addAssistantMessage('Server error');
+            return of(null);
+          }),
+          finalize(() => this.isLoading = false)
+        )
+      )
+    ).subscribe();
+  }
 
   handleChatInput(value: string) {
-    if (value.trim()) {
-      const userMessage: ChatMessage = {
-        id: this.nextId++,
-        text: value,
-        author: 'user'
-      };
-      this.messages.push(userMessage);
-      this.shouldScrollToBottom = true;
+    if (!value.trim() || this.isLoading) return;
 
-      this.http.post<{ reply: string }>('/api/chat', { message: value }).subscribe({
-        next: res => {
-          const assistantMessage: ChatMessage = {
-            id: this.nextId++,
-            text: res.reply,
-            author: 'assistant'
-          };
-          const userIndex = this.messages.findIndex(msg => msg === userMessage);
-          this.messages.splice(userIndex + 1, 0, assistantMessage);
-          this.shouldScrollToBottom = true;
-          console.log(res);
-        },
-        error: err => {
-          const errorMessage: ChatMessage = {
-            id: this.nextId++,
-            text: 'Wystąpił błąd po stronie serwera',
-            author: 'assistant'
-          };
-          const userIndex = this.messages.findIndex(msg => msg === userMessage);
-          this.messages.splice(userIndex + 1, 0, errorMessage);
-          this.shouldScrollToBottom = true;
-          console.error("Server error:", err.message);
-        }
-      });
-    }
+    this.addUserMessage(value);
+    this.scheduleScroll();
+    this.messageSend$.next(value);
+  }
+
+  onScroll(): void {
+    const el = this.chatContainer.nativeElement;
+    const atBottom = Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < 5;
+
+    this.isUserScrolledUp = !atBottom;
+    this.showScrollButton = this.isUserScrolledUp;
   }
 
   ngAfterViewChecked(): void {
-    if (this.shouldScrollToBottom && this.chatContainer) {
-      this.scrollToBottom();
+    if (this.shouldScrollToBottom && !this.isUserScrolledUp) {
+      this.performScroll();
       this.shouldScrollToBottom = false;
     }
+    this.cdr.detectChanges();
   }
 
-  private scrollToBottom(): void {
+  private scheduleScroll(): void {
+    this.isUserScrolledUp = false;
+    this.showScrollButton = false;
+    this.shouldScrollToBottom = true;
+  }
+
+  scrollToBottom(): void {
+    this.performScroll();
+    this.isUserScrolledUp = false;
+    this.showScrollButton = false;
+  }
+
+  private performScroll(): void {
     try {
-      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-    } catch(err) {
-      console.error('Scroll error', err);
-    }
+      this.chatContainer.nativeElement.scrollTop =
+        this.chatContainer.nativeElement.scrollHeight;
+    } catch {}
+  }
+
+  private addUserMessage(text: string) {
+    this.messages.push({
+      id: this.nextId++,
+      text,
+      author: 'user'
+    });
+  }
+
+  private addAssistantMessage(text: string) {
+    this.messages.push({
+      id: this.nextId++,
+      text,
+      author: 'assistant'
+    });
+    this.scheduleScroll();
   }
 }
