@@ -1,4 +1,4 @@
-import {Component, AfterViewInit} from '@angular/core';
+import {Component, AfterViewInit, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -7,7 +7,7 @@ import * as L from 'leaflet';
   standalone: true,
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
   constructor() {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
@@ -50,6 +50,9 @@ export class MapComponent implements AfterViewInit {
     this.observeThemeChanges();
   }
 
+  ngOnDestroy() {
+    this.map?.remove();
+  }
 
   private initMap(): void {
     this.map = L.map('map', {

@@ -63,14 +63,10 @@ import {Component, input} from '@angular/core';
       display: inline-block;
     }
     svg{
+      width: clamp(300px, 70vw, 569px) ;
+      height: auto;
       color: var(--text-color);
       display: block;
-    }
-    @media (max-width: 768px) {
-      svg{
-        width: 320px;
-        height: auto;
-      }
     }
   `
 })

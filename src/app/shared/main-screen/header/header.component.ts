@@ -8,10 +8,10 @@ import {UserType} from '../../../../types/UserType';
 import {AuthService} from '../../../core/services/auth.service';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
-import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
 import {ModalType} from '../../../enums/ModalType';
 import {ModalService} from '../../../core/services/modal.service';
+import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 
 
 @Component({

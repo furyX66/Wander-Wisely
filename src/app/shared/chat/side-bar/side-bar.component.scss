@@ -1,7 +1,9 @@
 .side-bar {
+  box-sizing: border-box;
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  padding: 20px 20px 16px 20px;
   flex-shrink: 0;
   flex-direction: column;
   justify-content: space-between;
@@ -24,7 +26,6 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 32px;
-  padding: 20px;
 }
 
 .chats {
@@ -62,51 +63,16 @@
   font-weight: 600;
 }
 
-.chats-lits {
-  font-family: var(--main-font), sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  color: var(--text-color)
-}
-
-.chats-lits .group-title {
-  font-weight: 500;
-  color: var(--text-color);
-  opacity: 0.5;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.chats-lits .chat-title {
-  cursor: pointer;
-}
-
-.chats-lits .active {
-  font-weight: 500;
-}
-
 .bottom-bar {
-  box-sizing: border-box;
   display: flex;
-  width: calc(100% - 20px);
   justify-content: space-between;
   gap: 8px;
   align-items: center;
-  padding-left: 20px;
-  padding-bottom: 16px;
   align-content: center;
 }
 
 .not-login-massage{
   opacity: 0.5;
-  padding: 20px;
 }
 
 app-user-menu{

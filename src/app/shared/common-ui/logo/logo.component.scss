@@ -11,17 +11,22 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0;
   cursor: pointer;
   text-decoration: none;
-  font-size: 24px;
+  font-size: clamp(1.2rem, calc(3vw + 1rem), 1.5rem);
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 
-@media (max-width: 768px){
-  a{
-    font-size: 20px;
+@media (max-width: 420px) {
+  p{
+    display: none;
+  }
+  span:nth-of-type(2){
+    color: var(--text-color);
+  }
+  span:nth-of-type(1){
+    text-transform: lowercase;
   }
 }

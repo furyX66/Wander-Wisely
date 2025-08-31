@@ -4,7 +4,7 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: clamp(0.5rem, 1rem, 1.5rem);
 }
 
 .menu-buttons {
@@ -30,9 +30,4 @@ icon-profile{
   cursor: pointer;
 }
 
-@media (max-width: 768px){
-  .header{
-    padding: 12px;
-  }
-}
 
