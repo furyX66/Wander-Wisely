@@ -8,7 +8,7 @@ import {Component, input, output} from '@angular/core';
 })
 export class ButtonComponent {
   text = input<string>('');
-  className = input<string>('btn');
+  className = input<string>('button');
   type = input<"button" | "submit" | "reset">('button');
 
   btnClick = output<Event>();

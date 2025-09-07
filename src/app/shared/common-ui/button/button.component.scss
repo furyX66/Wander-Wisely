@@ -1,9 +1,11 @@
 @use "colors" as *;
+@use "mixins" as *;
 
 :host{
   width: 100%;
 }
-.btn{
+.button{
+  @include poppins(500, 14px);
   position: relative;
   display: flex;
   height: 40px;
@@ -19,14 +21,9 @@
   width: 100%;
   color: $black;
   text-align: center;
-  font-family: Poppins, serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
 }
 
-.btn::before {
+.button::before {
   content: '';
   position: absolute;
   top: -4px;
@@ -41,7 +38,7 @@
   z-index: -1;
 }
 
-.btn:hover::before {
+.button:hover::before {
   filter: blur(6px);
   opacity: 0.6;
 }

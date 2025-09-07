@@ -1,3 +1,5 @@
+@use "colors" as *;
+
 .logo {
   display: flex;
   align-items: flex-end;
@@ -21,7 +23,6 @@
 }
 
 .content-wrapper span {
-  font-family: var(--main-font), sans-serif;
   font-size: clamp(2rem, calc(6.2vw + 1rem), 4.5rem);
   font-style: normal;
   font-weight: 700;
@@ -32,11 +33,7 @@
   margin: 0;
   color: var(--text-color);
   text-align: center;
-  font-family: var(--main-font), sans-serif;
   font-size: clamp(1rem, calc(1vw + 1rem), 2rem);
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
   padding: 0 24px;
 }
 
@@ -55,7 +52,7 @@
 }
 
 .fancy-w {
-  color: var(--red);
+  color: $red;
   display: inline-block;
 }
 

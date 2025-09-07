@@ -1,8 +1,6 @@
+@use "mixins" as *;
+
 .acc-font{
-  color: var(--text-color, #222);
-  font-family: Poppins, serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  @include poppins(400, 14px);
+  color: var(--text-color);
 }
