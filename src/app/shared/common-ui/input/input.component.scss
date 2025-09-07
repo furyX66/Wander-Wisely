@@ -1,3 +1,4 @@
+@use "colors" as *;
 :host{
   width: 100%;
 }
@@ -18,7 +19,7 @@ input{
   align-items: center;
   align-self: stretch;
   border-radius: 26px;
-  border: 1px solid var(--light-gray);
+  border: 1px solid $light-gray;
   background: transparent;
 }
 

@@ -1,0 +1,30 @@
+@use "colors" as *;
+
+$light-theme: (
+  background-color: $white,
+  text-color: $black,
+  assistant-message-color: $white,
+  assistant-message-border: 1px solid $light-gray,
+  main-page-color: $yellow-gradient
+);
+
+$dark-theme: (
+  background-color: $black,
+  text-color: $white,
+  assistant-message-color: $dark-gray,
+  assistant-message-border: none,
+  main-page-color: $black
+);
+
+
+:root {
+  @each $prop, $value in $light-theme {
+    --#{$prop}: #{$value};
+  }
+}
+
+.dark-mode {
+  @each $prop, $value in $dark-theme {
+    --#{$prop}: #{$value};
+  }
+}

@@ -40,27 +40,17 @@
   justify-content: center;
   align-items: flex-start;
   gap: 8px;
-}
 
-.option-buttons div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-}
+  div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+  }
 
-.option-buttons div p {
-  margin: 0;
-  cursor: pointer;
-  color: var(--text-color);
-  font-family: var(--main-font), sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  line-height: normal;
-}
-
-.option-buttons div:first-child {
-  font-weight: 600;
+  div:first-child {
+    font-weight: 600;
+  }
 }
 
 .bottom-bar {

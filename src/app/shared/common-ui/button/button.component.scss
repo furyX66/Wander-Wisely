@@ -1,3 +1,5 @@
+@use "colors" as *;
+
 :host{
   width: 100%;
 }
@@ -10,12 +12,12 @@
   align-items: center;
   align-self: stretch;
   border-radius: 69px;
-  background: var(--yellow);
+  background: $yellow;
   outline: none;
   border: none;
   cursor: pointer;
   width: 100%;
-  color: var(--black);
+  color: $black;
   text-align: center;
   font-family: Poppins, serif;
   font-size: 14px;

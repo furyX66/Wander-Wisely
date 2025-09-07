@@ -1,0 +1,19 @@
+@mixin poppins($weight: 400, $size: 16px, $style: normal) {
+  font-family: 'Poppins', sans-serif;
+  font-weight: $weight;
+  font-size: $size;
+  font-style: $style;
+  line-height: 1.5;
+}
+
+@mixin heading($size: 20px, $weight: 600) {
+  @include poppins($weight, $size);
+}
+
+@mixin body-text($weight: 400, $size: 16px) {
+  @include poppins($weight, $size);
+}
+
+@mixin button-text($weight: 500, $size: 16px) {
+  @include poppins($weight, $size);
+}

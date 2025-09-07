@@ -12,10 +12,9 @@
   @if (type() === 'password') {
     <button
       type="button"
-      class="show-password-btn"
       (click)="togglePasswordVisibility()"
       tabindex="-1"
-      style="position: absolute; right: 8px; top: 50%; transform: translateY(-45%); background: none; border: none; cursor: pointer;"
+      style="position: absolute; right: 10px; top: 50%; transform: translateY(-43%); background: none; border: none; cursor: pointer;"
     >
       @if (!showPassword) {
         <svg class="icon-eye" width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,4 +1,4 @@
-:host{
+:host {
   display: grid;
   grid-template-columns: 230px 3fr 3fr;
   grid-template-areas:
@@ -7,11 +7,11 @@
   height: 100dvh;
 }
 
-app-side-bar{
+app-side-bar {
   grid-area: sidebar;
 }
 
-app-chat-input{
+app-chat-input {
   align-self: center;
   flex: 0 0 auto;
   margin: 16px 0;
@@ -23,7 +23,7 @@ app-map {
   grid-area: map;
 }
 
-.chat-area{
+.chat-area {
   position: relative;
   padding-top: 16px;
   display: flex;
@@ -31,7 +31,7 @@ app-map {
   overflow: hidden;
 }
 
-.chat-messages{
+.chat-messages {
   padding: clamp(0.5rem, calc(1.2vw + 1rem), 1rem);
   height: 100%;
   scroll-behavior: smooth;
@@ -60,12 +60,12 @@ app-map {
 .user-message, .assistant-message {
   opacity: 0;
   transform: translateY(24px);
-  animation: fadeInUp 0.4s cubic-bezier(.24,.56,.81,.89) forwards;
+  animation: fadeInUp 0.4s cubic-bezier(.24, .56, .81, .89) forwards;
 }
 
-arrow-icon{
+arrow-icon {
   position: absolute;
-  left:50%;
+  left: 50%;
   bottom: 64px;
   transform: translateX(-50%);
 }
@@ -74,12 +74,12 @@ arrow-icon{
   display: flex;
   align-items: center;
   gap: 8px;
-  animation: fadeInUp 0.4s cubic-bezier(.24,.56,.81,.89) forwards;
-}
+  animation: fadeInUp 0.4s cubic-bezier(.24, .56, .81, .89) forwards;
 
-.loading-message app-loading-animation{
-  height: 50px;
-  width: 50px;
+  app-loading-animation {
+    height: 50px;
+    width: 50px;
+  }
 }
 
 @keyframes fadeInUp {
@@ -90,24 +90,25 @@ arrow-icon{
 }
 
 @media (max-width: 768px) {
-  app-side-bar{
+  app-side-bar {
     display: none;
   }
-  app-map{
+  app-map {
     display: none;
   }
-  :host{
+  :host {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     grid-template-areas: "chatarea"
   }
-  .chat-area{
+  .chat-area {
     height: 100%;
     margin: 0;
     align-self: end;
   }
-  .chat-messages{
+  .chat-messages {
     flex: 1;
     padding: 16px 8px;
   }
 }
+

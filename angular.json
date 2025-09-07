@@ -36,6 +36,11 @@
               "src/styles.scss",
               "node_modules/leaflet/dist/leaflet.css"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/scss/abstract"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
