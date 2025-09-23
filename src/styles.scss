@@ -3,7 +3,7 @@
 @use "mixins" as *;
 @use "variables" as *;
 
-//Normalization
+/* Normalization */
 
 *, :root{
   margin: 0;
@@ -25,14 +25,12 @@
 
 .menu-list-font-bold{
   color: var(--text-color);
-  @include poppins(700, 14px);
-  text-align: center;
+  @include poppins(700, 14px, center);
 }
 
 .menu-list-font{
   color: var(--text-color);
-  @include poppins(400, 14px);
-  text-align: center;
+  @include poppins(400, 14px, center);
 }
 
 .time-period-font{

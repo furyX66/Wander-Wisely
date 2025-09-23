@@ -34,10 +34,10 @@ export class ChatPageComponent implements AfterViewChecked {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   messages: ChatMessage[] = [];
-  private nextId = 0;
+  nextId = 0;
   showScrollButton = false;
-  private shouldScrollToBottom = false;
-  private isUserScrolledUp = false;
+  shouldScrollToBottom = false;
+  isUserScrolledUp = false;
 
   private messageSend$ = new Subject<string>();
   isLoading = false;
@@ -83,7 +83,7 @@ export class ChatPageComponent implements AfterViewChecked {
     this.cdr.detectChanges();
   }
 
-  private scheduleScroll(): void {
+  scheduleScroll(): void {
     this.isUserScrolledUp = false;
     this.showScrollButton = false;
     this.shouldScrollToBottom = true;
@@ -95,14 +95,14 @@ export class ChatPageComponent implements AfterViewChecked {
     this.showScrollButton = false;
   }
 
-  private performScroll(): void {
+  performScroll(): void {
     try {
       this.chatContainer.nativeElement.scrollTop =
         this.chatContainer.nativeElement.scrollHeight;
     } catch {}
   }
 
-  private addUserMessage(text: string) {
+  addUserMessage(text: string) {
     this.messages.push({
       id: this.nextId++,
       text,
@@ -110,7 +110,7 @@ export class ChatPageComponent implements AfterViewChecked {
     });
   }
 
-  private addAssistantMessage(text: string) {
+  addAssistantMessage(text: string) {
     this.messages.push({
       id: this.nextId++,
       text,
