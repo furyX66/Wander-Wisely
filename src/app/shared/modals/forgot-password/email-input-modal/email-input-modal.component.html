@@ -1,7 +1,7 @@
 <div class="modal-backdrop" (click)="closeModal()"></div>
 <div class="modal-wrapper">
   <div class="modal-content">
-    <h1 class="modal-window-title" style="color: var(--blue)">Change password</h1>
+    <h1 class="modal-window-title">Change password</h1>
     <p class="list-of-chats-font" style="text-align: center">Enter your email. We will send you verification code</p>
     <form [formGroup]="emailInputForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 36px; width:100%">
       <div class="modal-window-input-field">
@@ -14,7 +14,7 @@
           <div class="error-message">Email is required</div>
         }
       </div>
-      <app-button text="Send code" type="submit"/>
+      <app-button type="submit">Send code</app-button>
     </form>
   </div>
 </div>

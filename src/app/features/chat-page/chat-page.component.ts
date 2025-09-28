@@ -47,8 +47,8 @@ export class ChatPageComponent implements AfterViewChecked {
       filter(msg => !!msg.trim()),
       tap(() => this.isLoading = true),
       exhaustMap(message =>
-        this.http.post<{ reply: string }>('/api/chat', { message }).pipe(
-          tap(res => this.addAssistantMessage(res.reply)),
+        this.http.post<{response: string}>('/api/chat/chat', { message }).pipe(
+          tap(res => this.addAssistantMessage(res.response)),
           catchError(() => {
             this.addAssistantMessage('Server error');
             return of(null);

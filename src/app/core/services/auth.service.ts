@@ -37,7 +37,7 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials, { withCredentials: true }).pipe(
       tap(() => {
         this.isLoggedInSubject.next(true);
-        this.router.navigate(['/chat']);
+        this.router.navigate(['/chat'])
       })
     );
   }

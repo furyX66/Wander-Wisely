@@ -57,7 +57,7 @@
 }
 
 .modal-window-title{
-  color: var(--text-color);
+  color: $blue;
   @include poppins(700, 24px);
 }
 
@@ -126,17 +126,14 @@
 
 body {
   background: var(--background-color);
-  font-family: $primary-font;
   color: var(--text-color);
   width: 100dvw;
   min-height: 100dvh;
   transition: background 0.2s;
 }
 
-@media (max-width: 768px) {
-  .menu-list-font{
-    font-size: 12px;
-  }
-}
-
-
+//@media (max-width: 768px) {
+//  .menu-list-font{
+//    font-size: 12px;
+//  }
+//}
