@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ButtonComponent} from "../../common-ui/button/button.component";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputComponent} from "../../common-ui/input/input.component";
@@ -16,11 +16,12 @@ import {UserService} from '../../../core/services/user.service';
   styleUrl: './password-form-part.component.scss'
 })
 export class PasswordFormPartComponent implements OnInit {
+  private userService = inject(UserService);
   passwordForm!: FormGroup;
   successMessage='';
   errorMessage = '';
 
-  constructor(private userService: UserService, private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     this.passwordForm = this.fb.group({

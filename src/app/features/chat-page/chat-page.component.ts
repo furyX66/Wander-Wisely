@@ -1,4 +1,4 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, inject, ViewChild} from '@angular/core';
 import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
 import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
 import {MapComponent} from '../../shared/common-ui/map/map.component';
@@ -33,6 +33,8 @@ import {AssesstantIconComponent} from '../../../../public/assets/icons/assistant
 export class ChatPageComponent implements AfterViewChecked {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
+  private http = inject(HttpClient);
+
   messages: ChatMessage[] = [];
   nextId = 0;
   showScrollButton = false;
@@ -42,7 +44,7 @@ export class ChatPageComponent implements AfterViewChecked {
   private messageSend$ = new Subject<string>();
   isLoading = false;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
+  constructor(private cdr: ChangeDetectorRef) {
     this.messageSend$.pipe(
       filter(msg => !!msg.trim()),
       tap(() => this.isLoading = true),

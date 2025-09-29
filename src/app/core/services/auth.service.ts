@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
@@ -21,11 +21,12 @@ interface LoginData {
   providedIn: 'root'
 })
 export class AuthService {
+  private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private router: Router) {}
 
   register(userData: RegistrationData) {
     return this.http.post(`${this.apiUrl}/auth/registration`, userData).pipe(

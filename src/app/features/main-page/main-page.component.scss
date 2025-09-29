@@ -4,7 +4,7 @@
   min-height: 100dvh;
   grid-template-areas:
     "header"
-    "content";
+    "main-content";
   margin: 0;
   background: var(--main-page-color);
 }
@@ -16,7 +16,7 @@ app-header{
 .main-content{
   align-self: center;
   justify-self: center;
-  grid-area: content;
+  grid-area: main-content;
 }
 
 app-chat-input{

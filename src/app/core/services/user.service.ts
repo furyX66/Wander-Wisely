@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {UserType} from '../../../types/UserType';
@@ -8,11 +8,10 @@ import {environment} from '../../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
+  private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
   currentUserSubject = new BehaviorSubject<UserType | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
-
-  constructor(private http: HttpClient) {}
 
   getCurrentUser(): Observable<UserType> {
     return this.http.get<UserType>(`${this.apiUrl}/user/me`, {withCredentials: true}).pipe(

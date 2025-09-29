@@ -1,4 +1,4 @@
-import {Component, output} from '@angular/core';
+import {Component, inject, output} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
 import {ModalService} from '../../../core/services/modal.service';
 import {ModalType} from '../../../enums/ModalType';
@@ -10,9 +10,10 @@ import {ModalType} from '../../../enums/ModalType';
   styleUrl: './user-menu.component.scss'
 })
 export class UserMenuComponent {
-  closeMenu = output<void>();
+  private authService = inject(AuthService);
+  private modalService =  inject(ModalService);
 
-  constructor(private authService: AuthService, protected modalService: ModalService) {}
+  closeMenu = output<void>();
 
   logout() {
     this.authService.logout();

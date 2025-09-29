@@ -31,9 +31,11 @@ import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 })
 export class HeaderComponent implements OnInit {
   private modalService = inject(ModalService);
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
   showUserMenu = false;
 
-  constructor(public authService: AuthService, private userService: UserService) {
+  constructor() {
     this.user$ = this.userService.currentUser$;
     this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
