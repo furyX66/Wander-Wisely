@@ -6,13 +6,13 @@ import {UserMessageComponent} from '../../shared/chat/user-message/user-message.
 import {HttpClient} from '@angular/common/http';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ChatMessage} from '../../../types/ChatMessage';
-import {ProfileIcon} from '../../../../public/assets/icons/arrow-icon';
+import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
 import {exhaustMap, filter, finalize, of, Subject, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {
   LoadingAnimationComponent
 } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
-import {AssesstantIconComponent} from '../../../../public/assets/icons/assistant-icon';
+import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
 
 @Component({
   selector: 'app-chat-page',
@@ -22,9 +22,9 @@ import {AssesstantIconComponent} from '../../../../public/assets/icons/assistant
     MapComponent,
     UserMessageComponent,
     AssistantMessageComponent,
-    ProfileIcon,
+    ArrowIconComponent,
     LoadingAnimationComponent,
-    AssesstantIconComponent
+    AssistantIconComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,

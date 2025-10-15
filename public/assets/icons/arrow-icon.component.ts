@@ -1,7 +1,7 @@
 import {Component, input} from '@angular/core';
 
 @Component({
-  selector: 'arrow-icon',
+  selector: 'icon-arrow',
   imports: [],
   template: `
     <svg xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@ import {Component, input} from '@angular/core';
     }
   `
 })
-export class ProfileIcon {
+export class ArrowIconComponent {
   size = input<number>(36);
   strokeWidth = input<number | string>(1);
 }

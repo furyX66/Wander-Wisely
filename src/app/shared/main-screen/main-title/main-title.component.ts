@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MainScreenLogo} from '../../../../../public/assets/icons/main-screen-logo';
+import {MainScreenLogoComponent} from '../../../../../public/assets/icons/main-screen-logo.component';
 
 @Component({
   selector: 'app-main-title',
@@ -8,7 +8,7 @@ import {MainScreenLogo} from '../../../../../public/assets/icons/main-screen-log
   styleUrls: ['./main-title.component.scss'],
   imports: [
     CommonModule,
-    MainScreenLogo
+    MainScreenLogoComponent
   ],
   standalone: true
 })

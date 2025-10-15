@@ -24,7 +24,7 @@ import {Component, input} from '@angular/core';
     }
   `
 })
-export class ProfileIcon {
+export class ProfileIconComponent {
   size = input<number | string>(26);
   strokeWidth = input<number | string>(1);
 }

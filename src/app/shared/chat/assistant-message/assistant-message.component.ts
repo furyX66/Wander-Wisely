@@ -1,10 +1,10 @@
 import {Component, input} from '@angular/core';
-import {AssesstantIconComponent} from '../../../../../public/assets/icons/assistant-icon';
+import {AssistantIconComponent} from '../../../../../public/assets/icons/assistant-icon';
 
 @Component({
   selector: 'app-assistant-message',
   imports: [
-    AssesstantIconComponent
+    AssistantIconComponent
   ],
   templateUrl: './assistant-message.component.html',
   styleUrl: './assistant-message.component.scss'

@@ -7,7 +7,7 @@ import {AuthService} from '../../../core/services/auth.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {User} from '../../../../types/User';
-import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
+import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
 import {ChatIconComponent} from '../../../../../public/assets/icons/chat-icon';
@@ -23,7 +23,7 @@ import {ModalType} from '../../../enums/ModalType';
     ColorSchemeSwitchComponent,
     LogoComponent,
     AsyncPipe,
-    ProfileIcon,
+    ProfileIconComponent,
     UserMenuComponent,
     ChatIconComponent,
     NewChatIconComponent,

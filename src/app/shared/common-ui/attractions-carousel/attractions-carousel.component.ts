@@ -1,13 +1,15 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, input, signal, ViewChild} from '@angular/core';
 import {Attraction} from '../../../../types/Attraction';
 import {NgOptimizedImage} from '@angular/common';
-import {ProfileIcon} from '../../../../../public/assets/icons/arrow-icon';
+import {ArrowIconComponent} from '../../../../../public/assets/icons/arrow-icon.component';
+import {FavoriteIcon} from '../../../../../public/assets/icons/favorite-icon';
 
 @Component({
   selector: 'app-attractions-carousel',
   imports: [
     NgOptimizedImage,
-    ProfileIcon
+    ArrowIconComponent,
+    FavoriteIcon
   ],
   templateUrl: './attractions-carousel.component.html',
   styleUrl: './attractions-carousel.component.scss',

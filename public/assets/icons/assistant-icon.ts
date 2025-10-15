@@ -23,7 +23,7 @@ import {Component, input} from '@angular/core';
     }
   `
 })
-export class AssesstantIconComponent {
+export class AssistantIconComponent {
   width = input<number | string>(24);
   height = input<number | string>(21);
   strokeWidth = input<number | string>(1);

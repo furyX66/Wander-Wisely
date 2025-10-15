@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
 import {User} from '../../../../types/User';
 import {AuthService} from '../../../core/services/auth.service';
 import {AsyncPipe} from '@angular/common';
-import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
+import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserService} from '../../../core/services/user.service';
 import {ModalType} from '../../../enums/ModalType';
 import {ModalService} from '../../../core/services/modal.service';
@@ -22,7 +22,7 @@ import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
     LoginButtonComponent,
     LogoComponent,
     AsyncPipe,
-    ProfileIcon,
+    ProfileIconComponent,
     UserMenuComponent,
   ],
   templateUrl: './header.component.html',

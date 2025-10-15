@@ -70,7 +70,7 @@ import {Component, input} from '@angular/core';
     }
   `
 })
-export class MainScreenLogo {
+export class MainScreenLogoComponent {
   width = input<number | string>(569);
   height = input<number | string>(256);
 }
