@@ -9,6 +9,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 
   .cards-container {
@@ -66,7 +67,7 @@ icon-favorite{
 }
 
 .disabled {
-  opacity: 0.2;
+  opacity: 0;
   cursor: not-allowed;
   pointer-events: none;
 }
