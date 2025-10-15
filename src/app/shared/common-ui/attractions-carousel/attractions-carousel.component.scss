@@ -24,6 +24,7 @@
 
     .card {
       position: relative;
+      z-index: 500;
       scroll-snap-align: start;
       width: 174px;
       display: flex;

@@ -5,11 +5,6 @@ import {ChatPageComponent} from './features/chat-page/chat-page.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'main',
-    pathMatch: 'full',
-  },
-  {
-    path: 'main',
     component: MainPageComponent,
   },
   {
@@ -18,6 +13,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'main',
+    redirectTo: '',
   },
 ];
