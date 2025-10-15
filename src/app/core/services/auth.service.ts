@@ -35,19 +35,17 @@ export class AuthService {
   }
 
   login(credentials: LoginData) {
-    return this.http.post(`${this.apiUrl}/auth/login`, credentials, { withCredentials: true }).pipe(
+    return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(() => {
         this.isLoggedInSubject.next(true);
-        this.router.navigate(['/chat'])
+        this.router.navigate(['/chat']).then(()=>console.log("Logged in"))
       })
     );
   }
 
   forgotPassword(email: string): Observable<string> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/auth/forgot-password`, { email })
-      .pipe(
-        map(response => response.message)
-      );
+      .pipe(map(response => response.message));
   }
 
   verifyResetCode(email: string, code: string): Observable<any> {
@@ -63,14 +61,14 @@ export class AuthService {
   }
 
   logout() {
-    this.http.post(`${this.apiUrl}/auth/logout`, {}, { withCredentials: true }).subscribe(() => {
+    this.http.post(`${this.apiUrl}/auth/logout`, {}).subscribe(() => {
       this.isLoggedInSubject.next(false);
-      this.router.navigate(['/']);
+      this.router.navigate(['/']).then(()=>console.log("Logged out"));
     });
   }
 
   checkAuthStatus(): Observable<boolean> {
-    return this.http.get(`${this.apiUrl}/user/me`, { withCredentials: true }).pipe(
+    return this.http.get(`${this.apiUrl}/user/me`).pipe(
       tap(() => this.isLoggedInSubject.next(true)),
       map(() => true),
       catchError(() => {

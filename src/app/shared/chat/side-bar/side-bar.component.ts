@@ -6,7 +6,7 @@ import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
-import {UserType} from '../../../../types/UserType';
+import {User} from '../../../../types/User';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
@@ -40,7 +40,7 @@ export class SideBarComponent implements OnInit {
   private authService = inject(AuthService);
 
   showUserMenu = false;
-  user$: Observable<UserType | null>;
+  user$: Observable<User | null>;
   isLoggedIn$: Observable<boolean>;
 
   constructor() {

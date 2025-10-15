@@ -5,7 +5,7 @@ import {MapComponent} from '../../shared/common-ui/map/map.component';
 import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
 import {HttpClient} from '@angular/common/http';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
-import {ChatMessage} from '../../../types/ChatMessageType';
+import {ChatMessage} from '../../../types/ChatMessage';
 import {ProfileIcon} from '../../../../public/assets/icons/arrow-icon';
 import {exhaustMap, filter, finalize, of, Subject, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';

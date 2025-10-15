@@ -21,6 +21,7 @@ app-chat-input {
 
 app-map {
   grid-area: map;
+  position: relative;
 }
 
 .chat-area {
@@ -67,7 +68,7 @@ arrow-icon {
   position: absolute;
   left: 50%;
   bottom: 72px;
-  transform: translateX(-50%);
+  transform: translateX(-50%) rotate(-90deg);
 }
 
 .loading-message {

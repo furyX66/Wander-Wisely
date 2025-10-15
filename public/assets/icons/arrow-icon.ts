@@ -21,7 +21,6 @@ import {Component, input} from '@angular/core';
     }
     svg{
       color: var(--text-color);
-      transform: rotate(-90deg);
       display: block;
     }
   `

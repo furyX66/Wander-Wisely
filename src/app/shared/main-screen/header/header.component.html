@@ -2,19 +2,19 @@
   <app-logo/>
   <div class="menu-buttons">
     @if (!(isLoggedIn$  | async)) {
-    <app-color-scheme-switch/>
-    <app-login-button (click)="openLoginModal()"/>
-    <app-sign-up-button (click)="openRegistrationModal()"/>
+      <app-color-scheme-switch/>
+      <app-login-button (click)="openLoginModal()"/>
+      <app-sign-up-button (click)="openRegistrationModal()"/>
     } @else {
       <section class="user-signed">
         <app-color-scheme-switch/>
-        <p (click)="toggleUserMenu()" style="cursor:pointer" >{{ (user$ | async)?.username }}</p>
+        <p (click)="toggleUserMenu()" style="cursor:pointer">{{ (user$ | async)?.username }}</p>
         <icon-profile (click)="toggleUserMenu()"/>
       </section>
     }
   </div>
 </div>
-@if (showUserMenu){
+@if (showUserMenu) {
   <app-user-menu (closeMenu)="toggleUserMenu()"/>
 }
 

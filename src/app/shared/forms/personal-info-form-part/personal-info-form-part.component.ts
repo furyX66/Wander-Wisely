@@ -3,7 +3,7 @@ import {ButtonComponent} from "../../common-ui/button/button.component";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InputComponent} from "../../common-ui/input/input.component";
 import {UserService} from '../../../core/services/user.service';
-import {UserType} from '../../../../types/UserType';
+import {User} from '../../../../types/User';
 
 @Component({
   selector: 'app-personal-info-form-part',
@@ -44,7 +44,7 @@ export class PersonalInfoFormPartComponent implements OnInit {
 
       if (patch.length > 0) {
         this.userService.updateUser(this.userId, patch).subscribe({
-          next: (updatedUser: UserType)  => {
+          next: (updatedUser: User)  => {
             this.userService.currentUserSubject.next(updatedUser);
             this.successMessage = 'User updated successfully';
             console.log('User updated successfully:', updatedUser);

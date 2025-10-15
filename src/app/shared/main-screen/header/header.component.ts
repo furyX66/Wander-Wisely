@@ -4,7 +4,7 @@ import {SignUpButtonComponent} from '../../common-ui/sign-up-button/sign-up-butt
 import {LoginButtonComponent} from '../../common-ui/login-button/login-button.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {Observable} from 'rxjs';
-import {UserType} from '../../../../types/UserType';
+import {User} from '../../../../types/User';
 import {AuthService} from '../../../core/services/auth.service';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIcon} from '../../../../../public/assets/icons/profile-icon';
@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
 
-  user$: Observable<UserType | null>;
+  user$: Observable<User | null>;
   isLoggedIn$: Observable<boolean>;
 
   ngOnInit() {

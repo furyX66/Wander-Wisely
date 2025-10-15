@@ -1,5 +1,8 @@
 <div class="map-container">
   <div class="map-frame">
+    @if (attractions) {
+      <app-attractions-carousel [attractions]="attractions"/>
+    }
     <div id="map"></div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 @use "colors" as *;
 
 $light-theme: (
-  background-color: $white,
+  bg-color: $white,
   text-color: $black,
   assistant-message-color: $white,
   assistant-message-border: 1px solid $light-gray,
@@ -9,7 +9,7 @@ $light-theme: (
 );
 
 $dark-theme: (
-  background-color: $black,
+  bg-color: $black,
   text-color: $white,
   assistant-message-color: $dark-gray,
   assistant-message-border: none,

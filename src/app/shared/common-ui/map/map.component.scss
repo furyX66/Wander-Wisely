@@ -13,3 +13,11 @@
 #map {
   height: 100%;
 }
+
+app-attractions-carousel{
+  z-index: 2000;
+  position: absolute;
+  width: calc(100% - 48px);
+  top: 24px;
+  right: 24px;
+}

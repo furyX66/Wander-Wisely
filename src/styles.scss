@@ -75,7 +75,7 @@
   align-items: center;
   gap: 40px;
   border-radius: 40px;
-  background: var(--background-color);
+  background: var(--bg-color);
   max-width: 320px;
   max-height: 900px;
 }
@@ -125,15 +125,10 @@
 }
 
 body {
-  background: var(--background-color);
+  background: var(--bg-color);
   color: var(--text-color);
   width: 100dvw;
   min-height: 100dvh;
   transition: background 0.2s;
 }
 
-//@media (max-width: 768px) {
-//  .menu-list-font{
-//    font-size: 12px;
-//  }
-//}

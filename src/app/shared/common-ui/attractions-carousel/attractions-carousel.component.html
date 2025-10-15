@@ -1,0 +1,19 @@
+<div class="carousel-wrapper">
+  <arrow-icon class="arrow-left" (click)="scrollLeft()" [class.disabled]="!canScrollLeft()"/>
+  <div class="cards-container" #cardsContainer (scroll)="onScroll($event)">
+    @for (attraction of attractions(); track attraction.id) {
+      <div class="card">
+        <img loading="lazy" ngSrc="assets/img/stas.png" alt="Attraction image" height="300" width="300">
+        <div class="card-info">
+          <p class="menu-list-font-bold">{{ attraction.title }}</p>
+          <p class="menu-list-font">{{ attraction.rating }}</p>
+          <p class="menu-list-font">{{ attraction.price }}$</p>
+        </div>
+      </div>
+    }
+  </div>
+  <arrow-icon class="arrow-right" (click)="scrollRight()" [class.disabled]="!canScrollRight()"/>
+</div>
+
+
+
