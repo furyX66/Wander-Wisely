@@ -3,13 +3,17 @@ import {Attraction} from '../../../../types/Attraction';
 import {NgOptimizedImage} from '@angular/common';
 import {ArrowIconComponent} from '../../../../../public/assets/icons/arrow-icon.component';
 import {FavoriteIcon} from '../../../../../public/assets/icons/favorite-icon';
+import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.component';
+import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
 
 @Component({
   selector: 'app-attractions-carousel',
   imports: [
     NgOptimizedImage,
     ArrowIconComponent,
-    FavoriteIcon
+    FavoriteIcon,
+    CrossIconComponent,
+    DropdownArrowIconComponent
   ],
   templateUrl: './attractions-carousel.component.html',
   styleUrl: './attractions-carousel.component.scss',
@@ -20,6 +24,7 @@ import {FavoriteIcon} from '../../../../../public/assets/icons/favorite-icon';
 export class AttractionsCarouselComponent implements AfterViewInit {
   canScrollLeft = signal(false);
   canScrollRight = signal(true);
+  isShown = signal(true);
   attractions = input<Attraction[]>([]);
   currentPage = signal(0)
   private cardsPerPage!: number;
@@ -52,6 +57,10 @@ export class AttractionsCarouselComponent implements AfterViewInit {
 
   scrollRight() {
     this.scrollToPage(2);
+  }
+
+  onButtonClick(){
+    this.isShown.set(!this.isShown());
   }
 
   private updateScrollSignals(container: HTMLElement): void {

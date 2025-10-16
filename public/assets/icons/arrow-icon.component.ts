@@ -10,7 +10,7 @@ import {Component, input} from '@angular/core';
          viewBox="0 0 22 22"
          fill="none"
     >
-      <circle cx="11" cy="11" r="10.5" stroke="currentColor" fill="var(--assistant-message-color)" [attr.stroke-width]="strokeWidth()"/>
+      <circle class="circle-outline" cx="11" cy="11" r="10.5" stroke="currentColor" fill="var(--assistant-message-color)" [attr.stroke-width]="strokeWidth()"/>
       <path d="M12 6L8 11L12 16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   `,
@@ -22,6 +22,9 @@ import {Component, input} from '@angular/core';
     svg{
       color: var(--text-color);
       display: block;
+    }
+    .circle-outline:hover {
+      stroke-width: 1;
     }
   `
 })
