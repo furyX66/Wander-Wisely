@@ -3,7 +3,6 @@ import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
 import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
 import {MapComponent} from '../../shared/common-ui/map/map.component';
 import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
-import {HttpClient} from '@angular/common/http';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ChatMessage} from '../../../types/ChatMessage';
 import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
@@ -13,6 +12,13 @@ import {
   LoadingAnimationComponent
 } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
 import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
+import {ChatService} from '../../core/services/chat.service';
+import {Attraction} from '../../../types/Attraction';
+
+export interface ChatResponse {
+  reply: string;
+  places : Attraction[];
+}
 
 @Component({
   selector: 'app-chat-page',
@@ -33,9 +39,10 @@ import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-
 export class ChatPageComponent implements AfterViewChecked {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
-  private http = inject(HttpClient);
+  private chatService = inject(ChatService);
 
   messages: ChatMessage[] = [];
+  attractions: Attraction[] = [];
   nextId = 0;
   showScrollButton = false;
   shouldScrollToBottom = false;
@@ -45,20 +52,33 @@ export class ChatPageComponent implements AfterViewChecked {
   isLoading = false;
 
   constructor(private cdr: ChangeDetectorRef) {
-    this.messageSend$.pipe(
-      filter(msg => !!msg.trim()),
-      tap(() => this.isLoading = true),
-      exhaustMap(message =>
-        this.http.post<{reply: string}>('/api/chat', { message }).pipe(
-          tap(res => this.addAssistantMessage(res.reply)),
-          catchError(() => {
-            this.addAssistantMessage('Server error');
-            return of(null);
-          }),
-          finalize(() => this.isLoading = false)
+    this.messageSend$
+      .pipe(
+        filter(msg => !!msg.trim()),
+        tap(() => {
+          this.isLoading = true;
+          this.cdr.detectChanges();
+        }),
+        exhaustMap(message =>
+          this.chatService.chatAsk(message).pipe(
+            tap((res: ChatResponse) => {
+              if (res) this.addAssistantMessage(res.reply);
+              this.attractions = res.places;
+              this.cdr.detectChanges();
+            }),
+            catchError(() => {
+              this.addAssistantMessage('Server error');
+              this.cdr.detectChanges();
+              return of(null);
+            }),
+            finalize(() => {
+              this.isLoading = false;
+              this.cdr.detectChanges();
+            })
+          )
         )
       )
-    ).subscribe();
+      .subscribe();
   }
 
   handleChatInput(value: string) {

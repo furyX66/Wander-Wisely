@@ -15,7 +15,10 @@ export class UserService {
 
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/user/me`, {withCredentials: true}).pipe(
-      tap(user => this.currentUserSubject.next(user))
+      tap(user => {
+        console.log('CurrentUser from service:', user);
+        this.currentUserSubject.next(user)
+      })
     );
   }
 

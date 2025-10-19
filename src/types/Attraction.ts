@@ -1,6 +1,10 @@
 export interface Attraction {
   id: number;
-  title: string;
-  rating: string;
-  price: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  type: string;
+  rating: number;
+  price: number | null;
+  photoUrl: string | null;
 }

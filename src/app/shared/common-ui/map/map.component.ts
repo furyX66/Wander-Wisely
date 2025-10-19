@@ -1,6 +1,5 @@
-import {Component, AfterViewInit, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
-import {attractions} from "../../../../attractions";
 import {AttractionsCarouselComponent} from '../attractions-carousel/attractions-carousel.component';
 import {Attraction} from '../../../../types/Attraction';
 
@@ -14,7 +13,7 @@ import {Attraction} from '../../../../types/Attraction';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
-  attractions: Attraction[] = attractions;
+  attractions = input<Attraction[] >([]);
 
   constructor() {
     delete (L.Icon.Default.prototype as any)._getIconUrl;

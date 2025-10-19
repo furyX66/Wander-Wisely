@@ -1,19 +1,21 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, input, signal, ViewChild} from '@angular/core';
 import {Attraction} from '../../../../types/Attraction';
-import {NgOptimizedImage} from '@angular/common';
 import {ArrowIconComponent} from '../../../../../public/assets/icons/arrow-icon.component';
 import {FavoriteIcon} from '../../../../../public/assets/icons/favorite-icon';
 import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.component';
 import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
+import {StarIconComponent} from '../../../../../public/assets/icons/star-icon.component';
+import {MoneyIconComponent} from '../../../../../public/assets/icons/money-icon.component';
 
 @Component({
   selector: 'app-attractions-carousel',
   imports: [
-    NgOptimizedImage,
     ArrowIconComponent,
     FavoriteIcon,
     CrossIconComponent,
-    DropdownArrowIconComponent
+    DropdownArrowIconComponent,
+    StarIconComponent,
+    MoneyIconComponent
   ],
   templateUrl: './attractions-carousel.component.html',
   styleUrl: './attractions-carousel.component.scss',
@@ -43,6 +45,7 @@ export class AttractionsCarouselComponent implements AfterViewInit {
     const page = Math.round(container.scrollLeft / (this.cardStep * this.cardsPerPage));
     this.currentPage.set(page);
     this.updateScrollSignals(container);
+    console.log(this.canScrollLeft());
   }
 
   scrollToPage(deltaCards: number) {

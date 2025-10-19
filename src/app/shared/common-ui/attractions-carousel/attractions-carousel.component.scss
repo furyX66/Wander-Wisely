@@ -20,7 +20,7 @@
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
     display: flex;
-    gap: 8px;
+    gap: 0.5rem;
     overflow-x: hidden;
     scroll-behavior: smooth;
     width: 100%;
@@ -48,12 +48,19 @@
         grid-row: 2;
         box-sizing: border-box;
         display: flex;
-        padding: 1rem 2rem;
+        padding: 1rem;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         align-self: stretch;
         background-color: var(--bg-color);
+
+        .row{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 4px;
+        }
       }
     }
   }

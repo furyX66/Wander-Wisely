@@ -1,14 +1,25 @@
 <div class="carousel-wrapper" [class.closed]="!isShown()">
   <icon-arrow class="arrow-left" (click)="scrollLeft()" [class.disabled]="!canScrollLeft()" [strokeWidth]="0"/>
   <div class="cards-container" #cardsContainer (scroll)="onScroll($event)">
-    @for (attraction of attractions(); track attraction.id) {
+    @for (attraction of attractions(); track attraction) {
       <div class="card">
         <icon-favorite/>
-        <img loading="lazy" ngSrc="assets/img/stas.png" alt="Attraction image" height="174" width="120">
+        <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" alt="Attraction image" height="174"
+             width="120">
         <div class="card-info">
-          <p class="menu-list-font-bold">{{ attraction.title }}</p>
-          <p class="menu-list-font">{{ attraction.rating }}</p>
-          <p class="menu-list-font">{{ attraction.price }}$</p>
+          <span class="row">
+            <p class="menu-list-font-bold">{{ attraction.name }}</p>
+          </span>
+          <span class="row">
+            <icon-star/>
+            <p class="menu-list-font"> {{ attraction.rating }}</p>
+          </span>
+          <span class="row">
+                @if (attraction.price) {
+                  <icon-money/>
+                  <p class="menu-list-font">{{ attraction.price }}</p>
+                }
+          </span>
         </div>
       </div>
     }
@@ -17,7 +28,7 @@
 </div>
 
 <button class="btn" [class.btn-closed]="!isShown()" (click)="onButtonClick()">
-  @if(!isShown()){
+  @if (!isShown()) {
     <icon-dropdown-arrow [strokeWidth]="2"/>
     Open
   } @else {
