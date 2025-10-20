@@ -47,7 +47,6 @@ export class PersonalInfoFormPartComponent implements OnInit {
           next: (updatedUser: User)  => {
             this.userService.currentUserSubject.next(updatedUser);
             this.successMessage = 'User updated successfully';
-            console.log('User updated successfully:', updatedUser);
             this.oldUser = updatedUser;
           },
           error: error => {

@@ -1,4 +1,4 @@
-import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, inject, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
 import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
 import {MapComponent} from '../../shared/common-ui/map/map.component';
@@ -6,7 +6,7 @@ import {UserMessageComponent} from '../../shared/chat/user-message/user-message.
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ChatMessage} from '../../../interfaces/ChatMessage';
 import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
-import {exhaustMap, filter, finalize, of, Subject, tap} from 'rxjs';
+import {exhaustMap, filter, finalize, of, Subject, takeUntil, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {
   LoadingAnimationComponent
@@ -36,10 +36,11 @@ export interface ChatResponse {
   standalone: true,
   styleUrl: './chat-page.component.scss'
 })
-export class ChatPageComponent implements AfterViewChecked {
+export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   private chatService = inject(ChatService);
+  private destroy$ = new Subject<void>();
 
   messages: ChatMessage[] = [];
   attractions: Attraction[] = [];
@@ -47,41 +48,55 @@ export class ChatPageComponent implements AfterViewChecked {
   showScrollButton = false;
   shouldScrollToBottom = false;
   isUserScrolledUp = false;
-
-  private messageSend$ = new Subject<string>();
   isLoading = false;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  private messageSend$ = new Subject<string>();
+
+  ngOnInit(): void {
+    this.setupMessageStream();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.shouldScrollToBottom && !this.isUserScrolledUp) {
+      this.performScroll();
+      this.shouldScrollToBottom = false;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupMessageStream(): void {
     this.messageSend$
       .pipe(
         filter(msg => !!msg.trim()),
-        tap(() => {
-          this.isLoading = true;
-          this.cdr.detectChanges();
-        }),
+        tap(() => this.isLoading = true),
         exhaustMap(message =>
           this.chatService.chatAsk(message).pipe(
             tap((res: ChatResponse) => {
-              if (res) this.addAssistantMessage(res.reply);
-              this.attractions = res.places;
-              this.cdr.detectChanges();
+              if (res?.reply) {
+                this.addAssistantMessage(res.reply);
+              }
+              if (res?.places) {
+                this.attractions = res.places;
+              }
             }),
-            catchError(() => {
+            catchError((error) => {
+              console.error('Chat service error:', error);
               this.addAssistantMessage('Server error');
-              this.cdr.detectChanges();
               return of(null);
             }),
-            finalize(() => {
-              this.isLoading = false;
-              this.cdr.detectChanges();
-            })
+            finalize(() => this.isLoading = false)
           )
-        )
+        ),
+        takeUntil(this.destroy$)
       )
       .subscribe();
   }
 
-  handleChatInput(value: string) {
+  handleChatInput(value: string): void {
     if (!value.trim() || this.isLoading) return;
 
     this.addUserMessage(value);
@@ -97,14 +112,6 @@ export class ChatPageComponent implements AfterViewChecked {
     this.showScrollButton = this.isUserScrolledUp;
   }
 
-  ngAfterViewChecked(): void {
-    if (this.shouldScrollToBottom && !this.isUserScrolledUp) {
-      this.performScroll();
-      this.shouldScrollToBottom = false;
-    }
-    this.cdr.detectChanges();
-  }
-
   scheduleScroll(): void {
     this.isUserScrolledUp = false;
     this.showScrollButton = false;
@@ -117,14 +124,16 @@ export class ChatPageComponent implements AfterViewChecked {
     this.showScrollButton = false;
   }
 
-  performScroll(): void {
+  private performScroll(): void {
     try {
-      this.chatContainer.nativeElement.scrollTop =
-        this.chatContainer.nativeElement.scrollHeight;
-    } catch {}
+      const el = this.chatContainer.nativeElement;
+      el.scrollTop = el.scrollHeight;
+    } catch (error) {
+      console.error('Scroll error:', error);
+    }
   }
 
-  addUserMessage(text: string) {
+  private addUserMessage(text: string): void {
     this.messages.push({
       id: this.nextId++,
       text,
@@ -132,7 +141,7 @@ export class ChatPageComponent implements AfterViewChecked {
     });
   }
 
-  addAssistantMessage(text: string) {
+  private addAssistantMessage(text: string): void {
     this.messages.push({
       id: this.nextId++,
       text,
@@ -141,3 +150,4 @@ export class ChatPageComponent implements AfterViewChecked {
     this.scheduleScroll();
   }
 }
+
