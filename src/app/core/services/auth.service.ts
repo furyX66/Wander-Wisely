@@ -1,5 +1,4 @@
 import {inject, Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {BehaviorSubject, map, Observable, of} from 'rxjs';
@@ -22,20 +21,19 @@ interface LoginData {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
 
   constructor(private router: Router) {}
 
   register(userData: RegistrationData) {
-    return this.http.post(`${this.apiUrl}/auth/registration`, userData).pipe(
+    return this.http.post(`/api/auth/registration`, userData).pipe(
       tap(() => this.router.navigate(['/chat']))
     );
   }
 
   login(credentials: LoginData) {
-    return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
+    return this.http.post(`/api/auth/login`, credentials).pipe(
       tap(() => {
         this.isLoggedInSubject.next(true);
         this.router.navigate(['/chat']).then(()=>console.log("Logged in"))
@@ -44,16 +42,16 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<string> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/forgot-password`, { email })
+    return this.http.post<{ message: string }>(`/api/auth/forgot-password`, { email })
       .pipe(map(response => response.message));
   }
 
   verifyResetCode(email: string, code: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/verify-reset-code`, { email, code });
+    return this.http.post(`/api/auth/verify-reset-code`, { email, code });
   }
 
   resetPassword(email: string, code: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/reset-password`, {
+    return this.http.post(`/api/auth/reset-password`, {
       email,
       code,
       newPassword
@@ -61,14 +59,14 @@ export class AuthService {
   }
 
   logout() {
-    this.http.post(`${this.apiUrl}/auth/logout`, {}).subscribe(() => {
+    this.http.post(`/api/auth/logout`, {}).subscribe(() => {
       this.isLoggedInSubject.next(false);
       this.router.navigate(['/']).then(()=>console.log("Logged out"));
     });
   }
 
   checkAuthStatus(): Observable<boolean> {
-    return this.http.get(`${this.apiUrl}/user/me`).pipe(
+    return this.http.get(`/api/user/me`).pipe(
       tap(() => this.isLoggedInSubject.next(true)),
       map(() => true),
       catchError(() => {

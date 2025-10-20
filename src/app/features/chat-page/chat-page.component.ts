@@ -4,7 +4,7 @@ import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.c
 import {MapComponent} from '../../shared/common-ui/map/map.component';
 import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
-import {ChatMessage} from '../../../types/ChatMessage';
+import {ChatMessage} from '../../../interfaces/ChatMessage';
 import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
 import {exhaustMap, filter, finalize, of, Subject, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -13,7 +13,7 @@ import {
 } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
 import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
 import {ChatService} from '../../core/services/chat.service';
-import {Attraction} from '../../../types/Attraction';
+import {Attraction} from '../../../interfaces/Attraction';
 
 export interface ChatResponse {
   reply: string;

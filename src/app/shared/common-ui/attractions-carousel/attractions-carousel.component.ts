@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, input, signal, ViewChild} from '@angular/core';
-import {Attraction} from '../../../../types/Attraction';
+import {Attraction} from '../../../../interfaces/Attraction';
 import {ArrowIconComponent} from '../../../../../public/assets/icons/arrow-icon.component';
 import {FavoriteIcon} from '../../../../../public/assets/icons/favorite-icon';
 import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.component';

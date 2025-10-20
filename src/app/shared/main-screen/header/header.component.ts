@@ -4,7 +4,7 @@ import {SignUpButtonComponent} from '../../common-ui/sign-up-button/sign-up-butt
 import {LoginButtonComponent} from '../../common-ui/login-button/login-button.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {Observable} from 'rxjs';
-import {User} from '../../../../types/User';
+import {User} from '../../../../interfaces/User';
 import {AuthService} from '../../../core/services/auth.service';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';

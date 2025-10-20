@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import {AttractionsCarouselComponent} from '../attractions-carousel/attractions-carousel.component';
-import {Attraction} from '../../../../types/Attraction';
+import {Attraction} from '../../../../interfaces/Attraction';
 
 @Component({
   selector: 'app-map',
