@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, input, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, effect, input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import {AttractionsCarouselComponent} from '../attractions-carousel/attractions-carousel.component';
 import {Attraction} from '../../../../interfaces/Attraction';
@@ -14,6 +14,7 @@ import {Attraction} from '../../../../interfaces/Attraction';
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
   attractions = input<Attraction[] >([]);
+  private attractionMarkers: L.Marker[] = [];
 
   constructor() {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -23,6 +24,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       shadowUrl: '/assets/leaflet/marker-shadow.png',
     });
 
+    effect(() => {
+      const currentAttractions = this.attractions();
+      if (this.map && currentAttractions.length > 0) {
+        this.displayAttractions(currentAttractions);
+      }
+    });
   }
 
   private map!: L.Map;
@@ -68,6 +75,64 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     this.applyTheme(this.isDarkMode());
+  }
+
+  private displayAttractions(attractions: Attraction[]): void {
+    // Удаляем предыдущие маркеры
+    this.clearAttractionMarkers();
+
+    if (!attractions || attractions.length === 0) {
+      return;
+    }
+
+    const bounds: L.LatLngBoundsExpression = [];
+
+    attractions.forEach(attraction => {
+      const latLng = L.latLng(attraction.latitude, attraction.longitude);
+
+      const marker = L.marker(latLng)
+        .addTo(this.map)
+        .bindPopup(this.createPopupContent(attraction));
+
+      this.attractionMarkers.push(marker);
+      bounds.push([attraction.latitude, attraction.longitude]);
+    });
+
+    // Автоматически подстраиваем карту под все маркеры
+    if (bounds.length > 0) {
+      this.map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }
+
+  private createPopupContent(attraction: Attraction): string {
+    const stars = '⭐'.repeat(Math.round(attraction.rating));
+    const price = attraction.price !== null ? `${attraction.price} zł` : 'Free';
+    const photo = attraction.photoUrl
+      ? `<img src="${attraction.photoUrl}" alt="${attraction.name}" style="width: 100%; max-width: 200px; height: auto; border-radius: 4px; margin-bottom: 8px;">`
+      : '';
+
+    return `
+      <div style="min-width: 150px;">
+        ${photo}
+        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${attraction.name}</h3>
+        <p style="margin: 4px 0; font-size: 14px;">
+          <strong>Rating:</strong> ${stars} (${attraction.rating})
+        </p>
+        <p style="margin: 4px 0; font-size: 14px;">
+          <b>Price:</b> ${price}
+        </p>
+        <p style="margin: 4px 0; color: #666; font-size: 14px;">
+          <b>Type:</b> ${attraction.type}
+        </p>
+      </div>
+    `;
+  }
+
+  private clearAttractionMarkers(): void {
+    this.attractionMarkers.forEach(marker => {
+      this.map.removeLayer(marker);
+    });
+    this.attractionMarkers = [];
   }
 
   private applyTheme(isDark: boolean): void {
