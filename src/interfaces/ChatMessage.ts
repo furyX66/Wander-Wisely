@@ -1,5 +1,7 @@
 export interface ChatMessage {
   id: number;
-  text: string;
-  author: 'user' | 'assistant';
+  chatSessionId?: number;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp?: string;
 }

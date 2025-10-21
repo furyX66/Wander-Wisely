@@ -1,7 +1,6 @@
 import {Component, input, output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {Router} from '@angular/router';
 import {SendIconComponent} from '../../../../../public/assets/icons/send-icon';
 
 @Component({
@@ -14,19 +13,13 @@ import {SendIconComponent} from '../../../../../public/assets/icons/send-icon';
 export class ChatInputComponent {
   disabled = input<boolean>(false);
   placeholder = input<string>('Enter your wishes for the trip');
-  link = input<string | null>(null);
 
   onClick = output<string>();
 
   inputValue: string = '';
 
-  constructor(private router: Router) {}
-
   onSendClick() {
-    if (this.link()) {
-      this.router.navigate([this.link()]);
-      this.onClick.emit(this.inputValue);
-    } else if (this.disabled() || !this.inputValue.trim()){
+     if (this.disabled()){
       return;
     } else {
       this.onClick.emit(this.inputValue);

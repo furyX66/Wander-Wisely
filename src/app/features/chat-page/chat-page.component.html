@@ -2,15 +2,15 @@
 <section class="chat-area">
   <div class="chat-messages" id="chatContainer" #chatContainer (scroll)="onScroll()">
     @for (msg of messages; track msg.id) {
-      @if (msg.author === 'user') {
+      @if (msg.role === 'user') {
         <app-user-message
-          [text]="msg.text"
+          [text]="msg.content"
           class="user-message"
         ></app-user-message>
       }
-      @if (msg.author === 'assistant') {
+      @if (msg.role === 'assistant') {
         <app-assistant-message
-          [text]="msg.text"
+          [text]="msg.content"
           class="assistant-message"
         ></app-assistant-message>
       }

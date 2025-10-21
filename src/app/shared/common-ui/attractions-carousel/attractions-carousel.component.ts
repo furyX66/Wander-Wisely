@@ -103,7 +103,7 @@ export class AttractionsCarouselComponent implements AfterViewInit {
               this.observer.unobserve(img);
             },
             error: () => {
-              img.setAttribute('src', 'assets/images/placeholder-error.png');
+              img.setAttribute('src', 'assets/img/stas.png');
               img.removeAttribute('data-src');
               this.observer.unobserve(img);
             }
