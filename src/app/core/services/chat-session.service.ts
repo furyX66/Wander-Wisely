@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {ChatSession} from '../../../interfaces/ChatSession';
 import {ChatMessage} from '../../../interfaces/ChatMessage';
 import {SessionWithMessagesDto} from '../../../interfaces/SessionWithMessages';
@@ -9,33 +9,22 @@ import {SessionWithMessagesDto} from '../../../interfaces/SessionWithMessages';
   providedIn: 'root'
 })
 export class ChatSessionService {
-
-  constructor(private http: HttpClient) { }
-
-  getAll(): Observable<ChatSession[]> {
-    return this.http.get<ChatSession[]>("/api/ChatSessions");
-  }
+  private http = inject(HttpClient);
+  private base = '/api/ChatSessions';
 
   getSessionWithMessages(id: number): Observable<SessionWithMessagesDto> {
-    return this.http.get<SessionWithMessagesDto>(`/api/ChatSessions/${id}`);
+    return this.http.get<SessionWithMessagesDto>(`${this.base}/${id}`);
   }
 
   create(session: Partial<ChatSession>): Observable<ChatSession> {
-    return this.http.post<ChatSession>("/api/ChatSessions", session);
-  }
-
-  update(id: number, session: Partial<ChatSession>): Observable<void> {
-    return this.http.put<void>(`/api/ChatSessions/${id}`, session);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`/api/ChatSessions/${id}`);
+    return this.http.post<ChatSession>(this.base, session);
   }
 
   addMessage(sessionId: number, message: Partial<ChatMessage>): Observable<ChatMessage> {
-    return this.http.post<ChatMessage>(
-      `/api/ChatSessions/${sessionId}/messages`,
-      message
-    );
+    return this.http.post<ChatMessage>(`${this.base}/${sessionId}/messages`, message);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
   }
 }

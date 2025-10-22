@@ -7,6 +7,8 @@ import {Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {take} from 'rxjs';
 import {CreateChatSession} from '../../../interfaces/CreateChatSession';
+import {AuthService} from '../../core/services/auth.service';
+import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
 
 @Component({
   selector: 'app-main-page',
@@ -19,30 +21,38 @@ export class MainPageComponent {
   private chatSessionService = inject(ChatSessionService);
   private router = inject(Router);
   private userService = inject(UserService);
+  private authService = inject(AuthService);
+  private guestService = inject(GuestChatSessionService);
 
   handleChatInput(value: string) {
-    console.log("Clicked");
-    this.userService.getCurrentUser().pipe(take(1)).subscribe(user => {
-      const trimmed = value.trim();
-      const sessionName = trimmed || 'New session';
-      console.log("Clicked", sessionName);
+    const trimmed = value.trim();
+    const sessionName = trimmed || 'New session';
+    const initialContext = trimmed ? { initialMessage: trimmed, timestamp: new Date().toISOString() } : null;
 
-      const context = trimmed
-        ? JSON.stringify({
-          initialMessage: trimmed,
-          userName: user.username,
-          timestamp: new Date().toISOString()
-        })
-        : undefined;
+    this.authService.isLoggedIn().pipe(take(1)).subscribe(isLoggedIn => {
+      if (!isLoggedIn) {
+        this.guestService.initSession({
+          sessionName,
+          context: initialContext
+        });
+        this.router.navigate(['/chat']);
+        return;
+      }
 
-      const dto: CreateChatSession = {
-        userId: user.id,
-        sessionName,
-        context
-      };
+      this.userService.getCurrentUser().pipe(take(1)).subscribe(user => {
+        const context = initialContext
+          ? JSON.stringify({ ...initialContext, userName: user.username })
+          : undefined;
 
-      this.chatSessionService.create(dto).subscribe(session => {
-        this.router.navigate(['/chat', session.id]);
+        const dto: CreateChatSession = {
+          userId: user.id,
+          sessionName,
+          context
+        };
+
+        this.chatSessionService.create(dto).subscribe(session => {
+          this.router.navigate(['/chat', session.id]);
+        });
       });
     });
   }

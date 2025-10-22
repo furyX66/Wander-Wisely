@@ -65,7 +65,7 @@ export class AuthService {
     });
   }
 
-  checkAuthStatus(): Observable<boolean> {
+  isLoggedIn(): Observable<boolean> {
     return this.http.get(`/api/user/me`).pipe(
       tap(() => this.isLoggedInSubject.next(true)),
       map(() => true),
