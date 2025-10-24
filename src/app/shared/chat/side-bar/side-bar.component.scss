@@ -1,5 +1,9 @@
 @use "colors" as *;
 
+:host-context([data-theme='light']) app-user-menu{
+  outline:1px solid $light-hover-color;
+}
+
 .side-bar {
   box-sizing: border-box;
   display: flex;
