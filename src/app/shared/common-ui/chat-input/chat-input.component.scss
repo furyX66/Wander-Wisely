@@ -1,21 +1,22 @@
+@use "colors" as *;
+
 :host {
   display: flex;
   justify-content: center;
 }
 
-.input-container {
-  background-color: var(--hover-color);
+:host {
+  background-color: var(--chat-input-color);
   box-sizing: border-box;
   display: flex;
   width: 100%;
-  padding: 1rem;
+  padding: 0.25rem 0.25rem 0.25rem 1rem;
   align-items: center;
   justify-content: space-between;
   border-radius: 50px;
 }
 
-
-.input-container input {
+input {
   width: 100%;
   height: 100%;
   border: none;
@@ -24,29 +25,29 @@
   font-size: clamp(0.5rem, calc(2.5vw + 1rem), 1rem);
   color: var(--text-color);
   font-family: var(--main-font), sans-serif;
+
+  &::placeholder {
+    opacity: 0.5;
+  }
 }
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.8rem;
+
+  &:hover {
+    background-color: var(--hover-color);
+  }
+}
+
 
 .loading icon-send {
   opacity: 0.2;
   cursor: default;
 }
-
-.input-container button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-}
-
-.input-container img {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.input-container input::placeholder {
-  opacity: 0.5;
-}
-

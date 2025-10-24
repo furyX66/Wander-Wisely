@@ -12,6 +12,11 @@
   background: var(--main-page-color);
 }
 
+:host-context([data-theme='light']) app-chat-input{
+  --chat-input-color: oklch(0.92 0.1705 81.36);
+  --hover-color: oklch(0.95 0.1705 81.36);
+}
+
 app-header {
   grid-area: header;
 }
@@ -23,21 +28,21 @@ main {
   align-self: center;
   justify-self: center;
   justify-content: center;
+  gap: 1rem;
   grid-area: main-content;
 }
 
 app-chat-input {
   flex: 8;
-  padding: 1rem 0;
-  margin: 0 auto;
 }
 
 button {
+  white-space: nowrap;
   flex: 1;
-  @include poppins(500, 14px, center);
+  @include poppins(500, 16px, center);
   display: flex;
-  height: 40px;
-  padding: 8px 16px;
+  height: 51.6px;
+  padding: 0.8rem;
   justify-content: center;
   align-items: center;
   border-radius: 50px;
@@ -50,9 +55,15 @@ button {
 }
 
 .input-row {
-  width: 80vh;
+  width: clamp(360px, 960px, 50vw);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .input-row {
+    flex-direction: column;
+  }
 }

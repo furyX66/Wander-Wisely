@@ -1,6 +1,4 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {LoginButtonComponent} from '../../common-ui/login-button/login-button.component';
-import {SignUpButtonComponent} from '../../common-ui/sign-up-button/sign-up-button.component';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
@@ -14,12 +12,11 @@ import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-
 import {ModalService} from '../../../core/services/modal.service';
 import {ModalType} from '../../../enums/ModalType';
 import {SearchIconComponent} from '../../../../../public/assets/icons/search-icon.component';
+import {ButtonComponent} from '../../common-ui/button/button.component';
 
 @Component({
   selector: 'app-side-bar',
   imports: [
-    LoginButtonComponent,
-    SignUpButtonComponent,
     ColorSchemeSwitchComponent,
     LogoComponent,
     AsyncPipe,
@@ -27,7 +24,7 @@ import {SearchIconComponent} from '../../../../../public/assets/icons/search-ico
     UserMenuComponent,
     NewChatIconComponent,
     SearchIconComponent,
-
+    ButtonComponent,
   ],
   templateUrl: './side-bar.component.html',
   standalone: true,

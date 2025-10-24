@@ -23,7 +23,7 @@
       @if (errorMessage) {
         <div class="error-message" style="text-align: center">{{ errorMessage }}</div>
       }
-      <app-button type="submit">Login</app-button>
+      <app-button type="submit" [className]="'yellow'">Login</app-button>
     </form>
     <a (click)="switchToEmailInput.emit()" style="cursor: pointer" class="poppins-light">Forgot Password?</a>
     <div class="thin-divider"></div>
