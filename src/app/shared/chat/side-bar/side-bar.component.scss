@@ -77,15 +77,36 @@
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
+    border-radius: 50px;
     align-items: center;
-    align-content: center;
+    padding-left: 1rem;
+  }
+
+  .user-bottom-menu{
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .user-info{
+      display: flex;
+      align-items: center;
+      border-radius: 50px;
+      gap: 1.6rem;
+      padding: 0.8rem;
+
+      &:hover{
+        background-color: var(--hover-color);
+      }
+    }
   }
 }
 
 app-user-menu{
+  width: 198px;
   position: absolute;
-  bottom: 48px;
-  left: 46px;
+  bottom: 68px;
+  left: 20px;
 }
 
 icon-profile{

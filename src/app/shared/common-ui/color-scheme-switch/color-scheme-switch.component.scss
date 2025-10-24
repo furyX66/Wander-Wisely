@@ -1,7 +1,17 @@
 :host {
-  height: 30px;
-  width: 30px;
-}
-img {
+  box-sizing: border-box;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 51.6px;
+  width: 51.6px;
+  border-radius: 100%;
+  padding: 0.8rem;
+
+  &:hover{
+    background-color: var(--hover-color);
+  }
 }
+
+

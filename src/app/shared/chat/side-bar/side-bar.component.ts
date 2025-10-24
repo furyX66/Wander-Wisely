@@ -10,10 +10,10 @@ import {User} from '../../../../interfaces/User';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
-import {ChatIconComponent} from '../../../../../public/assets/icons/chat-icon';
 import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-icon';
 import {ModalService} from '../../../core/services/modal.service';
 import {ModalType} from '../../../enums/ModalType';
+import {SearchIconComponent} from '../../../../../public/assets/icons/search-icon.component';
 
 @Component({
   selector: 'app-side-bar',
@@ -25,8 +25,8 @@ import {ModalType} from '../../../enums/ModalType';
     AsyncPipe,
     ProfileIconComponent,
     UserMenuComponent,
-    ChatIconComponent,
     NewChatIconComponent,
+    SearchIconComponent,
 
   ],
   templateUrl: './side-bar.component.html',

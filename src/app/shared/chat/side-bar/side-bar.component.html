@@ -4,9 +4,9 @@
   <nav class="option-buttons">
     <ul>
       <li>
-        <button class="chat-list-font-selected">
-          <icon-chat [selected]="true"/>
-          Chats
+        <button class="chat-list-font">
+          <icon-search/>
+          Search chats
         </button>
       </li>
       <li>
@@ -26,17 +26,19 @@
     }
   </div>
   @if (!isLoggedIn) {
-    <section class="bottom-bar">
+    <span class="bottom-bar">
       <app-login-button (click)="openLoginModal()"/>
       <app-sign-up-button (click)="openRegistrationModal()"/>
       <app-color-scheme-switch/>
-    </section>
+    </span>
   } @else {
-    <section class="bottom-bar">
-      <icon-profile (click)="toggleUserMenu()"/>
-      <p (click)="toggleUserMenu()" style="cursor:pointer">{{ (user$ | async)?.username }}</p>
+    <span class="user-bottom-menu">
+      <span class="user-info" (click)="toggleUserMenu()">
+        <icon-profile/>
+        <p>{{ (user$ | async)?.username }}</p>
+      </span>
       <app-color-scheme-switch/>
-    </section>
+    </span>
   }
 </div>
 
