@@ -1,11 +1,21 @@
 @use "colors" as *;
 
 :host-context([data-theme='light']) app-user-menu{
-  outline:1px solid $light-hover-color;
+  outline:1px solid $light-gray;
 }
 
-.side-bar {
+:host-context([data-theme='light']) {
+  outline:1px solid $light-gray;
+}
+
+:host-context([data-theme='dark']) app-user-menu{
+  background: oklch(0.35 0 0);
+}
+
+:host{
   box-sizing: border-box;
+  background-color: var(--modal-bg-color);
+  border-radius: 0 30px 30px 0;
   display: flex;
   height: 100vh;
   padding: clamp(0.5rem, 1rem, 1.5rem);
@@ -13,102 +23,90 @@
   gap: 1rem;
   justify-content: space-between;
   position: relative;
+}
 
-  &::after{
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1px;
-    height: 80%;
-    background-color: var(--text-color);
-  }
+ul{
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
 
-  ul{
+  li{
     width: 100%;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-
-    li{
-      width: 100%;
-
-      button{
-        box-sizing: border-box;
-        width: 100%;
-        gap: 0.5rem;
-        display: flex;
-        align-items: center;
-        border-radius: 50px;
-        padding: 0.8rem;
-        outline: none;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-
-        &:hover{
-          background-color: var(--hover-color);
-        }
-      }
-    }
-  }
-
-  app-logo{
-    display: flex;
-    align-items: center;
-    height: 51.6px;
-    align-self: flex-start;
-  }
-
-  .option-buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .chat-list{
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-    flex: 1;
-
-    .not-login-massage{
-      margin-top: auto;
-      opacity: 0.5;
-    }
-  }
-  .bottom-bar {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.5rem;
-    border-radius: 50px;
-    align-items: center;
-    padding-left: 1rem;
-  }
-
-  .user-bottom-menu{
-    position: relative;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
 
     button{
-      color: var(--text-color);
+      box-sizing: border-box;
+      width: 100%;
+      gap: 0.5rem;
       display: flex;
-      border: none;
-      cursor: pointer;
-      background-color: transparent;
       align-items: center;
       border-radius: 50px;
-      gap: 1.6rem;
       padding: 0.8rem;
+      outline: none;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
 
       &:hover{
         background-color: var(--hover-color);
       }
+    }
+  }
+}
+
+app-logo{
+  display: flex;
+  align-items: center;
+  height: 51.6px;
+  align-self: flex-start;
+}
+
+.option-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.chat-list{
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  flex: 1;
+
+  .not-login-massage{
+    margin-top: auto;
+    opacity: 0.5;
+  }
+}
+.bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-bottom-menu{
+  position: relative;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  button{
+    flex:1;
+    color: var(--text-color);
+    display: flex;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    align-items: center;
+    border-radius: 50px;
+    gap: 2.6rem;
+    padding: 0.8rem;
+
+    &:hover{
+      background-color: var(--hover-color);
     }
   }
 }

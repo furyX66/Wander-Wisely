@@ -15,6 +15,10 @@
   --modal-bg-color: oklch(1 0.1705 81.36);
 }
 
+:host-context([data-theme='light']) app-login-button{
+  --hover-color: oklch(0.895 0.1705 81.36);
+}
+
 :host-context([data-theme='light']) app-user-menu{
   --hover-color: oklch(0.965 0.1705 81.36);
 }
@@ -30,7 +34,6 @@
 .menu-buttons {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
 }
 
 .user-signed{

@@ -24,8 +24,7 @@ input{
 }
 
 input:focus{
-  outline: none;
-  border: 1px solid var(--text-color);
+  outline: 1px solid var(--text-color);;
 }
 
 .icon-eye {
