@@ -2,6 +2,7 @@
 
 $light-theme: (
   bg-color: $white,
+  modal-bg-color: $white,
   text-color: $black,
   assistant-message-color: $white,
   assistant-message-border: 1px solid $light-gray,
@@ -13,13 +14,14 @@ $light-theme: (
 
 $dark-theme: (
   bg-color: $black,
+  modal-bg-color: $dark-gray,
   text-color: $white,
   assistant-message-color: $dark-gray,
   assistant-message-border: none,
   main-page-color: $black,
   btn-color: $black,
   btn-bg-color: $yellow,
-  hover-color: $dark-gray,
+  hover-color: $dark-hover-color,
 );
 
 
