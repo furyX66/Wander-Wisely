@@ -2,10 +2,17 @@ import {Component, inject, output} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
 import {ModalService} from '../../../core/services/modal.service';
 import {ModalType} from '../../../enums/ModalType';
+import {LogoutIconComponent} from '../../../../../public/assets/icons/logout-icon.component';
+import {SettingsIconComponent} from '../../../../../public/assets/icons/settings-icon.component';
+import {UserIconComponent} from '../../../../../public/assets/icons/user-icon.component';
 
 @Component({
   selector: 'app-user-menu',
-  imports: [],
+  imports: [
+    LogoutIconComponent,
+    SettingsIconComponent,
+    UserIconComponent
+  ],
   templateUrl: './user-menu.component.html',
   styleUrl: './user-menu.component.scss'
 })
@@ -22,5 +29,6 @@ export class UserMenuComponent {
 
   openUserSettingsModal() {
     this.modalService.openModal(ModalType.EDIT_PROFILE);
+    this.closeMenu.emit();
   }
 }

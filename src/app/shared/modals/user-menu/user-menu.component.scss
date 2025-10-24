@@ -14,6 +14,8 @@ ul{
   flex-direction: column;
 
   li{
+    display: flex;
+    gap: 0.5rem;
     border-radius: 50px;
     padding: 0.8rem;
     cursor: pointer;
