@@ -1,37 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {NgOptimizedImage} from '@angular/common';
+import {Component, inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Observable} from 'rxjs';
+import {shareReplay} from 'rxjs/operators';
+import {ThemeService} from '../../../core/services/theme.service';
+import {MoonIconComponent} from '../../../../../public/assets/icons/moon-icon.component';
+import {SunIconComponent} from '../../../../../public/assets/icons/sun-icon.component';
 
 @Component({
   selector: 'app-color-scheme-switch',
-  imports: [NgOptimizedImage],
+  imports: [CommonModule, MoonIconComponent, SunIconComponent],
   templateUrl: './color-scheme-switch.component.html',
   standalone: true,
   styleUrl: './color-scheme-switch.component.scss'
 })
-export class ColorSchemeSwitchComponent implements OnInit {
-  isDarkTheme = false;
+export class ColorSchemeSwitchComponent {
+  private themeService = inject(ThemeService);
 
-  ngOnInit() {
-    const saved = localStorage.getItem('isDarkTheme');
-    if (saved !== null) {
-      this.isDarkTheme = saved === 'true';
-    } else {
-      this.isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    this.updateBodyClass();
-  }
+  isDarkTheme$: Observable<boolean> = this.themeService.theme$.pipe(
+    shareReplay(1)
+  );
 
-  toggleTheme() {
-    this.isDarkTheme = !this.isDarkTheme;
-    localStorage.setItem('isDarkTheme', String(this.isDarkTheme));
-    this.updateBodyClass();
-  }
-
-  updateBodyClass() {
-    document.body.classList.toggle('dark-mode', this.isDarkTheme);
-  }
-
-  get iconPath() {
-    return this.isDarkTheme ? 'assets/icons/moon-icon.svg' : 'assets/icons/sun-icon.svg';
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 }

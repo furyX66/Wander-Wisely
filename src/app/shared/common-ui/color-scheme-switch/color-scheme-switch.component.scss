@@ -1,4 +1,6 @@
 :host {
+}
+button{
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
@@ -8,6 +10,8 @@
   width: 51.6px;
   border-radius: 100%;
   padding: 0.8rem;
+  background: transparent;
+  border: none;
 
   &:hover{
     background-color: var(--hover-color);
