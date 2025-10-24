@@ -4,7 +4,7 @@ import {SignUpButtonComponent} from '../../common-ui/sign-up-button/sign-up-butt
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
-import {Observable} from 'rxjs';
+import {map, Observable, shareReplay} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {User} from '../../../../interfaces/User';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
@@ -38,17 +38,21 @@ export class SideBarComponent implements OnInit {
   private modalService = inject(ModalService);
   private userService = inject(UserService);
   private authService = inject(AuthService);
-  authStatus$ = this.authService.authStatus$;
 
   showUserMenu = false;
   user$!: Observable<User | null>;
+
+  isLoggedIn$ = this.authService.authStatus$.pipe(
+    map(status => status === true),
+    shareReplay(1)
+  );
 
   ngOnInit() {
     if (this.authService.isInitializing()) {
       this.authService.initializeAuth().subscribe();
     }
     this.userService.getCurrentUser().subscribe();
-    this.user$ = this.userService.currentUser$;
+    this.user$ = this.userService.getCurrentUser().pipe(shareReplay(1));
   }
 
   openLoginModal(): void {

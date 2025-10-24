@@ -8,6 +8,7 @@ $light-theme: (
   main-page-color: $yellow-gradient,
   btn-color: $white,
   btn-bg-color: $black,
+  hover-color: $light-hover-color,
 );
 
 $dark-theme: (
@@ -18,6 +19,7 @@ $dark-theme: (
   main-page-color: $black,
   btn-color: $black,
   btn-bg-color: $yellow,
+  hover-color: $dark-gray,
 );
 
 
