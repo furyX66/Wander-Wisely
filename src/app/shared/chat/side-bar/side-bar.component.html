@@ -33,10 +33,10 @@
     </span>
   } @else {
     <span class="user-bottom-menu">
-      <span class="user-info" (click)="toggleUserMenu()">
+      <button (click)="toggleUserMenu()">
         <icon-profile/>
         <p>{{ (user$ | async)?.username }}</p>
-      </span>
+      </button>
       <app-color-scheme-switch/>
     </span>
   }

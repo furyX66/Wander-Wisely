@@ -51,6 +51,9 @@
   }
 
   app-logo{
+    display: flex;
+    align-items: center;
+    height: 51.6px;
     align-self: flex-start;
   }
 
@@ -88,8 +91,12 @@
     align-items: center;
     cursor: pointer;
 
-    .user-info{
+    button{
+      color: var(--text-color);
       display: flex;
+      border: none;
+      cursor: pointer;
+      background-color: transparent;
       align-items: center;
       border-radius: 50px;
       gap: 1.6rem;
@@ -106,7 +113,7 @@ app-user-menu{
   width: 198px;
   position: absolute;
   bottom: 68px;
-  left: 20px;
+  left: 1rem;
 }
 
 icon-profile{

@@ -1,4 +1,4 @@
-.header {
+:host {
   box-sizing: border-box;
   display: flex;
   width: 100%;
@@ -7,27 +7,53 @@
   padding: clamp(0.5rem, 1rem, 1.5rem);
 }
 
+:host-context([data-theme='light']) button, app-color-scheme-switch{
+  --hover-color: oklch(0.895 0.1705 81.36);
+}
+
+:host-context([data-theme='dark']) app-color-scheme-switch{
+  --hover-color: oklch(0.3092 0 0);
+}
+
 .menu-buttons {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 0.8rem;
 }
 
 .user-signed{
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 20px;
+
+  button{
+    color: var(--text-color);
+    border: none;
+    background: none;
+    border-radius: 50px;
+    padding: 0.8rem;
+    gap: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover{
+      background-color: var(--hover-color);
+    }
+  }
 }
 
 app-user-menu{
+  width: 190px;
   position: absolute;
-  top: 58px;
-  right: 24px;
+  top: 68px;
+  right: 19px;
 }
 
 icon-profile{
   cursor: pointer;
 }
+
+
 
 
