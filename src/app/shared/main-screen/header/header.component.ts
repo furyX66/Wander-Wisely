@@ -33,18 +33,17 @@ export class HeaderComponent implements OnInit {
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
   private userService = inject(UserService);
+  authStatus$ = this.authService.authStatus$;
+
   showUserMenu = false;
-
-  constructor() {
-    this.user$ = this.userService.currentUser$;
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
-  }
-
-  user$: Observable<User | null>;
-  isLoggedIn$: Observable<boolean>;
+  user$!: Observable<User | null>;
 
   ngOnInit() {
     this.userService.getCurrentUser().subscribe();
+    if (this.authService.isInitializing()) {
+      this.authService.initializeAuth().subscribe();
+    }
+    this.user$ = this.userService.currentUser$;
   }
 
   openLoginModal(): void {

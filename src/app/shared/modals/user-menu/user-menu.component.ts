@@ -16,7 +16,7 @@ export class UserMenuComponent {
   closeMenu = output<void>();
 
   logout() {
-    this.authService.logout();
+    this.authService.logout().subscribe();
     this.closeMenu.emit();
   }
 

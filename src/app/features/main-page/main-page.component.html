@@ -6,7 +6,7 @@
       [disabled]="false"
       (onClick)="handleChatInput($event)"
     ></app-chat-input>
-    @if ((isLoggedIn$ | async)) {
+    @if ((authStatus$ | async)) {
       <button (click)="handleNavigateToChats()">Go to chats</button>
     }
   </div>

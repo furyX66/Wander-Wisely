@@ -1,7 +1,7 @@
 <div class="header">
   <app-logo/>
   <div class="menu-buttons">
-    @if (!(isLoggedIn$  | async)) {
+    @if (!(authStatus$ | async)) {
       <app-color-scheme-switch/>
       <app-login-button (click)="openLoginModal()"/>
       <app-sign-up-button (click)="openRegistrationModal()"/>

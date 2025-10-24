@@ -38,18 +38,17 @@ export class SideBarComponent implements OnInit {
   private modalService = inject(ModalService);
   private userService = inject(UserService);
   private authService = inject(AuthService);
+  authStatus$ = this.authService.authStatus$;
 
   showUserMenu = false;
-  user$: Observable<User | null>;
-  isLoggedIn$: Observable<boolean>;
-
-  constructor() {
-    this.user$ = this.userService.currentUser$;
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
-  }
+  user$!: Observable<User | null>;
 
   ngOnInit() {
+    if (this.authService.isInitializing()) {
+      this.authService.initializeAuth().subscribe();
+    }
     this.userService.getCurrentUser().subscribe();
+    this.user$ = this.userService.currentUser$;
   }
 
   openLoginModal(): void {

@@ -1,8 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {BehaviorSubject, map, Observable, of} from 'rxjs';
-import {tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, of, shareReplay, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 interface RegistrationData {
@@ -21,33 +20,96 @@ interface LoginData {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
-  isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
+  private router = inject(Router);
+  private authStatusSubject = new BehaviorSubject<boolean | null>(null);
+  authStatus$: Observable<boolean | null> = this.authStatusSubject.asObservable();
 
-  constructor(private router: Router) {}
+  private isInitialized = false;
 
-  register(userData: RegistrationData) {
-    return this.http.post(`/api/auth/registration`, userData).pipe(
-      tap(() => this.router.navigate(['/chat']))
+  initializeAuth(): Observable<boolean> {
+    if (this.isInitialized) {
+      return of(this.authStatusSubject.value !== null ? this.authStatusSubject.value : false);
+    }
+    return this.http.get<{ authenticated: boolean }>(`/api/user/me`).pipe(
+      tap(() => {
+        this.authStatusSubject.next(true);
+        this.isInitialized = true;
+      }),
+      map(() => true),
+      catchError(() => {
+        this.authStatusSubject.next(false);
+        this.isInitialized = true;
+        return of(false);
+      }),
+      shareReplay(1)
     );
   }
 
-  login(credentials: LoginData) {
-    return this.http.post(`/api/auth/login`, credentials).pipe(
+  isLoggedIn(): Observable<boolean> {
+    if (!this.isInitialized) {
+      this.initializeAuth().subscribe();
+    }
+
+    return this.authStatusSubject.pipe(
+      map(status => status === true)
+    );
+  }
+
+  getCurrentStatus(): boolean | null {
+    return this.authStatusSubject.value;
+  }
+
+  isInitializing(): boolean {
+    return !this.isInitialized;
+  }
+
+  register(userData: RegistrationData): Observable<any> {
+    return this.http.post(`/api/auth/registration`, userData).pipe(
       tap(() => {
-        this.isLoggedInSubject.next(true);
-        this.router.navigate(['/chat']).then(()=>console.log("Logged in"))
+        this.authStatusSubject.next(true);
+        this.isInitialized = true;
+      }),
+      catchError(error => {
+        console.error('Registration error:', error);
+        throw error;
       })
     );
   }
 
+  login(credentials: LoginData): Observable<any> {
+    return this.http.post(`/api/auth/login`, credentials).pipe(
+      tap(() => {
+        this.authStatusSubject.next(true);
+        this.isInitialized = true;
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        this.authStatusSubject.next(false);
+        throw error;
+      })
+    );
+  }
+
+
   forgotPassword(email: string): Observable<string> {
     return this.http.post<{ message: string }>(`/api/auth/forgot-password`, { email })
-      .pipe(map(response => response.message));
+      .pipe(
+        map(response => response.message),
+        catchError(error => {
+          console.error('Forgot password error:', error);
+          throw error;
+        })
+      );
   }
 
   verifyResetCode(email: string, code: string): Observable<any> {
-    return this.http.post(`/api/auth/verify-reset-code`, { email, code });
+    return this.http.post(`/api/auth/verify-reset-code`, { email, code })
+      .pipe(
+        catchError(error => {
+          console.error('Verify reset code error:', error);
+          throw error;
+        })
+      );
   }
 
   resetPassword(email: string, code: string, newPassword: string): Observable<any> {
@@ -55,23 +117,28 @@ export class AuthService {
       email,
       code,
       newPassword
-    });
+    }).pipe(
+      catchError(error => {
+        console.error('Reset password error:', error);
+        throw error;
+      })
+    );
   }
 
-  logout() {
-    this.http.post(`/api/auth/logout`, {}).subscribe(() => {
-      this.isLoggedInSubject.next(false);
-      this.router.navigate(['/']).then(()=>console.log("Logged out"));
-    });
-  }
+  logout(): Observable<void> {
+    this.authStatusSubject.next(false);
+    this.isInitialized = false;
 
-  isLoggedIn(): Observable<boolean> {
-    return this.http.get(`/api/user/me`).pipe(
-      tap(() => this.isLoggedInSubject.next(true)),
-      map(() => true),
-      catchError(() => {
-        this.isLoggedInSubject.next(false);
-        return of(false);
+    return this.http.post<void>(`/api/auth/logout`, {}).pipe(
+      tap(() => {
+        console.log('Successfully logged out from server');
+        this.router.navigate(['/']);
+      }),
+
+      catchError(error => {
+        console.warn('Server logout failed, but local state is cleared:', error);
+        this.router.navigate(['/']);
+        return of(void 0);
       })
     );
   }

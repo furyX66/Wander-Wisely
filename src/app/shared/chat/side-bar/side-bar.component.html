@@ -14,7 +14,7 @@
       </div>
     </div>
   </div>
-  @if (!(isLoggedIn$  | async)) {
+  @if (!(authStatus$  | async)) {
     <p class="not-login-massage">Sign up or login to get access to history, more chats etc.</p>
     <section class="bottom-bar">
       <app-login-button (click)="openLoginModal()"/>
