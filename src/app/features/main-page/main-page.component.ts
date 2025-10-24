@@ -9,10 +9,11 @@ import {take} from 'rxjs';
 import {CreateChatSession} from '../../../interfaces/CreateChatSession';
 import {AuthService} from '../../core/services/auth.service';
 import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-main-page',
-  imports: [MainTitleComponent, HeaderComponent, ChatInputComponent,],
+  imports: [MainTitleComponent, HeaderComponent, ChatInputComponent, AsyncPipe],
   templateUrl: './main-page.component.html',
   standalone: true,
   styleUrl: './main-page.component.scss'
@@ -23,6 +24,7 @@ export class MainPageComponent {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private guestService = inject(GuestChatSessionService);
+  isLoggedIn$ =  this.authService.isLoggedIn().pipe(take(1))
 
   handleChatInput(value: string) {
     const trimmed = value.trim();
@@ -31,10 +33,25 @@ export class MainPageComponent {
 
     this.authService.isLoggedIn().pipe(take(1)).subscribe(isLoggedIn => {
       if (!isLoggedIn) {
-        this.guestService.initSession({
+        if (this.guestService.sessionExists()) {
+          this.router.navigate(['/chat']);
+          return;
+        }
+        const trimmed = value.trim();
+        const sessionName = trimmed || 'New session';
+        const initialContext = trimmed
+          ? { initialMessage: trimmed, timestamp: new Date().toISOString() }
+          : null;
+
+        this.guestService.createNewSessionIfNotExists({
           sessionName,
           context: initialContext
         });
+
+        if (trimmed) {
+          this.guestService.addMessage('user', trimmed);
+        }
+
         this.router.navigate(['/chat']);
         return;
       }
@@ -51,9 +68,18 @@ export class MainPageComponent {
         };
 
         this.chatSessionService.create(dto).subscribe(session => {
-          this.router.navigate(['/chat', session.id]);
+          if (trimmed) {
+            this.chatSessionService.addMessage(session.id, {role: 'user', content: trimmed})
+              .subscribe(() => this.router.navigate(['/chat', session.id]));
+          } else {
+            this.router.navigate(['/chat', session.id]);
+          }
         });
       });
     });
+  }
+
+  handleNavigateToChats(){
+    this.router.navigate(['/chat']);
   }
 }

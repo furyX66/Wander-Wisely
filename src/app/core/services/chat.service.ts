@@ -15,4 +15,10 @@ export class ChatService {
       { message }
     );
   }
+  guestChatAsk( message: string): Observable<ChatResponse> {
+    return this.http.post<ChatResponse>(
+      `/api/ChatSessions/ask`,
+      { message }
+    );
+  }
 }

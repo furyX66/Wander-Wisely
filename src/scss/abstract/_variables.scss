@@ -5,7 +5,9 @@ $light-theme: (
   text-color: $black,
   assistant-message-color: $white,
   assistant-message-border: 1px solid $light-gray,
-  main-page-color: $yellow-gradient
+  main-page-color: $yellow-gradient,
+  btn-color: $white,
+  btn-bg-color: $black,
 );
 
 $dark-theme: (
@@ -13,7 +15,9 @@ $dark-theme: (
   text-color: $white,
   assistant-message-color: $dark-gray,
   assistant-message-border: none,
-  main-page-color: $black
+  main-page-color: $black,
+  btn-color: $black,
+  btn-bg-color: $yellow,
 );
 
 

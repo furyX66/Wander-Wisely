@@ -1,3 +1,6 @@
+@use "colors" as *;
+@use "mixins" as *;
+
 :host {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -9,18 +12,47 @@
   background: var(--main-page-color);
 }
 
-app-header{
+app-header {
   grid-area: header;
 }
 
-.main-content{
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   align-self: center;
   justify-self: center;
+  justify-content: center;
   grid-area: main-content;
 }
 
-app-chat-input{
-  max-width: 600px;
-  padding: 16px 0;
+app-chat-input {
+  flex: 8;
+  padding: 1rem 0;
   margin: 0 auto;
+}
+
+button {
+  flex: 1;
+  @include poppins(500, 14px, center);
+  display: flex;
+  height: 40px;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  background: var(--btn-bg-color);
+  color: var(--btn-color);
+  outline: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.input-row {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }

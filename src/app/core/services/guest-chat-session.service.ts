@@ -5,18 +5,25 @@ import {GuestChatSession} from '../../../interfaces/GuestChatSession';
 @Injectable({providedIn: 'root'})
 export class GuestChatSessionService {
   private STORAGE_KEY = 'guestChat';
-  private data: GuestChatSession;
+  private data!: GuestChatSession;
   private nextId = 0
 
   constructor() {
+    this.loadFromStorage();
+  }
+
+  private loadFromStorage(): void {
     const raw = localStorage.getItem(this.STORAGE_KEY);
-    this.data = raw
-      ? JSON.parse(raw)
-      : {messages: [], nextId: 0, context: null};
-    this.persist();
+    if (raw) {
+      this.data = JSON.parse(raw);
+      this.nextId = this.data.nextId || this.data.messages.length;
+    } else {
+      this.data = {messages: [], nextId: 0, context: null, sessionName: undefined};
+    }
   }
 
   private persist() {
+    this.data.nextId = this.nextId;
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
   }
 
@@ -24,11 +31,18 @@ export class GuestChatSessionService {
     return [...this.data.messages];
   }
 
-  initSession(meta: { sessionName: string; context: any | null }) {
+  createNewSessionIfNotExists(meta: { sessionName?: string; context: any | null }): void {
+    if (this.sessionExists()) {
+      return;
+    }
+
     this.data = {
       messages: [],
       context: meta.context,
+      sessionName: meta.sessionName,
+      nextId: 0
     };
+    this.nextId = 0;
     this.persist();
   }
 
@@ -43,4 +57,15 @@ export class GuestChatSessionService {
     this.persist();
   }
 
+  clearMessages(): void {
+    this.data.messages = [];
+    this.data.sessionName = undefined;
+    this.data.context = null;
+    this.nextId = 0;
+    this.persist();
+  }
+
+  sessionExists(): boolean {
+    return this.data.messages.length > 0 || this.data.sessionName !== undefined;
+  }
 }
