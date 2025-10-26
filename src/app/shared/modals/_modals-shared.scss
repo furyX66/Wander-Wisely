@@ -15,6 +15,7 @@
   gap: 2rem;
   border-radius: 50px;
   background: var(--bg-color);
+  width: 386px;
 
   h1 {
     color: $blue;
@@ -57,7 +58,7 @@ form {
     flex-direction: column;
     gap: 0.25rem;
 
-    p {
+    span {
       margin-left: 0.5rem;
     }
   }
