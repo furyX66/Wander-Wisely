@@ -1,9 +1,11 @@
-import {Component, computed, inject, input, output} from '@angular/core';
+import {Component, computed, inject, input, OnInit, output} from '@angular/core';
 import {ButtonComponent} from '../../../common-ui/button/button.component';
 import {InputComponent} from '../../../common-ui/input/input.component';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth.service';
 import {passwordValidator} from '../../../../core/helpers/validators/passwordValidator';
+import {ModalType} from '../../../../enums/ModalType';
+import {ModalService} from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-new-password',
@@ -15,27 +17,38 @@ import {passwordValidator} from '../../../../core/helpers/validators/passwordVal
   templateUrl: './new-password.component.html',
   styleUrl: './new-password.component.scss'
 })
-export class NewPasswordComponent {
+export class NewPasswordComponent implements OnInit {
+  private modalService = inject(ModalService);
   private authService = inject(AuthService);
-  newPasswordForm: FormGroup;
-  data = input<{email:string; code:string}>();
-  close = output<void>();
+  private fb = inject(FormBuilder);
+  newPasswordForm!: FormGroup;
+
+  data = input<{ email: string; code: string }>();
   email = computed(() => this.data()?.email || '');
   code = computed(() => this.data()?.code || '');
 
-  constructor(private fb: FormBuilder) {
+  close = output<void>();
+
+  ngOnInit(): void {
     this.newPasswordForm = this.fb.group({
       newPassword: ['', [Validators.required, passwordValidator]],
       repeatNewPassword: ['', Validators.required],
     });
   }
 
+  handleClose(): void {
+    this.modalService.openModal(ModalType.CLOSE_MODAL);
+  }
+
   onSubmit() {
+    this.newPasswordForm.controls["newPassword"].markAsTouched();
+    this.newPasswordForm.controls["repeatNewPassword"].markAsTouched();
+
     if (this.newPasswordForm.invalid) {
       return;
     }
 
-    const { newPassword, repeatNewPassword } = this.newPasswordForm.value;
+    const {newPassword, repeatNewPassword} = this.newPasswordForm.value;
 
     if (newPassword !== repeatNewPassword) {
       return;
@@ -44,9 +57,8 @@ export class NewPasswordComponent {
     this.authService.resetPassword(this.email(), this.code(), this.newPasswordForm.value.newPassword,).subscribe({
       next: (response: string) => {
         if (!response) {
-          console.error("Password reset error",response);
-        }
-        else {
+          console.error("Password reset error", response);
+        } else {
           console.log('Password reset error success:', response);
           this.close.emit();
           this.newPasswordForm.reset();

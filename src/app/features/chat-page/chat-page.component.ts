@@ -14,6 +14,10 @@ import {
 import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
 import {ChatService} from '../../core/services/chat.service';
 import {Attraction} from '../../../interfaces/Attraction';
+import {ActivatedRoute} from '@angular/router';
+import {ChatSessionService} from '../../core/services/chat-session.service';
+import {ChatSession} from '../../../interfaces/ChatSession';
+import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
 
 export interface ChatResponse {
   reply: string;
@@ -39,11 +43,17 @@ export interface ChatResponse {
 export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
+  private route = inject(ActivatedRoute);
   private chatService = inject(ChatService);
+  private chatSessionService = inject(ChatSessionService);
+  private guestChatSessionService = inject(GuestChatSessionService);
   private destroy$ = new Subject<void>();
 
+  sessionId!: number;
   messages: ChatMessage[] = [];
   attractions: Attraction[] = [];
+  session?: ChatSession;
+  contextObj?: any;
   nextId = 0;
   showScrollButton = false;
   shouldScrollToBottom = false;
@@ -53,7 +63,27 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private messageSend$ = new Subject<string>();
 
   ngOnInit(): void {
-    this.setupMessageStream();
+    this.sessionId = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (!this.sessionId) {
+      this.messages = this.guestChatSessionService.getMessages();
+      this.setupMessageStream();
+    } else {
+      this.chatSessionService.getSessionWithMessages(this.sessionId)
+        .subscribe(dto => {
+          this.session = dto.session;
+          this.messages = dto.messages;
+          if (this.session.context) {
+            try {
+              this.contextObj = JSON.parse(this.session.context);
+            } catch {
+              console.warn('Invalid JSON context');
+            }
+          }
+        });
+
+      this.setupMessageStream();
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -73,33 +103,59 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       .pipe(
         filter(msg => !!msg.trim()),
         tap(() => this.isLoading = true),
-        exhaustMap(message =>
-          this.chatService.chatAsk(message).pipe(
+        exhaustMap(message => {
+          const chatRequest$ = !this.sessionId
+            ? this.chatService.guestChatAsk(message)
+            : this.chatService.chatAsk(this.sessionId, message);
+
+          return chatRequest$.pipe(
             tap((res: ChatResponse) => {
               if (res?.reply) {
                 this.addAssistantMessage(res.reply);
+                if (!this.sessionId) {
+                  this.guestChatSessionService.addMessage('assistant', res.reply);
+                } else {
+                  this.chatSessionService
+                    .addMessage(this.sessionId, { role: 'assistant', content: res.reply })
+                    .subscribe();
+                }
               }
               if (res?.places) {
                 this.attractions = res.places;
               }
             }),
-            catchError((error) => {
+            catchError(error => {
               console.error('Chat service error:', error);
-              this.addAssistantMessage('Server error');
+              const errorMsg = 'Server error';
+              this.addAssistantMessage(errorMsg);
+              if (!this.sessionId) {
+                this.guestChatSessionService.addMessage('assistant', errorMsg);
+              }
+
               return of(null);
             }),
             finalize(() => this.isLoading = false)
           )
-        ),
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe();
   }
 
+
   handleChatInput(value: string): void {
     if (!value.trim() || this.isLoading) return;
 
     this.addUserMessage(value);
+
+    if (!this.sessionId) {
+      this.guestChatSessionService.addMessage('user', value);
+    } else {
+      this.chatSessionService
+        .addMessage(this.sessionId, { role: 'user', content: value })
+        .subscribe();
+    }
+
     this.scheduleScroll();
     this.messageSend$.next(value);
   }
@@ -134,19 +190,21 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private addUserMessage(text: string): void {
-    this.messages.push({
+    const msg: ChatMessage = {
       id: this.nextId++,
-      text,
-      author: 'user'
-    });
+      role: 'user',
+      content: text
+    };
+    this.messages.push(msg);
   }
 
   private addAssistantMessage(text: string): void {
-    this.messages.push({
+    const msg: ChatMessage = {
       id: this.nextId++,
-      text,
-      author: 'assistant'
-    });
+      role: 'assistant',
+      content: text
+    };
+    this.messages.push(msg);
     this.scheduleScroll();
   }
 }

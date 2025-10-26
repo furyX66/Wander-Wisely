@@ -1,14 +1,26 @@
 @use "colors" as *;
 
-.menu-wrapper{
-  display: inline-flex;
-  height: 80px;
-  padding: 16px 20px;
+:host{
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border-radius: 32px;
+  background: var(--modal-bg-color);
+}
+
+ul{
+  list-style: none;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 8px;
-  border-radius: 16px;
-  border: 1px solid $light-gray;
-  background: var(--bg-color);
+
+  li{
+    display: flex;
+    gap: 0.5rem;
+    border-radius: 50px;
+    padding: 0.8rem;
+    cursor: pointer;
+
+    &:hover{
+      background-color: var(--hover-color);
+    }
+  }
 }

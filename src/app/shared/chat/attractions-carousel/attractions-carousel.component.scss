@@ -5,12 +5,12 @@
   gap: 8px;
 }
 
-.carousel-wrapper{
+.carousel-wrapper {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.25rem;
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
@@ -24,10 +24,10 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     width: 100%;
-    padding: 4px 0;
 
     .card {
       display: grid;
+      width: 174px;
       grid-template-rows: repeat(2, 120px);
       grid-template-columns: 174px;
       position: relative;
@@ -44,6 +44,8 @@
       }
 
       &-info {
+        width: 100%;
+        overflow: hidden;
         border-radius: 0 0 30px 30px;
         grid-row: 2;
         box-sizing: border-box;
@@ -52,20 +54,31 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        align-self: stretch;
         background-color: var(--bg-color);
 
-        .row{
+        h3 {
+          width: 100%;
+          margin: 0;
+          overflow: hidden;
+          hyphens: auto;
+          text-overflow: ellipsis;
+          word-break: break-word;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        .row {
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 4px;
+          gap: 0.25rem;
         }
       }
     }
   }
 
-  icon-favorite{
+  icon-favorite {
     position: absolute;
     right: 16px;
     top: 16px;
@@ -83,17 +96,17 @@
   pointer-events: none;
 }
 
-.closed{
+.closed {
   transform: translateY(-100%);
   opacity: 0;
   visibility: hidden;
 }
 
-.btn-closed{
+.btn-closed {
   transform: translateY(-650%) !important;
 }
 
-.btn{
+.btn {
   background-color: var(--bg-color);
   color: var(--text-color);
   cursor: pointer;
@@ -108,15 +121,16 @@
   transform: translateY(0);
   transition: transform 0.4s ease;
 
-  icon-cross{
+  icon-cross {
     height: 12px;
     width: 12px;
   }
 
-  &:hover{
+  &:hover {
     outline: 1px solid var(--text-color);
   }
 }
+
 
 
 

@@ -1,14 +1,13 @@
-<div class="input-container">
-  <input
-    type="text"
-    [placeholder]="placeholder()"
-    [(ngModel)]="inputValue"
-    (keydown.enter)="onSendClick()"
-  />
-  <button type="button"
-          (click) ="onSendClick()"
-          [disabled]="disabled()"
-          [class.loading]="disabled()">
-    <icon-send/>
-  </button>
-</div>
+<input
+  type="text"
+  [placeholder]="placeholder()"
+  [(ngModel)]="inputValue"
+  (keydown.enter)="onSendClick()"
+/>
+<button type="button"
+        (click)="onSendClick()"
+        [disabled]="disabled()"
+        [class.loading]="disabled()">
+  <icon-send/>
+</button>
+

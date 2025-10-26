@@ -1,7 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
-import {SignUpButtonComponent} from '../../common-ui/sign-up-button/sign-up-button.component';
-import {LoginButtonComponent} from '../../common-ui/login-button/login-button.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {Observable} from 'rxjs';
 import {User} from '../../../../interfaces/User';
@@ -12,18 +10,18 @@ import {UserService} from '../../../core/services/user.service';
 import {ModalType} from '../../../enums/ModalType';
 import {ModalService} from '../../../core/services/modal.service';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
+import {ButtonComponent} from '../../common-ui/button/button.component';
 
 
 @Component({
   selector: 'app-header',
   imports: [
     ColorSchemeSwitchComponent,
-    SignUpButtonComponent,
-    LoginButtonComponent,
     LogoComponent,
     AsyncPipe,
     ProfileIconComponent,
     UserMenuComponent,
+    ButtonComponent,
   ],
   templateUrl: './header.component.html',
   standalone: true,
@@ -33,18 +31,17 @@ export class HeaderComponent implements OnInit {
   private modalService = inject(ModalService);
   private authService = inject(AuthService);
   private userService = inject(UserService);
+  authStatus$ = this.authService.authStatus$;
+
   showUserMenu = false;
-
-  constructor() {
-    this.user$ = this.userService.currentUser$;
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
-  }
-
-  user$: Observable<User | null>;
-  isLoggedIn$: Observable<boolean>;
+  user$!: Observable<User | null>;
 
   ngOnInit() {
     this.userService.getCurrentUser().subscribe();
+    if (this.authService.isInitializing()) {
+      this.authService.initializeAuth().subscribe();
+    }
+    this.user$ = this.userService.currentUser$;
   }
 
   openLoginModal(): void {

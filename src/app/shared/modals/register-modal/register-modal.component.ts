@@ -1,4 +1,4 @@
-import {Component, output} from '@angular/core';
+import {Component, inject, OnInit, output} from '@angular/core';
 import {InputComponent} from '../../common-ui/input/input.component';
 import {ButtonComponent} from '../../common-ui/button/button.component';
 import {AuthService} from '../../../core/services/auth.service';
@@ -16,17 +16,16 @@ import {passwordValidator} from '../../../core/helpers/validators/passwordValida
   styleUrl: './register-modal.component.scss'
 })
 
-export class RegisterModalComponent {
-  registrationForm: FormGroup;
+export class RegisterModalComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  registrationForm!: FormGroup;
   errorMessage = '';
 
   close = output<void>();
   switchToLogin = output<void>();
 
-  constructor(
-    private authService: AuthService,
-    private fb: FormBuilder
-  ) {
+  ngOnInit(): void {
     this.registrationForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       username: ['', Validators.required, Validators.minLength(3)],

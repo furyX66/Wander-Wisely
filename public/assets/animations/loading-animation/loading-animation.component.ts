@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { AnimationItem } from 'lottie-web';
-import { LottieComponent, AnimationOptions } from 'ngx-lottie';
+import {Component} from '@angular/core';
+import {AnimationOptions, LottieComponent} from 'ngx-lottie';
 
 @Component({
   selector: 'app-loading-animation',
@@ -21,7 +20,4 @@ export class LoadingAnimationComponent {
     }
   };
 
-  animationCreated(animationItem: AnimationItem): void {
-    console.log(animationItem);
-  }
 }

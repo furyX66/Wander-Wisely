@@ -10,6 +10,7 @@ import {
   VerificationCodeInputComponent
 } from '../forgot-password/verification-code-input/verification-code-input.component';
 import {NewPasswordComponent} from '../forgot-password/new-password/new-password.component';
+import {CloseModalComponent} from '../close-modal/close-modal.component';
 
 @Component({
   selector: 'app-modal-container-component',
@@ -20,7 +21,8 @@ import {NewPasswordComponent} from '../forgot-password/new-password/new-password
     RegisterModalComponent,
     SettingsWindowComponent,
     VerificationCodeInputComponent,
-    NewPasswordComponent
+    NewPasswordComponent,
+    CloseModalComponent
   ],
   templateUrl: './modal-container-component.component.html',
   styleUrl: './modal-container-component.component.scss'

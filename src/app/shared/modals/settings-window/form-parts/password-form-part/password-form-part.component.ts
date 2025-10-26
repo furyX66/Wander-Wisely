@@ -1,8 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ButtonComponent} from "../../common-ui/button/button.component";
+import {ButtonComponent} from "../../../../common-ui/button/button.component";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {InputComponent} from "../../common-ui/input/input.component";
-import {UserService} from '../../../core/services/user.service';
+import {InputComponent} from "../../../../common-ui/input/input.component";
+import {UserService} from '../../../../../core/services/user.service';
 
 @Component({
   selector: 'app-password-form-part',

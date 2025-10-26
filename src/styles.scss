@@ -2,126 +2,13 @@
 @use "fonts" as *;
 @use "mixins" as *;
 @use "variables" as *;
-
-/* Normalization */
+@use "text-styles" as *;
+@use "utilities" as *;
 
 *, :root{
   margin: 0;
   padding: 0;
   @include poppins();
-}
-
-/* Text styles */
-
-.chat-list-font{
-  color: var(--text-color);
-  @include poppins(400, 16px);
-}
-
-.chat-list-font-selected{
-  color: var(--text-color);
-  @include poppins(600, 16px);
-}
-
-.menu-list-font-bold{
-  color: var(--text-color);
-  @include poppins(700, 14px, center);
-}
-
-.menu-list-font{
-  color: var(--text-color);
-  @include poppins(400, 14px, center);
-}
-
-.time-period-font{
-  color: var(--text-color);
-  @include poppins(500, 14px);
-}
-
-.list-of-chats-font{
-  color: var(--text-color);
-  @include poppins(300, 14px);
-  margin: 0;
-}
-
-.list-of-chats-selected{
-  color: var(--text-color);
-  @include poppins(500, 14px);
-}
-
-.poppins-light{
-  color: var(--text-color);
-  @include poppins(300, 14px);
-  text-align: center;
-  opacity: 0.3;
-}
-
-.modal-window-title{
-  color: $blue;
-  @include poppins(700, 24px);
-}
-
-.modal-wrapper{
-  box-sizing: border-box;
-  position: fixed;
-  margin: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1500;
-  display: flex;
-  padding: 48px 64px;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  border-radius: 40px;
-  background: var(--bg-color);
-  max-width: 320px;
-  max-height: 900px;
-}
-
-.modal-content{
-  display: flex;
-  gap: 24px;
-  width: 250px;
-  flex-direction: column;
-  align-items: center;
-}
-
-.modal-backdrop {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-}
-
-.modal-window-inputs{
-  gap: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-self: stretch;
-}
-
-.modal-window-input-field{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  align-self: stretch;
-}
-
-.thin-divider {
-  width: 80%;
-  border-top: 1px solid $light-gray;
-  opacity: 0.5;
-}
-
-.error-message{
-  color: $red;
-  @include poppins(300,14px);
-  margin: 0;
 }
 
 body {

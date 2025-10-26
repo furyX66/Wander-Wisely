@@ -1,0 +1,23 @@
+@use "mixins" as *;
+
+.font-s-light{
+  color: var(--text-color);
+  @include poppins(300, 0.875rem);
+}
+
+.font-s-normal{
+  color: var(--text-color);
+  @include poppins(400, 0.875rem, center);
+}
+
+.font-s-medium{
+  color: var(--text-color);
+  @include poppins(500, 0.875rem);
+}
+
+.font-s-semibold{
+  color: var(--text-color);
+  @include poppins(600, 0.875rem, center);
+}
+
+

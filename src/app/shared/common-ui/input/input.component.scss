@@ -1,34 +1,54 @@
 @use "colors" as *;
-:host{
+
+:host {
   width: 100%;
 }
 
-.input-wrapper{
+.input-wrapper {
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
   width: 100%;
-}
-input{
-  box-sizing: border-box;
-  padding: 0 1rem;
-  width: 100%;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  border-radius: 26px;
-  border: 1px solid $light-gray;
-  background: transparent;
-}
 
-input:focus{
-  outline: none;
-  border: 1px solid var(--text-color);
-}
+  label {
+    margin-left: 0.5rem;
+    width: fit-content;
+  }
 
-.icon-eye {
-  color: var(--text-color);
-}
+  button {
+    position: absolute;
+    border-radius: 100%;
+    padding: 0.4rem;
+    right: 0.25rem;
+    top: 66%;
+    transform: translateY(-45%);
+    background: none;
+    border: none;
+    cursor: pointer;
 
+    &:hover {
+      background: var(--hover-color);
+    }
+  }
+
+  input {
+    box-sizing: border-box;
+    padding: 0 1rem;
+    width: 100%;
+    display: flex;
+    height: 40px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 50px;
+    border: none;
+    outline: 1px solid $light-gray;
+    background: transparent;
+
+    &:focus {
+      outline: 1px solid var(--text-color);;
+    }
+  }
+}

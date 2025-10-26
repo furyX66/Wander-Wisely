@@ -9,7 +9,16 @@ import {ChatResponse} from '../../features/chat-page/chat-page.component';
 export class ChatService {
   private http = inject(HttpClient);
 
-  chatAsk(message: string): Observable<ChatResponse> {
-    return this.http.post<ChatResponse>('/api/Chat/ask', { message });
+  chatAsk(sessionId: number, message: string): Observable<ChatResponse> {
+    return this.http.post<ChatResponse>(
+      `/api/ChatSessions/${sessionId}/ask`,
+      { message }
+    );
+  }
+  guestChatAsk( message: string): Observable<ChatResponse> {
+    return this.http.post<ChatResponse>(
+      `/api/ChatSessions/ask`,
+      { message }
+    );
   }
 }

@@ -1,5 +1,5 @@
-import {Component, input} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 
 @Component({
@@ -10,5 +10,4 @@ import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-i
   styleUrl: './user-message.component.scss'
 })
 export class UserMessageComponent {
-  text = input<string>('');
 }

@@ -2,18 +2,28 @@
 
 $light-theme: (
   bg-color: $white,
+  modal-bg-color: $white,
   text-color: $black,
   assistant-message-color: $white,
   assistant-message-border: 1px solid $light-gray,
-  main-page-color: $yellow-gradient
+  main-page-color: $yellow-gradient,
+  btn-color: $white,
+  btn-bg-color: $black,
+  hover-color: $light-hover-color,
+  chat-input-color: $white,
 );
 
 $dark-theme: (
   bg-color: $black,
+  modal-bg-color: $dark-gray,
   text-color: $white,
   assistant-message-color: $dark-gray,
   assistant-message-border: none,
-  main-page-color: $black
+  main-page-color: $black,
+  btn-color: $black,
+  btn-bg-color: $yellow,
+  hover-color: $dark-hover-color,
+  chat-input-color: $gray,
 );
 
 

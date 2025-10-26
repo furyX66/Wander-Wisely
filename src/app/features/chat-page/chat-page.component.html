@@ -2,17 +2,15 @@
 <section class="chat-area">
   <div class="chat-messages" id="chatContainer" #chatContainer (scroll)="onScroll()">
     @for (msg of messages; track msg.id) {
-      @if (msg.author === 'user') {
-        <app-user-message
-          [text]="msg.text"
-          class="user-message"
-        ></app-user-message>
+      @if (msg.role === 'user') {
+        <app-user-message>
+          <p>{{msg.content}}</p>
+        </app-user-message>
       }
-      @if (msg.author === 'assistant') {
-        <app-assistant-message
-          [text]="msg.text"
-          class="assistant-message"
-        ></app-assistant-message>
+      @if (msg.role === 'assistant') {
+        <app-assistant-message>
+          <p>{{msg.content}}</p>
+        </app-assistant-message>
       }
     }
     @if (showScrollButton) {

@@ -1,1 +1,14 @@
-<img [ngSrc]="iconPath" alt="Sun Icon" (click)="toggleTheme()" height="30" width="30" priority>
+@let isDarkTheme = (isDarkTheme$ | async);
+
+<button
+  (click)="toggleTheme()"
+  class="theme-switch"
+  [attr.aria-label]="isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode'"
+  title="Toggle theme">
+
+  @if (isDarkTheme) {
+    <icon-moon/>
+  } @else {
+    <icon-sun/>
+  }
+</button>

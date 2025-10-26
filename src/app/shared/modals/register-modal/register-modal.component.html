@@ -1,57 +1,47 @@
 <div class="modal-backdrop" (click)="closeModal()"></div>
 <div class="modal-wrapper">
-  <div class="modal-content">
-    <h1 class="modal-window-title">Registration</h1>
-    <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm" style="display: flex; flex-direction: column; gap: 36px; width:100%">
-      <div class="modal-window-inputs">
-        <div class="modal-window-input-field">
-          <p class="list-of-chats-selected">Email</p>
-          <app-input formControlName="email" type="email" />
-          @if (registrationForm.get('email')?.errors?.['required'] && registrationForm.get('email')?.touched) {
-            <div class="error-message">Email is required</div>
-          }
-          @if (registrationForm.get('email')?.errors?.['email'] && registrationForm.get('email')?.touched) {
-            <div class="error-message">Enter valid email</div>
-          }
-        </div>
-        <div class="modal-window-input-field">
-          <p class="list-of-chats-selected">Username</p>
-          <app-input formControlName="username" type="text"/>
-          @if (registrationForm.get('username')?.errors?.['required'] && registrationForm.get('username')?.touched) {
-            <div class="error-message">Username is required</div>
-          }
-        </div>
-        <div class="modal-window-input-field">
-          <p class="list-of-chats-selected">Password</p>
-          <app-input formControlName="password" type="password"/>
-          @if (registrationForm.get('password')?.errors?.['invalidPassword'] && registrationForm.get('password')?.touched
-            ) {
-            <div class="error-message">
-              Password must contain at least 8 characters, one uppercase letter, one number, and one special character
-            </div>
-          }
-        </div>
-        <div class="modal-window-input-field">
-          <p class="list-of-chats-selected">Repeat Password</p>
-          <app-input formControlName="repeatPassword" type="password"/>
-          @if (registrationForm.get('repeatPassword')?.errors?.['required'] && registrationForm.get('repeatPassword')?.touched) {
-            <div class="error-message">Repeat password</div>
-          }
-          @if (
-            registrationForm.get('repeatPassword')?.touched &&
-            registrationForm.get('repeatPassword')?.value &&
-            registrationForm.get('repeatPassword')?.value !== registrationForm.get('password')?.value
-            ) {
-            <div class="error-message">Passwords do not match</div>
-          }
-        </div>
-      </div>
-      @if (errorMessage) {
-        <div class="error-message" style="text-align: center">{{ errorMessage }}</div>
+  <h1>Registration</h1>
+  <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+    @let email = registrationForm.controls['email'];
+    @let username = registrationForm.controls['username'];
+    @let password = registrationForm.controls['password'];
+    @let repeatPassword = registrationForm.controls['repeatPassword'];
+
+    <div class="modal-window-input-field">
+      <app-input [label]="'Email'" [id]="'email'" formControlName="email" type="email"/>
+      @if (email.hasError('required') && email.touched) {
+        <span class="error-message">Email is required</span>
+      } @else if (email.hasError('email') && email.touched) {
+        <span class="error-message">Enter valid email</span>
       }
-      <app-button type="submit">Continue</app-button>
-    </form>
-      <div class="thin-divider"></div>
-      <a class="poppins-light" style="cursor: pointer" (click)="switchToLogin.emit()">Already have an account?</a>
-  </div>
+    </div>
+    <div class="modal-window-input-field">
+      <app-input [label]="'Username'" [id]="'username'" formControlName="username" type="text"/>
+      @if (username.hasError("required") && username.touched){
+        <span class="error-message">Username is required</span>
+      }
+    </div>
+    <div class="modal-window-input-field">
+      <app-input [label]="'Password'" [id]="'password'" formControlName="password" type="password"/>
+      @if (password.invalid && password.touched) {
+        <span class="error-message">Password must contain at least 8 characters, one uppercase letter, one number, and one special character</span>
+      }
+    </div>
+    <div class="modal-window-input-field">
+      <app-input [label]="'Repeat password'" [id]="'repeatPassword'" formControlName="repeatPassword" type="password"/>
+      @if (repeatPassword.hasError('required') && repeatPassword.touched) {
+        <span class="error-message">Please repeat your password</span>
+      }
+      @if (repeatPassword.touched &&
+      repeatPassword.value && repeatPassword.value !== password.value) {
+        <span class="error-message">Passwords do not match</span>
+      }
+    </div>
+    @if (errorMessage) {
+      <span class="error-message" style="text-align: center">{{ errorMessage }}</span>
+    }
+    <app-button type="submit" [variant]="'yellow'">Continue</app-button>
+  </form>
+  <div class="thin-divider"></div>
+  <p>Already have an account? <a (click)="switchToLogin.emit()">Log in</a></p>
 </div>

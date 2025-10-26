@@ -1,10 +1,14 @@
 <app-header/>
-<main class="main-content">
+<main>
   <app-main-title/>
-  <app-chat-input
-    [disabled]="false"
-    (onClick)="handleChatInput($event)"
-    [link]="'/chat'"
-  ></app-chat-input>
+  <div class="input-row">
+    <app-chat-input
+      [disabled]="false"
+      (onClick)="handleChatInput($event)"
+    ></app-chat-input>
+    @if ((authStatus$ | async)) {
+      <button (click)="handleNavigateToChats()">Go to chats</button>
+    }
+  </div>
 </main>
 

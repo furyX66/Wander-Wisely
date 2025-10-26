@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component} from '@angular/core';
 import {AssistantIconComponent} from '../../../../../public/assets/icons/assistant-icon';
 
 @Component({
@@ -10,5 +10,4 @@ import {AssistantIconComponent} from '../../../../../public/assets/icons/assista
   styleUrl: './assistant-message.component.scss'
 })
 export class AssistantMessageComponent {
-  text = input<string>('');
 }

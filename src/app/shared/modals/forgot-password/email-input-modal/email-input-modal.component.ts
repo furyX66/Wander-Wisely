@@ -1,4 +1,4 @@
-import {Component, inject, output} from '@angular/core';
+import {Component, inject, OnInit, output} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputComponent} from '../../../common-ui/input/input.component';
 import {ButtonComponent} from '../../../common-ui/button/button.component';
@@ -15,20 +15,22 @@ import {AuthService} from '../../../../core/services/auth.service';
   templateUrl: './email-input-modal.component.html',
   styleUrl: './email-input-modal.component.scss'
 })
-export class EmailInputModalComponent {
+export class EmailInputModalComponent implements OnInit {
   private authService = inject(AuthService);
-  emailInputForm: FormGroup;
+  private fb= inject(FormBuilder);
+  emailInputForm!: FormGroup;
   codeSuccess = output<{ email: string, code: string }>();
 
   close = output<void>();
 
-  constructor(private fb: FormBuilder) {
+  ngOnInit(): void {
     this.emailInputForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
 
   onSubmit() {
+    this.emailInputForm.controls["email"].markAsTouched();
     if (this.emailInputForm.invalid) {
       return;
     }

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, effect, input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
-import {AttractionsCarouselComponent} from '../attractions-carousel/attractions-carousel.component';
+import {AttractionsCarouselComponent} from '../../chat/attractions-carousel/attractions-carousel.component';
 import {Attraction} from '../../../../interfaces/Attraction';
 
 @Component({

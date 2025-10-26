@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {ButtonComponent} from "../../common-ui/button/button.component";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {InputComponent} from "../../common-ui/input/input.component";
-import {UserService} from '../../../core/services/user.service';
-import {User} from '../../../../interfaces/User';
+import {Component, inject, OnInit} from '@angular/core';
+import {ButtonComponent} from "../../../../common-ui/button/button.component";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {InputComponent} from "../../../../common-ui/input/input.component";
+import {UserService} from '../../../../../core/services/user.service';
+import {User} from '../../../../../../interfaces/User';
 
 @Component({
   selector: 'app-personal-info-form-part',
@@ -17,13 +17,13 @@ import {User} from '../../../../interfaces/User';
   styleUrl: './personal-info-form-part.component.scss'
 })
 export class PersonalInfoFormPartComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private userService = inject(UserService);
   userId!: number;
   oldUser: any;
   personalInfoForm!: FormGroup;
   successMessage = '';
   errorMessage = '';
-
-  constructor(private userService: UserService, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.userService.getCurrentUser().subscribe(user => {
@@ -31,7 +31,7 @@ export class PersonalInfoFormPartComponent implements OnInit {
       this.userId = user.id;
       this.personalInfoForm = this.fb.group({
         username: [user.username],
-        email: [user.email],
+        email: [[user.email], Validators.email],
       });
     });
   }
