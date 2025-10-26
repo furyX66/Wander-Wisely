@@ -1,22 +1,14 @@
+@use "../modals-shared" as *;
+
+
 .settings-menu{
   list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 12px;
-}
-
-.edit-profile-content{
-  display: flex;
-  width: 250px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 1rem;
-}
 
-li{
-  cursor: pointer;
+  li{
+    cursor: pointer;
+  }
 }

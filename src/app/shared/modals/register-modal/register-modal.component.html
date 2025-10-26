@@ -3,20 +3,18 @@
   <h1>Registration</h1>
   <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
     <div class="modal-window-input-field">
-      <p class="list-of-chats-selected">Email</p>
-      <app-input formControlName="email" type="email"/>
+      <app-input [label]="'Email'" [id]="'email'" formControlName="email" type="email"/>
       @if (registrationForm.get('email')?.errors?.['required'] && registrationForm.get('email')?.touched) {
-        <div class="error-message">Email is required</div>
+        <p class="error-message">Email is required</p>
       }
       @if (registrationForm.get('email')?.errors?.['email'] && registrationForm.get('email')?.touched) {
-        <div class="error-message">Enter valid email</div>
+        <p class="error-message">Enter valid email</p>
       }
     </div>
     <div class="modal-window-input-field">
-      <p class="list-of-chats-selected">Username</p>
-      <app-input formControlName="username" type="text"/>
+      <app-input [label]="'Username'" [id]="'username'" formControlName="username" type="text"/>
       @if (registrationForm.get('username')?.errors?.['required'] && registrationForm.get('username')?.touched) {
-        <div class="error-message">Username is required</div>
+        <p class="error-message">Username is required</p>
       }
     </div>
     <div class="modal-window-input-field">

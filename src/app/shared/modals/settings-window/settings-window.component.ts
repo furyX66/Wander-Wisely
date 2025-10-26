@@ -1,8 +1,8 @@
 import {Component, output} from '@angular/core';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import {PersonalInfoFormPartComponent} from '../../forms/personal-info-form-part/personal-info-form-part.component';
-import {PasswordFormPartComponent} from '../../forms/password-form-part/password-form-part.component';
+import {PersonalInfoFormPartComponent} from './form-parts/personal-info-form-part/personal-info-form-part.component';
+import {PasswordFormPartComponent} from './form-parts/password-form-part/password-form-part.component';
 
 @Component({
   selector: 'app-settings-window',

@@ -1,11 +1,16 @@
 import {Component, forwardRef, input} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {EyeIconComponent} from '../../../../../public/assets/icons/eye-icon.component';
+import {EyeOffIconComponent} from '../../../../../public/assets/icons/eye-off-icon.component';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
-  imports: [],
+  imports: [
+    EyeIconComponent,
+    EyeOffIconComponent
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -15,6 +20,8 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   ]
 })
 export class InputComponent implements ControlValueAccessor {
+  id=input<string>('');
+  label = input<string>('');
   type = input<string>('text');
   placeholder = input<string>('');
   name = input<string>('');

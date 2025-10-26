@@ -21,27 +21,6 @@
     @include poppins(700, 1.5rem);
   }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-
-    app-button {
-      margin-top: 1rem;
-    }
-
-    .modal-window-input-field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-
-      p {
-        margin-left: 0.5rem;
-      }
-    }
-  }
-
   .action-font{
     width: fit-content;
     color: $blue;
@@ -59,6 +38,27 @@
       text-decoration: underline $blue;
       font-size: inherit;
       cursor: pointer;
+    }
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+
+  app-button {
+    margin-top: 1rem;
+  }
+
+  .modal-window-input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    p {
+      margin-left: 0.5rem;
     }
   }
 }

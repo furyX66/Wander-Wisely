@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ButtonComponent} from "../../common-ui/button/button.component";
+import {ButtonComponent} from "../../../../common-ui/button/button.component";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {InputComponent} from "../../common-ui/input/input.component";
-import {UserService} from '../../../core/services/user.service';
-import {User} from '../../../../interfaces/User';
+import {InputComponent} from "../../../../common-ui/input/input.component";
+import {UserService} from '../../../../../core/services/user.service';
+import {User} from '../../../../../../interfaces/User';
 
 @Component({
   selector: 'app-personal-info-form-part',
