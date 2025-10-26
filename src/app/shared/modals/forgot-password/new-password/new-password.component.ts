@@ -34,6 +34,9 @@ export class NewPasswordComponent implements OnInit {
   }
 
   onSubmit() {
+    this.newPasswordForm.controls["newPassword"].markAsTouched();
+    this.newPasswordForm.controls["repeatNewPassword"].markAsTouched();
+
     if (this.newPasswordForm.invalid) {
       return;
     }

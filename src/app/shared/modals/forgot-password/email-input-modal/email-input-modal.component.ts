@@ -30,6 +30,7 @@ export class EmailInputModalComponent implements OnInit {
   }
 
   onSubmit() {
+    this.emailInputForm.controls["email"].markAsTouched();
     if (this.emailInputForm.invalid) {
       return;
     }

@@ -3,14 +3,15 @@
   <h1>Change password</h1>
   <p class="list-of-chats-font" style="text-align: center">If user with provided email exists in our system, a code has been sent</p>
   <form [formGroup]="verifyResetCodeForm" (ngSubmit)="onSubmit()">
+    @let code = verifyResetCodeForm.controls['code'];
+
     <div class="modal-window-input-field">
-      <p class="list-of-chats-selected text-center">Verification code</p>
-      <app-input formControlName="code"/>
-      @if (verifyResetCodeForm.get('code')?.errors?.['required'] && verifyResetCodeForm.get('code')?.touched && !this.errorMessage) {
-        <div class="error-message">Code is required</div>
+      <app-input [label]="'Verification code'" [id]="'verificationCode'" formControlName="code"/>
+      @if (code.invalid && code.touched && !this.errorMessage) {
+        <span class="error-message">Code is required</span>
       }
       @if (this.errorMessage) {
-        <div class="error-message">{{ this.errorMessage }}</div>
+        <span class="error-message">{{ this.errorMessage }}</span>
       }
     </div>
     <app-button type="submit" [variant]="'yellow'">Verify</app-button>
