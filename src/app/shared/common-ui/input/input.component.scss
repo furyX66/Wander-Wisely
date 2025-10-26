@@ -17,14 +17,20 @@
     width: fit-content;
   }
 
-  .eye-button {
+  button {
     position: absolute;
-    right: 10px;
-    top: 67%;
-    transform: translateY(-43%);
+    border-radius: 100%;
+    padding: 0.4rem;
+    right: 0.25rem;
+    top: 66%;
+    transform: translateY(-45%);
     background: none;
     border: none;
     cursor: pointer;
+
+    &:hover {
+      background: var(--hover-color);
+    }
   }
 
   input {
@@ -36,11 +42,12 @@
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
-    border-radius: 26px;
-    border: 1px solid $light-gray;
+    border-radius: 50px;
+    border: none;
+    outline: 1px solid $light-gray;
     background: transparent;
 
-    &:focus{
+    &:focus {
       outline: 1px solid var(--text-color);;
     }
   }
