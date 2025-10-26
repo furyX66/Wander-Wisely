@@ -1,6 +1,6 @@
 <div class="input-wrapper" style="position: relative;">
   @if (label()) {
-    <label class="list-of-chats-selected" [for]="id()">{{ label() }}</label>
+    <label class="font-s-medium" [for]="id()">{{ label() }}</label>
   }
   <input
     [id]=id()
@@ -11,7 +11,7 @@
     [required]="required()"
     [value]="internalValue"
     (input)="onInput($event)"
-    class="custom-input list-of-chats-font"
+    class="custom-input font-s-light"
   />
   @if (type() === 'password') {
     <button

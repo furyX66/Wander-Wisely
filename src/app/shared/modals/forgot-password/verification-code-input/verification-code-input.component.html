@@ -1,7 +1,7 @@
 <div class="modal-backdrop" (click)="handleClose()"></div>
 <div class="modal-wrapper">
   <h1>Change password</h1>
-  <p class="list-of-chats-font" style="text-align: center">If user with provided email exists in our system, a code has been sent</p>
+  <p class="font-s-light" style="text-align: center">If user with provided email exists in our system, a code has been sent</p>
   <form [formGroup]="verifyResetCodeForm" (ngSubmit)="onSubmit()">
     @let code = verifyResetCodeForm.controls['code'];
 

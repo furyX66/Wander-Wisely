@@ -1,7 +1,7 @@
 <div class="modal-backdrop" (click)="closeModal()"></div>
 <div class="modal-wrapper">
   <h1>Change password</h1>
-  <p class="list-of-chats-font" style="text-align: center">Enter your email. We will send you verification code</p>
+  <p class="font-s-light" style="text-align: center">Enter your email. We will send you verification code</p>
   <form [formGroup]="emailInputForm" (ngSubmit)="onSubmit()">
     @let email = emailInputForm.controls['email'];
 

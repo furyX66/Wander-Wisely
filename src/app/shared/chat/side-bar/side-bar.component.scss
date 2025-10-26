@@ -1,19 +1,19 @@
 @use "colors" as *;
 
-:host-context([data-theme='light']) app-user-menu{
-  outline:1px solid $light-gray;
+:host-context([data-theme='light']) app-user-menu {
+  outline: 1px solid $light-gray;
 }
 
-:host-context([data-theme='dark']) app-user-menu{
+:host-context([data-theme='dark']) app-user-menu {
   background: $gray
 }
 
 :host-context([data-theme='light']) {
-  outline:1px solid $light-gray;
+  outline: 1px solid $light-gray;
 }
 
 
-:host{
+:host {
   box-sizing: border-box;
   background-color: var(--modal-bg-color);
   border-radius: 0 30px 30px 0;
@@ -26,16 +26,16 @@
   position: relative;
 }
 
-ul{
+ul {
   width: 100%;
   list-style: none;
   display: flex;
   flex-direction: column;
 
-  li{
+  li {
     width: 100%;
 
-    button{
+    button {
       box-sizing: border-box;
       width: 100%;
       gap: 0.5rem;
@@ -48,14 +48,14 @@ ul{
       background-color: transparent;
       cursor: pointer;
 
-      &:hover{
+      &:hover {
         background-color: var(--hover-color);
       }
     }
   }
 }
 
-app-logo{
+app-logo {
   display: flex;
   align-items: center;
   height: 51.6px;
@@ -70,32 +70,33 @@ app-logo{
   gap: 0.5rem;
 }
 
-.chat-list{
+.chat-list {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
   flex: 1;
 
-  .not-login-massage{
+  .not-login-massage {
     margin-top: auto;
     opacity: 0.5;
   }
 }
+
 .bottom-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.user-bottom-menu{
+.user-bottom-menu {
   position: relative;
   justify-content: space-between;
   display: flex;
   align-items: center;
   cursor: pointer;
 
-  button{
-    flex:1;
+  button {
+    flex: 1;
     color: var(--text-color);
     display: flex;
     border: none;
@@ -106,20 +107,20 @@ app-logo{
     gap: 2.6rem;
     padding: 0.8rem;
 
-    &:hover{
+    &:hover {
       background-color: var(--hover-color);
     }
   }
 }
 
-app-user-menu{
+app-user-menu {
   width: 198px;
   position: absolute;
   bottom: 68px;
   left: 1rem;
 }
 
-icon-profile{
+icon-profile {
   cursor: pointer;
 }
 

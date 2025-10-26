@@ -5,21 +5,20 @@
       @for (attraction of attractions(); track attraction) {
         <div class="card">
           <icon-favorite/>
-          <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.photoUrl" alt="Attraction image">
+          <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.photoUrl"
+               alt="Attraction image">
           <div class="card-info">
-          <span class="row">
-            <p class="menu-list-font-bold">{{ attraction.name }}</p>
-          </span>
+            <h3 class="font-s-semibold">{{ attraction.name }}</h3>
             <span class="row">
-            <icon-star/>
-            <p class="menu-list-font"> {{ attraction.rating }}</p>
-          </span>
+              <icon-star/>
+              <p class="font-s-normal"> {{ attraction.rating }}</p>
+            </span>
             <span class="row">
                 @if (attraction.price) {
                   <icon-money/>
-                  <p class="menu-list-font">{{ attraction.price }}</p>
+                  <p class="font-s-normal">{{ attraction.price }}</p>
                 }
-          </span>
+            </span>
           </div>
         </div>
       }

@@ -2,70 +2,13 @@
 @use "fonts" as *;
 @use "mixins" as *;
 @use "variables" as *;
-
-/* Normalization */
+@use "text-styles" as *;
+@use "utilities" as *;
 
 *, :root{
   margin: 0;
   padding: 0;
   @include poppins();
-}
-
-/* Text styles */
-
-.chat-list-font{
-  color: var(--text-color);
-  @include poppins(400, 16px);
-}
-
-.chat-list-font-selected{
-  color: var(--text-color);
-  @include poppins(600, 16px);
-}
-
-.menu-list-font-bold{
-  color: var(--text-color);
-  @include poppins(700, 14px, center);
-}
-
-.menu-list-font{
-  color: var(--text-color);
-  @include poppins(400, 14px, center);
-}
-
-.time-period-font{
-  color: var(--text-color);
-  @include poppins(500, 14px);
-}
-
-.list-of-chats-font{
-  color: var(--text-color);
-  @include poppins(300, 14px);
-  margin: 0;
-}
-
-.list-of-chats-selected{
-  color: var(--text-color);
-  @include poppins(500, 14px);
-}
-
-.poppins-light{
-  color: var(--text-color);
-  @include poppins(300, 14px);
-  text-align: center;
-  opacity: 0.3;
-}
-
-.thin-divider {
-  width: 80%;
-  border-top: 1px solid $light-gray;
-  opacity: 0.5;
-}
-
-.error-message{
-  color: $red;
-  @include poppins(300,14px);
-  margin: 0;
 }
 
 body {

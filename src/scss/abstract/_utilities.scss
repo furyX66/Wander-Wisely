@@ -1,0 +1,14 @@
+@use "colors" as *;
+@use "mixins" as *;
+
+.thin-divider {
+  width: 80%;
+  border-top: 1px solid $light-gray;
+  opacity: 0.5;
+}
+
+.error-message{
+  color: $red;
+  @include poppins(300, 0.875rem);
+  margin: 0;
+}
