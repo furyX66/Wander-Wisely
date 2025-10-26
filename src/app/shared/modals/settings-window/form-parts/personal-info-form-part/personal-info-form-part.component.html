@@ -1,7 +1,14 @@
 @if (personalInfoForm) {
   <form [formGroup]="personalInfoForm" (ngSubmit)="onSubmit()">
+    @let email = personalInfoForm.controls["email"];
+
     <app-input [label]="'Username'" [id]="'username'" formControlName="username"/>
-    <app-input [label]="'Email'" [id]="'email'" formControlName="email" type="email"/>
+    <div class="modal-window-input-field">
+      <app-input [label]="'Email'" [id]="'email'" formControlName="email" type="email"/>
+      @if(email.invalid && email.touched){
+        <span class="error-message">Invalid email format</span>
+      }
+    </div>
     <app-button type="submit" [variant]="'yellow'">Save Information</app-button>
     @if (successMessage) {
       <p class="list-of-chats-font" style="text-align: center; color: limegreen">{{ successMessage }}</p>
