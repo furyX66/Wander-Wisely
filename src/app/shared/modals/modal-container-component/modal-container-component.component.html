@@ -21,3 +21,7 @@
 @if (modalService.getModalState$(ModalType.NEW_PASSWORD_INPUT) | async){
   <app-new-password (close)="modalService.closeModal(ModalType.NEW_PASSWORD_INPUT)" [data]="modalService.getModalData(ModalType.NEW_PASSWORD_INPUT)"/>
 }
+
+@if (modalService.getModalState$(ModalType.CLOSE_MODAL) | async){
+  <app-close-modal (close)="modalService.closeModal(ModalType.CLOSE_MODAL)" (closeAnotherModal)="modalService.closeAllModals()"/>
+}

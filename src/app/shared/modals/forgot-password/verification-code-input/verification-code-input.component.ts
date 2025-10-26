@@ -3,19 +3,22 @@ import {ButtonComponent} from "../../../common-ui/button/button.component";
 import {InputComponent} from "../../../common-ui/input/input.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from '../../../../core/services/auth.service';
+import {ModalType} from '../../../../enums/ModalType';
+import {ModalService} from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-verification-code-input',
-    imports: [
-        ButtonComponent,
-        InputComponent,
-        ReactiveFormsModule
-    ],
+  imports: [
+    ButtonComponent,
+    InputComponent,
+    ReactiveFormsModule
+  ],
   templateUrl: './verification-code-input.component.html',
   styleUrl: './verification-code-input.component.scss'
 })
 export class VerificationCodeInputComponent implements OnInit {
   errorMessage = "";
+  private modalService = inject(ModalService);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
   verifyResetCodeForm!: FormGroup;
@@ -29,6 +32,10 @@ export class VerificationCodeInputComponent implements OnInit {
     this.verifyResetCodeForm = this.fb.group({
       code: ['', Validators.required],
     });
+  }
+
+  handleClose(): void {
+    this.modalService.openModal(ModalType.CLOSE_MODAL);
   }
 
   onSubmit() {

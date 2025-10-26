@@ -4,6 +4,8 @@ import {InputComponent} from '../../../common-ui/input/input.component';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth.service';
 import {passwordValidator} from '../../../../core/helpers/validators/passwordValidator';
+import {ModalType} from '../../../../enums/ModalType';
+import {ModalService} from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-new-password',
@@ -16,6 +18,7 @@ import {passwordValidator} from '../../../../core/helpers/validators/passwordVal
   styleUrl: './new-password.component.scss'
 })
 export class NewPasswordComponent implements OnInit {
+  private modalService = inject(ModalService);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
   newPasswordForm!: FormGroup;
@@ -31,6 +34,10 @@ export class NewPasswordComponent implements OnInit {
       newPassword: ['', [Validators.required, passwordValidator]],
       repeatNewPassword: ['', Validators.required],
     });
+  }
+
+  handleClose(): void {
+    this.modalService.openModal(ModalType.CLOSE_MODAL);
   }
 
   onSubmit() {
