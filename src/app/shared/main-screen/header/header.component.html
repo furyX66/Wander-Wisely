@@ -2,8 +2,8 @@
 @if (!(authStatus$ | async)) {
   <span class="menu-buttons">
       <app-color-scheme-switch/>
-      <app-button [className]="'transparent'" (click)="openLoginModal()">Login</app-button>
-      <app-button [className]="'outlined'" (click)="openRegistrationModal()">Sign Up</app-button>
+      <app-button [variant]="'transparent'" (click)="openLoginModal()">Login</app-button>
+      <app-button [variant]="'outlined'" (click)="openRegistrationModal()">Sign Up</app-button>
     </span>
 } @else {
   <span class="user-signed">

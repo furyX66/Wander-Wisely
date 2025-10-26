@@ -26,8 +26,8 @@
 </div>
 @if (!isLoggedIn) {
   <span class="bottom-bar">
-      <app-button [className]="'transparent'" (click)="openLoginModal()">Login</app-button>
-      <app-button [className]="'outlined'" (click)="openRegistrationModal()">Sign up</app-button>
+      <app-button [variant]="'transparent'" (click)="openLoginModal()">Login</app-button>
+      <app-button [variant]="'outlined'" (click)="openRegistrationModal()">Sign up</app-button>
       <app-color-scheme-switch/>
     </span>
 } @else {

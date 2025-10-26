@@ -5,8 +5,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
-  imports: [
-  ],
+  imports: [],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

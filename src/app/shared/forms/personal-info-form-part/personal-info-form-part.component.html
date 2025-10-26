@@ -1,5 +1,5 @@
 @if(personalInfoForm){
-  <form [formGroup]="personalInfoForm" (ngSubmit)="onSubmit()" class="form">
+  <form [formGroup]="personalInfoForm" (ngSubmit)="onSubmit()">
     <div class="modal-window-input-field">
       <p class="list-of-chats-selected">Username</p>
       <app-input formControlName="username"/>
@@ -8,7 +8,7 @@
       <p class="list-of-chats-selected">Email</p>
       <app-input formControlName="email" type="email"/>
     </div>
-    <app-button type="submit">Save Information</app-button>
+    <app-button type="submit" [variant]="'yellow'">Save Information</app-button>
     @if (successMessage) {
       <p class="list-of-chats-font" style="text-align: center; color: limegreen">{{ successMessage }}</p>
     }

@@ -1,6 +1,1 @@
-@use "mixins" as *;
-
-.acc-font{
-  @include poppins(400, 14px);
-  color: var(--text-color);
-}
+@use "../modals-shared" as *;
