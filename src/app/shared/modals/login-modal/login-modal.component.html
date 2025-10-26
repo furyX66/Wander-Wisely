@@ -2,23 +2,24 @@
 <div class="modal-wrapper">
   <h1>Login</h1>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    @let emailOrUsername = loginForm.controls['emailOrUsername'];
+    @let password = loginForm.controls['password'];
+
     <div class="modal-window-input-field">
-      <p class="list-of-chats-selected">Email or username</p>
-      <app-input formControlName="emailOrUsername"/>
-      @if (loginForm.get('emailOrUsername')?.errors?.['required'] && loginForm.get('emailOrUsername')?.touched) {
-        <div class="error-message">Email or username is required</div>
+      <app-input [label]="'Email or username'" [id]="'emailOrUsername'" formControlName="emailOrUsername"/>
+      @if (emailOrUsername.invalid && emailOrUsername.touched) {
+        <span class="error-message">Email or username is required</span>
       }
     </div>
     <div class="modal-window-input-field">
-      <p class="list-of-chats-selected">Password</p>
-      <app-input formControlName="password" type="password"/>
-      @if (loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched) {
-        <div class="error-message">Password is required</div>
+      <app-input [label]="'Password'" [id]="'password'" formControlName="password" type="password"/>
+      @if (password.invalid && password.touched) {
+        <span class="error-message">Password is required</span>
       }
     </div>
     <a class="action-font" (click)="switchToEmailInput.emit()">Forgot Password?</a>
     @if (errorMessage) {
-      <div class="error-message" style="text-align: center">{{ errorMessage }}</div>
+      <span class="error-message" style="text-align: center">{{ errorMessage }}</span>
     }
     <app-button type="submit" [variant]="'yellow'">Login</app-button>
   </form>

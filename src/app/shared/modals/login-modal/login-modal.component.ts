@@ -1,4 +1,4 @@
-import {Component, inject, output} from '@angular/core';
+import {Component, inject, OnInit, output} from '@angular/core';
 import {ButtonComponent} from "../../common-ui/button/button.component";
 import {InputComponent} from "../../common-ui/input/input.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -15,23 +15,23 @@ import {AuthService} from '../../../core/services/auth.service';
   styleUrl: './login-modal.component.scss',
   standalone: true,
 })
-export class LoginModalComponent {
+export class LoginModalComponent implements OnInit {
   private authService = inject(AuthService);
-  loginForm: FormGroup;
+  private fb = inject(FormBuilder);
+  loginForm!: FormGroup;
   errorMessage = '';
 
   close = output<void>();
   switchToRegister = output<void>();
   switchToEmailInput = output<void>();
 
-  constructor(
-    private fb: FormBuilder,
-  ) {
+  ngOnInit() {
     this.loginForm = this.fb.group({
       emailOrUsername: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
+
   onSubmit() {
     if (this.loginForm.invalid) {
       this.errorMessage = 'Please fill all fields.';
