@@ -7,7 +7,7 @@
           <p>{{msg.content}}</p>
         </app-user-message>
       }
-      @if (msg.role === 'assistant') {
+      @if (msg.role === 'assistant') { 
         <app-assistant-message>
           <p>{{msg.content}}</p>
         </app-assistant-message>
@@ -26,4 +26,3 @@
   <app-chat-input [disabled]="isLoading" (onClick)="handleChatInput($event)"/>
 </section>
 <app-map [attractions]="attractions"/>
-
