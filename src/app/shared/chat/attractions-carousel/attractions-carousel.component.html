@@ -1,5 +1,5 @@
 <div class="carousel-wrapper" [class.closed]="!isShown()">
-  <icon-arrow class="arrow-left" (click)="scrollLeft()" [class.disabled]="!canScrollLeft()" [strokeWidth]="0"/>
+  <icon-arrow (click)="scrollLeft()" [class.disabled]="!canScrollLeft()" [strokeWidth]="0"/>
   <div class="cards-container" #cardsContainer (scroll)="onScroll($event)">
     @if (attractions().length > 0) {
       @for (attraction of attractions(); track attraction) {
@@ -8,7 +8,7 @@
           <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.photoUrl"
                alt="Attraction image">
           <div class="card-info">
-            <h3 class="font-s-semibold">{{ attraction.name }}</h3>
+            <h3 class="font-s-semiBold">{{ attraction.name }}</h3>
             <span class="row">
               <icon-star/>
               <p class="font-s-normal"> {{ attraction.rating }}</p>
