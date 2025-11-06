@@ -13,6 +13,7 @@ import {Component, input} from '@angular/core';
   `,
   styles: `
     :host {
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -23,6 +24,6 @@ import {Component, input} from '@angular/core';
   `
 })
 export class CrossIconComponent {
-  size = input<number>(21);
+  size = input<number>(16);
   strokeWidth = input<number>(1);
 }

@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, effect, input, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import {AttractionsCarouselComponent} from '../../chat/attractions-carousel/attractions-carousel.component';
-import {Attraction} from '../../../../interfaces/Attraction';
+import {IAttraction} from '../../../../interfaces/IAttraction';
 
 @Component({
   selector: 'app-map',
@@ -13,7 +13,7 @@ import {Attraction} from '../../../../interfaces/Attraction';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
-  attractions = input<Attraction[] >([]);
+  attractions = input<IAttraction[] >([]);
   private attractionMarkers: L.Marker[] = [];
 
   constructor() {
@@ -77,7 +77,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.applyTheme(this.isDarkMode());
   }
 
-  private displayAttractions(attractions: Attraction[]): void {
+  private displayAttractions(attractions: IAttraction[]): void {
     // Удаляем предыдущие маркеры
     this.clearAttractionMarkers();
 
@@ -104,7 +104,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private createPopupContent(attraction: Attraction): string {
+  private createPopupContent(attraction: IAttraction): string {
     const stars = '⭐'.repeat(Math.round(attraction.rating));
     const price = attraction.price !== null ? `${attraction.price} zł` : 'Free';
     const photo = attraction.photoUrl

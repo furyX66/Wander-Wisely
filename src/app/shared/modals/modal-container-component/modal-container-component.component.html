@@ -25,3 +25,7 @@
 @if (modalService.getModalState$(ModalType.CLOSE_MODAL) | async){
   <app-close-modal (close)="modalService.closeModal(ModalType.CLOSE_MODAL)" (closeAnotherModal)="modalService.closeAllModals()"/>
 }
+
+@if (modalService.getModalState$(ModalType.CLEAR_CHAT) | async){
+  <app-clear-chat (close)="modalService.closeModal(ModalType.CLEAR_CHAT)" (switchToLogin)="switchToLogin()" (switchToRegister)="switchToRegister()" (confirmClear)="handleClearChat()"/>
+}

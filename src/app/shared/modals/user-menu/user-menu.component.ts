@@ -5,6 +5,7 @@ import {ModalType} from '../../../enums/ModalType';
 import {LogoutIconComponent} from '../../../../../public/assets/icons/logout-icon.component';
 import {SettingsIconComponent} from '../../../../../public/assets/icons/settings-icon.component';
 import {UserIconComponent} from '../../../../../public/assets/icons/user-icon.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-menu',
@@ -19,11 +20,13 @@ import {UserIconComponent} from '../../../../../public/assets/icons/user-icon.co
 export class UserMenuComponent {
   private authService = inject(AuthService);
   private modalService =  inject(ModalService);
+  private router = inject(Router);
 
   closeMenu = output<void>();
 
   logout() {
     this.authService.logout().subscribe();
+    this.router.navigate(['/']).then(() => {console.log("Logged out")});
     this.closeMenu.emit();
   }
 

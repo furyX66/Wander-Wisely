@@ -1,15 +1,20 @@
 import {Injectable} from '@angular/core';
-import {ChatMessage} from '../../../interfaces/ChatMessage';
-import {GuestChatSession} from '../../../interfaces/GuestChatSession';
+import {IChatMessage} from '../../../interfaces/IChatMessage';
+import {IGuestChatSession} from '../../../interfaces/IGuestChatSession';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class GuestChatSessionService {
   private STORAGE_KEY = 'guestChat';
-  private data!: GuestChatSession;
-  private nextId = 0
+  private data!: IGuestChatSession;
+  private nextId = 0;
+
+  private messagesSubject = new BehaviorSubject<IChatMessage[]>([]);
+  public messages$ = this.messagesSubject.asObservable();
 
   constructor() {
     this.loadFromStorage();
+    this.messagesSubject.next([...this.data.messages]);
   }
 
   private loadFromStorage(): void {
@@ -25,10 +30,15 @@ export class GuestChatSessionService {
   private persist() {
     this.data.nextId = this.nextId;
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
+    this.messagesSubject.next([...this.data.messages]);
   }
 
-  getMessages(): ChatMessage[] {
-    return [...this.data.messages];
+  hasMessages(): boolean {
+    return this.data.messages.length > 0;
+  }
+
+  getMessages(): Observable<IChatMessage[]> {
+    return this.messages$;
   }
 
   createNewSessionIfNotExists(meta: { sessionName?: string; context: any | null }): void {
@@ -47,7 +57,7 @@ export class GuestChatSessionService {
   }
 
   addMessage(role: 'user' | 'assistant', content: string) {
-    const msg: ChatMessage = {
+    const msg: IChatMessage = {
       id: this.nextId++,
       role,
       content,
@@ -57,7 +67,7 @@ export class GuestChatSessionService {
     this.persist();
   }
 
-  clearMessages(): void {
+  clearChatSession(): void {
     this.data.messages = [];
     this.data.sessionName = undefined;
     this.data.context = null;

@@ -1,26 +1,44 @@
 @let isLoggedIn = (isLoggedIn$ | async);
 <app-logo/>
 <nav class="option-buttons">
-  <ul>
-    <li>
-      <button>
-        <icon-search/>
-        Search chats
-      </button>
-    </li>
-    <li>
-      <button>
-        <icon-new-chat/>
-        New chat
-      </button>
-    </li>
-  </ul>
+  @if (isLoggedIn) {
+    <ul>
+      <li>
+        <button>
+          <icon-search/>
+          Search chats
+        </button>
+      </li>
+      <li>
+        <button (click)="createNewChat()">
+          <icon-new-chat/>
+          New Chat
+        </button>
+      </li>
+    </ul>
+  } @else {
+    <ul>
+      <li>
+        <button (click)="clearChat()">
+          <icon-cross/>
+          Clear chat
+        </button>
+      </li>
+    </ul>
+  }
 </nav>
 <div class="chat-list">
   @if (!isLoggedIn) {
     <p class="not-login-massage">
       Sign up or login to get access to history, more chats etc.
     </p>
+  } @else {
+    @for (session of chatSessions; track session.id) {
+      <div (click)="navigateToChat(session.id)" class="chat-element">
+        <span>{{ session.sessionName }}</span>
+        <button type="button" class="delete-chat" (click)="deleteChat(session.id); $event.stopPropagation()"><icon-cross [strokeWidth]="1.5"/></button>
+      </div>
+    }
   }
 </div>
 @if (!isLoggedIn) {

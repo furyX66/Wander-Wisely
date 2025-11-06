@@ -1,6 +1,5 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
 import {BehaviorSubject, map, Observable, of, shareReplay, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
@@ -20,7 +19,6 @@ interface LoginData {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private router = inject(Router);
   private authStatusSubject = new BehaviorSubject<boolean | null>(null);
   authStatus$: Observable<boolean | null> = this.authStatusSubject.asObservable();
 
@@ -53,10 +51,6 @@ export class AuthService {
     return this.authStatusSubject.pipe(
       map(status => status === true)
     );
-  }
-
-  getCurrentStatus(): boolean | null {
-    return this.authStatusSubject.value;
   }
 
   isInitializing(): boolean {
@@ -132,12 +126,10 @@ export class AuthService {
     return this.http.post<void>(`/api/auth/logout`, {}).pipe(
       tap(() => {
         console.log('Successfully logged out from server');
-        this.router.navigate(['/']);
       }),
 
       catchError(error => {
         console.warn('Server logout failed, but local state is cleared:', error);
-        this.router.navigate(['/']);
         return of(void 0);
       })
     );
