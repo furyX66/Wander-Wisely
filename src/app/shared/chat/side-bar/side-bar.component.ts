@@ -94,7 +94,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
       .subscribe(user => {
         const dto: ICreateChatSession = {
           userId: user.userId,
-          sessionName: 'New Chat',
+          sessionName: 'New Session',
           context: undefined
         };
         this.chatSessionService.create(dto)
@@ -119,6 +119,20 @@ export class SideBarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(sessions => {
         this.chatSessions = sessions;
+      });
+  }
+
+  deleteChat(sessionId: number): void {
+    this.chatSessionService.delete(sessionId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          console.log('Deleted');
+          this.chatSessions = this.chatSessions.filter(s => s.id !== sessionId);
+        },
+        error: (error) => {
+          console.error('Failed to delete:', error);
+        }
       });
   }
 

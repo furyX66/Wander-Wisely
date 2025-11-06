@@ -4,16 +4,25 @@
   @if (isLoggedIn) {
     <ul>
       <li>
-        <button><icon-search/>Search chats</button>
+        <button>
+          <icon-search/>
+          Search chats
+        </button>
       </li>
       <li>
-        <button (click)="createNewChat()"><icon-new-chat/>New Chat</button>
+        <button (click)="createNewChat()">
+          <icon-new-chat/>
+          New Chat
+        </button>
       </li>
     </ul>
   } @else {
     <ul>
       <li>
-        <button (click)="clearChat()"><icon-cross/>Clear chat</button>
+        <button (click)="clearChat()">
+          <icon-cross/>
+          Clear chat
+        </button>
       </li>
     </ul>
   }
@@ -24,8 +33,11 @@
       Sign up or login to get access to history, more chats etc.
     </p>
   } @else {
-    @for (session of chatSessions; track session.id){
-      <a class="chat-element" [routerLink]="['/chat', session.id]">{{session.sessionName}}</a>
+    @for (session of chatSessions; track session.id) {
+      <div class="chat-element">
+        <a [routerLink]="['/chat', session.id]">{{ session.sessionName }}</a>
+        <button type="button" class="delete-chat" (click)="deleteChat(session.id)"><icon-cross [strokeWidth]="1.5"/></button>
+      </div>
     }
   }
 </div>

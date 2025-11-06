@@ -59,9 +59,6 @@ export class ChatSessionService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`).pipe(
-      tap(() => {
-        this.messagesSubject.next([]);
-      }),
       catchError(error => {
         console.error('Failed to delete session:', error);
         throw error;
