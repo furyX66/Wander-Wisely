@@ -1,30 +1,24 @@
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  inject,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import { SideBarComponent } from '../../shared/chat/side-bar/side-bar.component';
-import { ChatInputComponent } from '../../shared/common-ui/chat-input/chat-input.component';
-import { MapComponent } from '../../shared/common-ui/map/map.component';
-import { UserMessageComponent } from '../../shared/chat/user-message/user-message.component';
-import { AssistantMessageComponent } from '../../shared/chat/assistant-message/assistant-message.component';
-import { ArrowIconComponent } from '../../../../public/assets/icons/arrow-icon.component';
+import {AfterViewChecked, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
+import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
+import {MapComponent} from '../../shared/common-ui/map/map.component';
+import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
+import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
+import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
 import {exhaustMap, filter, finalize, Observable, of, Subject, takeUntil, tap} from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { LoadingAnimationComponent } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
-import { AssistantIconComponent } from '../../../../public/assets/icons/assistant-icon';
-import { ChatService } from '../../core/services/chat.service';
-import { IAttraction } from '../../../interfaces/IAttraction';
-import { ActivatedRoute } from '@angular/router';
-import { ChatSessionService } from '../../core/services/chat-session.service';
-import { IChatSession } from '../../../interfaces/IChatSession';
-import { GuestChatSessionService } from '../../core/services/guest-chat-session.service';
-import { AsyncPipe } from '@angular/common';
-import {IChatMessage} from '../../../interfaces/IChatMessage'; // ✅ Добавили
+import {catchError} from 'rxjs/operators';
+import {
+  LoadingAnimationComponent
+} from '../../../../public/assets/animations/loading-animation/loading-animation.component';
+import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
+import {ChatService} from '../../core/services/chat.service';
+import {IAttraction} from '../../../interfaces/IAttraction';
+import {ActivatedRoute} from '@angular/router';
+import {ChatSessionService} from '../../core/services/chat-session.service';
+import {IChatSession} from '../../../interfaces/IChatSession';
+import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
+import {AsyncPipe} from '@angular/common';
+import {IChatMessage} from '../../../interfaces/IChatMessage';
 
 export interface ChatResponse {
   reply: string;
@@ -42,7 +36,7 @@ export interface ChatResponse {
     ArrowIconComponent,
     LoadingAnimationComponent,
     AssistantIconComponent,
-    AsyncPipe // ✅ Добавили
+    AsyncPipe
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
@@ -57,6 +51,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private guestChatSessionService = inject(GuestChatSessionService);
   private destroy$ = new Subject<void>();
 
+  private messageStreamDestroy$ = new Subject<void>();
+
   messages$!: Observable<IChatMessage[]>;
 
   sessionId!: number;
@@ -68,7 +64,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   isUserScrolledUp = false;
   isLoading = false;
 
-
   private messageSend$ = new Subject<string>();
 
   ngOnInit(): void {
@@ -77,6 +72,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe(params => {
         this.sessionId = Number(params['id']);
         console.log('Loading session:', this.sessionId);
+
+        this.messageStreamDestroy$.next();
 
         this.loadSession();
       });
@@ -92,6 +89,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.messageStreamDestroy$.next();
+    this.messageStreamDestroy$.complete();
   }
 
   private loadSession(): void {
@@ -129,7 +128,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
           } else {
             this.chatSessionService
               .addMessage(this.sessionId, { role: 'user', content: message })
-              .pipe(takeUntil(this.destroy$))
+              .pipe(takeUntil(this.messageStreamDestroy$))
               .subscribe();
           }
 
@@ -145,7 +144,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
                 } else {
                   this.chatSessionService
                     .addMessage(this.sessionId, { role: 'assistant', content: res.reply })
-                    .pipe(takeUntil(this.destroy$))
+                    .pipe(takeUntil(this.messageStreamDestroy$))
                     .subscribe();
                 }
                 this.scheduleScroll();
@@ -162,7 +161,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
               } else {
                 this.chatSessionService
                   .addMessage(this.sessionId, { role: 'assistant', content: errorMsg })
-                  .pipe(takeUntil(this.destroy$))
+                  .pipe(takeUntil(this.messageStreamDestroy$))
                   .subscribe();
               }
               this.scheduleScroll();
@@ -171,14 +170,13 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
             finalize(() => this.isLoading = false)
           );
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.messageStreamDestroy$)
       )
       .subscribe();
   }
 
   handleChatInput(value: string): void {
     if (!value.trim() || this.isLoading) return;
-
     this.scheduleScroll();
     this.messageSend$.next(value);
   }
@@ -186,7 +184,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   onScroll(): void {
     const el = this.chatContainer.nativeElement;
     const atBottom = Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < 5;
-
     this.isUserScrolledUp = !atBottom;
     this.showScrollButton = this.isUserScrolledUp;
   }
@@ -212,3 +209,4 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 }
+
