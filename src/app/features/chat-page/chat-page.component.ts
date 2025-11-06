@@ -1,27 +1,34 @@
-import {AfterViewChecked, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
-import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
-import {MapComponent} from '../../shared/common-ui/map/map.component';
-import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
-import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
-import {ChatMessage} from '../../../interfaces/ChatMessage';
-import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
-import {exhaustMap, filter, finalize, of, Subject, takeUntil, tap} from 'rxjs';
-import {catchError} from 'rxjs/operators';
 import {
-  LoadingAnimationComponent
-} from '../../../../public/assets/animations/loading-animation/loading-animation.component';
-import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
-import {ChatService} from '../../core/services/chat.service';
-import {Attraction} from '../../../interfaces/Attraction';
-import {ActivatedRoute} from '@angular/router';
-import {ChatSessionService} from '../../core/services/chat-session.service';
-import {ChatSession} from '../../../interfaces/ChatSession';
-import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import { SideBarComponent } from '../../shared/chat/side-bar/side-bar.component';
+import { ChatInputComponent } from '../../shared/common-ui/chat-input/chat-input.component';
+import { MapComponent } from '../../shared/common-ui/map/map.component';
+import { UserMessageComponent } from '../../shared/chat/user-message/user-message.component';
+import { AssistantMessageComponent } from '../../shared/chat/assistant-message/assistant-message.component';
+import { ArrowIconComponent } from '../../../../public/assets/icons/arrow-icon.component';
+import {exhaustMap, filter, finalize, Observable, of, Subject, takeUntil, tap} from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { LoadingAnimationComponent } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
+import { AssistantIconComponent } from '../../../../public/assets/icons/assistant-icon';
+import { ChatService } from '../../core/services/chat.service';
+import { Attraction } from '../../../interfaces/Attraction';
+import { ActivatedRoute } from '@angular/router';
+import { ChatSessionService } from '../../core/services/chat-session.service';
+import { ChatSession } from '../../../interfaces/ChatSession';
+import { GuestChatSessionService } from '../../core/services/guest-chat-session.service';
+import { AsyncPipe } from '@angular/common';
+import {ChatMessage} from '../../../interfaces/ChatMessage'; // ✅ Добавили
 
 export interface ChatResponse {
   reply: string;
-  places : Attraction[];
+  places: Attraction[];
 }
 
 @Component({
@@ -34,7 +41,8 @@ export interface ChatResponse {
     AssistantMessageComponent,
     ArrowIconComponent,
     LoadingAnimationComponent,
-    AssistantIconComponent
+    AssistantIconComponent,
+    AsyncPipe // ✅ Добавили
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
@@ -49,16 +57,17 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private guestChatSessionService = inject(GuestChatSessionService);
   private destroy$ = new Subject<void>();
 
+  messages$!: Observable<ChatMessage[]>;
+
   sessionId!: number;
-  messages: ChatMessage[] = [];
-  attractions: Attraction[] = [];
-  session?: ChatSession;
+  session!: ChatSession;
   contextObj?: any;
-  nextId = 0;
+  attractions: Attraction[] = [];
   showScrollButton = false;
   shouldScrollToBottom = false;
   isUserScrolledUp = false;
   isLoading = false;
+
 
   private messageSend$ = new Subject<string>();
 
@@ -66,13 +75,14 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.sessionId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (!this.sessionId) {
-      this.messages = this.guestChatSessionService.getMessages();
+      this.messages$ = this.guestChatSessionService.messages$;
       this.setupMessageStream();
     } else {
+      this.messages$ = this.chatSessionService.messages$;
       this.chatSessionService.getSessionWithMessages(this.sessionId)
+        .pipe(takeUntil(this.destroy$))
         .subscribe(dto => {
           this.session = dto.session;
-          this.messages = dto.messages;
           if (this.session.context) {
             try {
               this.contextObj = JSON.parse(this.session.context);
@@ -104,6 +114,15 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         filter(msg => !!msg.trim()),
         tap(() => this.isLoading = true),
         exhaustMap(message => {
+          if (!this.sessionId) {
+            this.guestChatSessionService.addMessage('user', message);
+          } else {
+            this.chatSessionService
+              .addMessage(this.sessionId, { role: 'user', content: message })
+              .pipe(takeUntil(this.destroy$))
+              .subscribe();
+          }
+
           const chatRequest$ = !this.sessionId
             ? this.chatService.guestChatAsk(message)
             : this.chatService.chatAsk(this.sessionId, message);
@@ -111,14 +130,15 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
           return chatRequest$.pipe(
             tap((res: ChatResponse) => {
               if (res?.reply) {
-                this.addAssistantMessage(res.reply);
                 if (!this.sessionId) {
                   this.guestChatSessionService.addMessage('assistant', res.reply);
                 } else {
                   this.chatSessionService
                     .addMessage(this.sessionId, { role: 'assistant', content: res.reply })
+                    .pipe(takeUntil(this.destroy$))
                     .subscribe();
                 }
+                this.scheduleScroll();
               }
               if (res?.places) {
                 this.attractions = res.places;
@@ -127,34 +147,27 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
             catchError(error => {
               console.error('Chat service error:', error);
               const errorMsg = 'Server error';
-              this.addAssistantMessage(errorMsg);
               if (!this.sessionId) {
                 this.guestChatSessionService.addMessage('assistant', errorMsg);
+              } else {
+                this.chatSessionService
+                  .addMessage(this.sessionId, { role: 'assistant', content: errorMsg })
+                  .pipe(takeUntil(this.destroy$))
+                  .subscribe();
               }
-
+              this.scheduleScroll();
               return of(null);
             }),
             finalize(() => this.isLoading = false)
-          )
+          );
         }),
         takeUntil(this.destroy$)
       )
       .subscribe();
   }
 
-
   handleChatInput(value: string): void {
     if (!value.trim() || this.isLoading) return;
-
-    this.addUserMessage(value);
-
-    if (!this.sessionId) {
-      this.guestChatSessionService.addMessage('user', value);
-    } else {
-      this.chatSessionService
-        .addMessage(this.sessionId, { role: 'user', content: value })
-        .subscribe();
-    }
 
     this.scheduleScroll();
     this.messageSend$.next(value);
@@ -188,24 +201,4 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       console.error('Scroll error:', error);
     }
   }
-
-  private addUserMessage(text: string): void {
-    const msg: ChatMessage = {
-      id: this.nextId++,
-      role: 'user',
-      content: text
-    };
-    this.messages.push(msg);
-  }
-
-  private addAssistantMessage(text: string): void {
-    const msg: ChatMessage = {
-      id: this.nextId++,
-      role: 'assistant',
-      content: text
-    };
-    this.messages.push(msg);
-    this.scheduleScroll();
-  }
 }
-

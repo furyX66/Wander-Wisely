@@ -4,15 +4,16 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {InputComponent} from "../../../../common-ui/input/input.component";
 import {UserService} from '../../../../../core/services/user.service';
 import {User} from '../../../../../../interfaces/User';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-personal-info-form-part',
-    imports: [
-        ButtonComponent,
-        FormsModule,
-        InputComponent,
-        ReactiveFormsModule
-    ],
+  imports: [
+    ButtonComponent,
+    FormsModule,
+    InputComponent,
+    ReactiveFormsModule
+  ],
   templateUrl: './personal-info-form-part.component.html',
   styleUrl: './personal-info-form-part.component.scss'
 })
@@ -22,18 +23,27 @@ export class PersonalInfoFormPartComponent implements OnInit {
   userId!: number;
   oldUser: any;
   personalInfoForm!: FormGroup;
+  private destroy$ = new Subject<void>();
   successMessage = '';
   errorMessage = '';
 
   ngOnInit() {
-    this.userService.getCurrentUser().subscribe(user => {
-      this.oldUser = user;
-      this.userId = user.id;
-      this.personalInfoForm = this.fb.group({
-        username: [user.username],
-        email: [[user.email], Validators.email],
-      });
-    });
+    this.userService.getCurrentUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        {
+          next: (user) => {
+            this.oldUser = user;
+            this.userId = user.userId;
+            this.personalInfoForm = this.fb.group({
+              username: [user.username],
+              email: [user.email, Validators.email],
+            });
+          },
+          error: (err) => {
+            console.error('Failed to load user:', err);
+          }
+        });
   }
 
   onSubmit() {
@@ -44,7 +54,7 @@ export class PersonalInfoFormPartComponent implements OnInit {
 
       if (patch.length > 0) {
         this.userService.updateUser(this.userId, patch).subscribe({
-          next: (updatedUser: User)  => {
+          next: (updatedUser: User) => {
             this.userService.currentUserSubject.next(updatedUser);
             this.successMessage = 'User updated successfully';
             this.oldUser = updatedUser;
@@ -79,5 +89,10 @@ export class PersonalInfoFormPartComponent implements OnInit {
     }
 
     return patch;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

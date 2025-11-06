@@ -69,7 +69,7 @@ export class MainPageComponent implements OnInit {
           : undefined;
 
         const dto: CreateChatSession = {
-          userId: user.id,
+          userId: user.userId,
           sessionName,
           context
         };
