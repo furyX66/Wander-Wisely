@@ -100,12 +100,10 @@ app-logo {
     background-color: transparent;
     cursor: pointer;
 
-    a{
+    span{
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      height: 100%;
-      text-decoration: none;
       color: var(--text-color);
       flex: 1;
     }

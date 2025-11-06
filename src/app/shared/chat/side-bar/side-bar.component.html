@@ -34,9 +34,9 @@
     </p>
   } @else {
     @for (session of chatSessions; track session.id) {
-      <div class="chat-element">
-        <a [routerLink]="['/chat', session.id]">{{ session.sessionName }}</a>
-        <button type="button" class="delete-chat" (click)="deleteChat(session.id)"><icon-cross [strokeWidth]="1.5"/></button>
+      <div (click)="navigateToChat(session.id)" class="chat-element">
+        <span>{{ session.sessionName }}</span>
+        <button type="button" class="delete-chat" (click)="deleteChat(session.id); $event.stopPropagation()"><icon-cross [strokeWidth]="1.5"/></button>
       </div>
     }
   }

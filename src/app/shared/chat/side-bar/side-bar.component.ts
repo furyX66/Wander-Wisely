@@ -16,7 +16,7 @@ import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.
 import {GuestChatSessionService} from '../../../core/services/guest-chat-session.service';
 import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {IChatSession} from '../../../../interfaces/IChatSession';
 
 @Component({
@@ -31,7 +31,7 @@ import {IChatSession} from '../../../../interfaces/IChatSession';
     SearchIconComponent,
     ButtonComponent,
     CrossIconComponent,
-    RouterLink,
+
   ],
   templateUrl: './side-bar.component.html',
   standalone: true,
@@ -134,6 +134,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
           console.error('Failed to delete:', error);
         }
       });
+  }
+
+  navigateToChat(id : number): void {
+    this.router.navigate(['/chat', id]);
   }
 
   clearChat(): void {
