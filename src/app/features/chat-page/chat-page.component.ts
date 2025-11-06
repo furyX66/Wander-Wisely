@@ -18,17 +18,17 @@ import { catchError } from 'rxjs/operators';
 import { LoadingAnimationComponent } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
 import { AssistantIconComponent } from '../../../../public/assets/icons/assistant-icon';
 import { ChatService } from '../../core/services/chat.service';
-import { Attraction } from '../../../interfaces/Attraction';
+import { IAttraction } from '../../../interfaces/IAttraction';
 import { ActivatedRoute } from '@angular/router';
 import { ChatSessionService } from '../../core/services/chat-session.service';
-import { ChatSession } from '../../../interfaces/ChatSession';
+import { IChatSession } from '../../../interfaces/IChatSession';
 import { GuestChatSessionService } from '../../core/services/guest-chat-session.service';
 import { AsyncPipe } from '@angular/common';
-import {ChatMessage} from '../../../interfaces/ChatMessage'; // ✅ Добавили
+import {IChatMessage} from '../../../interfaces/IChatMessage'; // ✅ Добавили
 
 export interface ChatResponse {
   reply: string;
-  places: Attraction[];
+  places: IAttraction[];
 }
 
 @Component({
@@ -57,12 +57,12 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private guestChatSessionService = inject(GuestChatSessionService);
   private destroy$ = new Subject<void>();
 
-  messages$!: Observable<ChatMessage[]>;
+  messages$!: Observable<IChatMessage[]>;
 
   sessionId!: number;
-  session!: ChatSession;
+  session!: IChatSession;
   contextObj?: any;
-  attractions: Attraction[] = [];
+  attractions: IAttraction[] = [];
   showScrollButton = false;
   shouldScrollToBottom = false;
   isUserScrolledUp = false;
@@ -72,13 +72,35 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private messageSend$ = new Subject<string>();
 
   ngOnInit(): void {
-    this.sessionId = Number(this.route.snapshot.paramMap.get('id'));
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.sessionId = Number(params['id']);
+        console.log('Loading session:', this.sessionId);
 
+        this.loadSession();
+      });
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.shouldScrollToBottom && !this.isUserScrolledUp) {
+      this.performScroll();
+      this.shouldScrollToBottom = false;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadSession(): void {
     if (!this.sessionId) {
       this.messages$ = this.guestChatSessionService.messages$;
       this.setupMessageStream();
     } else {
       this.messages$ = this.chatSessionService.messages$;
+
       this.chatSessionService.getSessionWithMessages(this.sessionId)
         .pipe(takeUntil(this.destroy$))
         .subscribe(dto => {
@@ -94,18 +116,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
       this.setupMessageStream();
     }
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.shouldScrollToBottom && !this.isUserScrolledUp) {
-      this.performScroll();
-      this.shouldScrollToBottom = false;
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private setupMessageStream(): void {

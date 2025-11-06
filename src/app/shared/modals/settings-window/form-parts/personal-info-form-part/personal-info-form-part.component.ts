@@ -3,7 +3,7 @@ import {ButtonComponent} from "../../../../common-ui/button/button.component";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputComponent} from "../../../../common-ui/input/input.component";
 import {UserService} from '../../../../../core/services/user.service';
-import {User} from '../../../../../../interfaces/User';
+import {IUser} from '../../../../../../interfaces/IUser';
 import {Subject, takeUntil} from 'rxjs';
 
 @Component({
@@ -54,9 +54,9 @@ export class PersonalInfoFormPartComponent implements OnInit {
 
       if (patch.length > 0) {
         this.userService.updateUser(this.userId, patch).subscribe({
-          next: (updatedUser: User) => {
+          next: (updatedUser: IUser) => {
             this.userService.currentUserSubject.next(updatedUser);
-            this.successMessage = 'User updated successfully';
+            this.successMessage = 'IUser updated successfully';
             this.oldUser = updatedUser;
           },
           error: error => {

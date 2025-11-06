@@ -15,8 +15,9 @@ import {ButtonComponent} from '../../common-ui/button/button.component';
 import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.component';
 import {GuestChatSessionService} from '../../../core/services/guest-chat-session.service';
 import {ChatSessionService} from '../../../core/services/chat-session.service';
-import {CreateChatSession} from '../../../../interfaces/CreateChatSession';
-import {Router} from '@angular/router';
+import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
+import {Router, RouterLink} from '@angular/router';
+import {IChatSession} from '../../../../interfaces/IChatSession';
 
 @Component({
   selector: 'app-side-bar',
@@ -30,6 +31,7 @@ import {Router} from '@angular/router';
     SearchIconComponent,
     ButtonComponent,
     CrossIconComponent,
+    RouterLink,
   ],
   templateUrl: './side-bar.component.html',
   standalone: true,
@@ -45,6 +47,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private destroy$ = new Subject<void>();
   showUserMenu = false;
+  chatSessions : IChatSession[] = [];
 
   isLoggedIn$ = this.authService.authStatus$.pipe(
     map(status => status === true),
@@ -58,6 +61,17 @@ export class SideBarComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe();
     }
+    this.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        if (user) {
+          this.chatSessionService.getUserSessions(user.userId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(sessions => {
+              this.chatSessions = sessions;
+            });
+        }
+      });
   }
 
   openLoginModal(): void {
@@ -78,7 +92,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(user => {
-        const dto: CreateChatSession = {
+        const dto: ICreateChatSession = {
           userId: user.userId,
           sessionName: 'New Chat',
           context: undefined
@@ -90,6 +104,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
               console.log('Chat session created:', newSession);
               this.router.navigate(['/chat', newSession.id]);
               this.showUserMenu = false;
+              this.loadUserSessions(user.userId);
             },
             error: (error) => {
               console.error('Failed to create chat:', error);
@@ -97,6 +112,14 @@ export class SideBarComponent implements OnInit, OnDestroy {
           });
       });
     console.log('Create new chat');
+  }
+
+  private loadUserSessions(userId: number): void {
+    this.chatSessionService.getUserSessions(userId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(sessions => {
+        this.chatSessions = sessions;
+      });
   }
 
   clearChat(): void {

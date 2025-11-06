@@ -1,4 +1,4 @@
-export interface ChatSession {
+export interface IChatSession {
   id: number;
   userId: number;
   sessionName: string;

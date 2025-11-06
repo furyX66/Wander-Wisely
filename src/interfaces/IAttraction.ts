@@ -1,4 +1,4 @@
-export interface Attraction {
+export interface IAttraction {
   id: number;
   name: string;
   latitude: number;

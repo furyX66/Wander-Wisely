@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
-import {ChatMessage} from '../../../interfaces/ChatMessage';
-import {GuestChatSession} from '../../../interfaces/GuestChatSession';
+import {IChatMessage} from '../../../interfaces/IChatMessage';
+import {IGuestChatSession} from '../../../interfaces/IGuestChatSession';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class GuestChatSessionService {
   private STORAGE_KEY = 'guestChat';
-  private data!: GuestChatSession;
+  private data!: IGuestChatSession;
   private nextId = 0;
 
-  private messagesSubject = new BehaviorSubject<ChatMessage[]>([]);
+  private messagesSubject = new BehaviorSubject<IChatMessage[]>([]);
   public messages$ = this.messagesSubject.asObservable();
 
   constructor() {
@@ -37,7 +37,7 @@ export class GuestChatSessionService {
     return this.data.messages.length > 0;
   }
 
-  getMessages(): Observable<ChatMessage[]> {
+  getMessages(): Observable<IChatMessage[]> {
     return this.messages$;
   }
 
@@ -57,7 +57,7 @@ export class GuestChatSessionService {
   }
 
   addMessage(role: 'user' | 'assistant', content: string) {
-    const msg: ChatMessage = {
+    const msg: IChatMessage = {
       id: this.nextId++,
       role,
       content,

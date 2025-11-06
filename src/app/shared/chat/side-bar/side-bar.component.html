@@ -23,6 +23,10 @@
     <p class="not-login-massage">
       Sign up or login to get access to history, more chats etc.
     </p>
+  } @else {
+    @for (session of chatSessions; track session.id){
+      <a class="chat-element" [routerLink]="['/chat', session.id]">{{session.sessionName}}</a>
+    }
   }
 </div>
 @if (!isLoggedIn) {

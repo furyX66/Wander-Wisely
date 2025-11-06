@@ -1,4 +1,4 @@
-export interface ChatMessage {
+export interface IChatMessage {
   id: number;
   chatSessionId?: number;
   role: 'user' | 'assistant';

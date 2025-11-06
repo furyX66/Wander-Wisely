@@ -8,7 +8,7 @@ import {
   signal,
   ViewChild
 } from '@angular/core';
-import {Attraction} from '../../../../interfaces/Attraction';
+import {IAttraction} from '../../../../interfaces/IAttraction';
 import {ArrowIconComponent} from '../../../../../public/assets/icons/arrow-icon.component';
 import {FavoriteIcon} from '../../../../../public/assets/icons/favorite-icon';
 import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.component';
@@ -39,7 +39,7 @@ export class AttractionsCarouselComponent implements AfterViewInit {
   canScrollLeft = signal(false);
   canScrollRight = signal(true);
   isShown = signal(true);
-  attractions = input<Attraction[]>([]);
+  attractions = input<IAttraction[]>([]);
   currentPage = signal(0)
   private cardsPerPage!: number;
   private cardStep = 182;

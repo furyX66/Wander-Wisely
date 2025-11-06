@@ -1,18 +1,18 @@
 import {inject, Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
-import {User} from '../../../interfaces/User';
+import {IUser} from '../../../interfaces/IUser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private http = inject(HttpClient);
-  currentUserSubject = new BehaviorSubject<User | null>(null);
+  currentUserSubject = new BehaviorSubject<IUser | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  getCurrentUser(): Observable<User> {
-    return this.http.get<User>(`/api/user/me`, {withCredentials: true}).pipe(
+  getCurrentUser(): Observable<IUser> {
+    return this.http.get<IUser>(`/api/user/me`, {withCredentials: true}).pipe(
       tap(user => {
         this.currentUserSubject.next(user)
       })
@@ -20,7 +20,7 @@ export class UserService {
   }
 
   updateUser(id: number, patch: any[]) {
-    return this.http.patch<User>(`/api/user/${id}`, patch, {
+    return this.http.patch<IUser>(`/api/user/${id}`, patch, {
       headers: { 'Content-Type': 'application/json-patch+json' }
     });
   }

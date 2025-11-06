@@ -39,7 +39,7 @@ export class EmailInputModalComponent implements OnInit {
 
     this.authService.forgotPassword(email).subscribe({
       next: (response: string) => {
-        if (response === 'User does not exist.') {
+        if (response === 'IUser does not exist.') {
           console.error(response);
         } else {
           console.log('Reset code sent:', response);

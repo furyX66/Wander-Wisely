@@ -6,7 +6,7 @@ import {ChatSessionService} from '../../core/services/chat-session.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {Observable, take} from 'rxjs';
-import {CreateChatSession} from '../../../interfaces/CreateChatSession';
+import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
 import {AuthService} from '../../core/services/auth.service';
 import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
 import {AsyncPipe} from '@angular/common';
@@ -68,7 +68,7 @@ export class MainPageComponent implements OnInit {
           ? JSON.stringify({...initialContext, userName: user.username})
           : undefined;
 
-        const dto: CreateChatSession = {
+        const dto: ICreateChatSession = {
           userId: user.userId,
           sessionName,
           context

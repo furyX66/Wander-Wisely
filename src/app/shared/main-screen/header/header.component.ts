@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {Observable} from 'rxjs';
-import {User} from '../../../../interfaces/User';
+import {IUser} from '../../../../interfaces/IUser';
 import {AuthService} from '../../../core/services/auth.service';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
   authStatus$ = this.authService.authStatus$;
 
   showUserMenu = false;
-  user$!: Observable<User | null>;
+  user$!: Observable<IUser | null>;
 
   ngOnInit() {
     this.userService.getCurrentUser().subscribe();

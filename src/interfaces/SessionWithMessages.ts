@@ -1,7 +1,7 @@
-import {ChatSession} from './ChatSession';
-import {ChatMessage} from './ChatMessage';
+import {IChatSession} from './IChatSession';
+import {IChatMessage} from './IChatMessage';
 
 export interface SessionWithMessagesDto {
-  session: ChatSession;
-  messages: ChatMessage[];
+  session: IChatSession;
+  messages: IChatMessage[];
 }
