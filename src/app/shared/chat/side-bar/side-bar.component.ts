@@ -100,7 +100,11 @@ export class SideBarComponent implements OnInit, OnDestroy {
   }
 
   clearChat(): void {
-    this.guestChatSessionService.clearChatSession()
+    if (this.guestChatSessionService.hasMessages()) {
+      this.modalService.openModal(ModalType.CLEAR_CHAT);
+    } else{
+      this.guestChatSessionService.clearChatSession();
+    }
   }
 
   ngOnDestroy() {

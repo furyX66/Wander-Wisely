@@ -11,6 +11,8 @@ import {
 } from '../forgot-password/verification-code-input/verification-code-input.component';
 import {NewPasswordComponent} from '../forgot-password/new-password/new-password.component';
 import {CloseModalComponent} from '../close-modal/close-modal.component';
+import {ClearChatComponent} from '../clear-chat/clear-chat.component';
+import {GuestChatSessionService} from '../../../core/services/guest-chat-session.service';
 
 @Component({
   selector: 'app-modal-container-component',
@@ -22,37 +24,44 @@ import {CloseModalComponent} from '../close-modal/close-modal.component';
     SettingsWindowComponent,
     VerificationCodeInputComponent,
     NewPasswordComponent,
-    CloseModalComponent
+    CloseModalComponent,
+    ClearChatComponent
   ],
   templateUrl: './modal-container-component.component.html',
   styleUrl: './modal-container-component.component.scss'
 })
 export class ModalContainerComponentComponent {
   protected modalService = inject(ModalService);
+  private guestChatSessionService = inject(GuestChatSessionService);
   protected readonly ModalType = ModalType;
 
   switchToRegister() {
-    this.modalService.closeModal(ModalType.LOGIN);
+    this.modalService.closeAllModals();
     this.modalService.openModal(ModalType.REGISTER);
   }
 
   switchToLogin() {
-    this.modalService.closeModal(ModalType.REGISTER);
+    this.modalService.closeAllModals();
     this.modalService.openModal(ModalType.LOGIN);
   }
 
   switchToEmailInput() {
-    this.modalService.closeModal(ModalType.LOGIN);
+    this.modalService.closeAllModals();
     this.modalService.openModal(ModalType.FORGOT_PASSWORD);
   }
 
   switchToVerificationCodeInput(data: { email: string, code: string }) {
-    this.modalService.closeModal(ModalType.FORGOT_PASSWORD);
+    this.modalService.closeAllModals();
     this.modalService.openModal(ModalType.CODE_INPUT, data);
   }
 
   switchToNewPasswordInput(data: { email: string, code: string }) {
-    this.modalService.closeModal(ModalType.CODE_INPUT);
+    this.modalService.closeAllModals();
     this.modalService.openModal(ModalType.NEW_PASSWORD_INPUT, data);
+  }
+
+  handleClearChat(): void {
+    this.guestChatSessionService.clearChatSession();
+    this.modalService.closeModal(ModalType.CLEAR_CHAT);
   }
 }

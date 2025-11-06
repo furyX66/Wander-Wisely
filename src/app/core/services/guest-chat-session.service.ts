@@ -33,6 +33,10 @@ export class GuestChatSessionService {
     this.messagesSubject.next([...this.data.messages]);
   }
 
+  hasMessages(): boolean {
+    return this.data.messages.length > 0;
+  }
+
   getMessages(): Observable<ChatMessage[]> {
     return this.messages$;
   }

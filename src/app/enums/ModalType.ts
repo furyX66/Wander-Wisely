@@ -7,4 +7,5 @@ export enum ModalType {
   CODE_INPUT = 'codeInput',
   NEW_PASSWORD_INPUT = 'newPasswordInput',
   CLOSE_MODAL = 'closeModal',
+  CLEAR_CHAT = 'clearChat',
 }

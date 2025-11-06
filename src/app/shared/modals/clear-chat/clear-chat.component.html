@@ -1,0 +1,13 @@
+<div class="modal-backdrop" style="z-index: 2000;" (click)="closeModal()"></div>
+<div class="modal-wrapper" style="z-index: 2000;">
+  <h1>Clear current chat?</h1>
+  <p class="font-s-light" style="text-align: center">
+    Your current conversation will be cleared.
+    <a (click)="switchToRegister.emit()">Sign up</a>
+    or
+    <a (click)="switchToLogin.emit()">Log in</a>
+    to save chats.
+  </p>
+  <app-button [variant]="'yellow'" (click)="handleCancel()">Cancel</app-button>
+  <app-button [variant]="'outlined'" (click)="handleClear()">Clear chat</app-button>
+</div>
