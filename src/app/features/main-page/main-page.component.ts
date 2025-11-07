@@ -1,92 +1,63 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MainTitleComponent} from '../../shared/main-screen/main-title/main-title.component';
 import {HeaderComponent} from '../../shared/main-screen/header/header.component';
-import {ChatInputComponent} from "../../shared/common-ui/chat-input/chat-input.component";
 import {ChatSessionService} from '../../core/services/chat-session.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
-import {Observable, take} from 'rxjs';
+import {Observable, Subject, takeUntil} from 'rxjs';
 import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
 import {AuthService} from '../../core/services/auth.service';
-import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
-import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-main-page',
-  imports: [MainTitleComponent, HeaderComponent, ChatInputComponent, AsyncPipe],
+  imports: [MainTitleComponent, HeaderComponent],
   templateUrl: './main-page.component.html',
   standalone: true,
   styleUrl: './main-page.component.scss'
 })
-export class MainPageComponent implements OnInit {
-  private chatSessionService = inject(ChatSessionService);
+export class MainPageComponent implements OnInit, OnDestroy {
   private router = inject(Router);
-  private userService = inject(UserService);
   private authService = inject(AuthService);
-  private guestService = inject(GuestChatSessionService);
+  private chatSessionService = inject(ChatSessionService);
+  private userService = inject(UserService);
+  private destroy$ = new Subject<void>();
+
   authStatus$!: Observable<boolean | null>;
 
   ngOnInit() {
-    if (this.authService.isInitializing()) {
-      this.authService.initializeAuth().subscribe();
-    }
     this.authStatus$ = this.authService.authStatus$;
   }
 
-  handleChatInput(value: string) {
-    const trimmed = value.trim();
-    const sessionName = trimmed || 'New session';
-    const initialContext = trimmed ? {initialMessage: trimmed, timestamp: new Date().toISOString()} : null;
-
-    this.authService.isLoggedIn().pipe(take(1)).subscribe(isLoggedIn => {
-      if (!isLoggedIn) {
-        if (this.guestService.sessionExists()) {
+  startChatting(): void {
+    this.authService.isLoggedIn()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isLoggedIn => {
+        if (!isLoggedIn) {
           this.router.navigate(['/chat']);
           return;
         }
-        const trimmed = value.trim();
-        const sessionName = trimmed || 'New session';
-        const initialContext = trimmed
-          ? {initialMessage: trimmed, timestamp: new Date().toISOString()}
-          : null;
 
-        this.guestService.createNewSessionIfNotExists({
-          sessionName,
-          context: initialContext
-        });
+        this.userService.getCurrentUser()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(user => {
+            const dto: ICreateChatSession = {
+              userId: user.userId,
+              sessionName: 'New Chat',
+              context: undefined
+            };
 
-        if (trimmed) {
-          this.guestService.addMessage('user', trimmed);
-        }
-
-        this.router.navigate(['/chat']);
-        return;
-      }
-
-      this.userService.getCurrentUser().pipe(take(1)).subscribe(user => {
-        const context = initialContext
-          ? JSON.stringify({...initialContext, userName: user.username})
-          : undefined;
-
-        const dto: ICreateChatSession = {
-          userId: user.userId,
-          sessionName,
-          context
-        };
-
-        this.chatSessionService.create(dto).subscribe(session => {
-          if (trimmed) {
-            this.chatSessionService.addMessage(session.id, {role: 'user', content: trimmed})
-              .subscribe(() => this.router.navigate(['/chat', session.id]));
-          } else {
-            this.router.navigate(['/chat', session.id]);
-          }
-        });
+            this.chatSessionService.create(dto)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe(session => {
+                this.router.navigate(['/chat', session.id]);
+              });
+          });
       });
-    });
   }
 
-  handleNavigateToChats() {
-    this.router.navigate(['/chat']);
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
+
