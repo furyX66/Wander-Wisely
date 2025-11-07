@@ -5,7 +5,7 @@ import {MapComponent} from '../../shared/common-ui/map/map.component';
 import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
-import {exhaustMap, filter, finalize, Observable, of, Subject, takeUntil, tap} from 'rxjs';
+import {exhaustMap, filter, finalize, Observable, of, Subject, switchMap, take, takeUntil, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {
   LoadingAnimationComponent
@@ -13,12 +13,15 @@ import {
 import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
 import {ChatService} from '../../core/services/chat.service';
 import {IAttraction} from '../../../interfaces/IAttraction';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ChatSessionService} from '../../core/services/chat-session.service';
 import {IChatSession} from '../../../interfaces/IChatSession';
 import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
 import {AsyncPipe} from '@angular/common';
 import {IChatMessage} from '../../../interfaces/IChatMessage';
+import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
+import {UserService} from '../../core/services/user.service';
+import {AuthService} from '../../core/services/auth.service';
 
 export interface ChatResponse {
   reply: string;
@@ -49,6 +52,9 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private chatService = inject(ChatService);
   private chatSessionService = inject(ChatSessionService);
   private guestChatSessionService = inject(GuestChatSessionService);
+  private userService = inject(UserService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
   private destroy$ = new Subject<void>();
 
   private messageStreamDestroy$ = new Subject<void>();
@@ -71,10 +77,24 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
         this.sessionId = Number(params['id']);
-
         this.messageStreamDestroy$.next();
-
         this.loadSession();
+      });
+    this.authService.authStatus$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(status => status === true),
+      )
+      .subscribe(() => {
+        this.guestChatSessionService.clearChatSession();
+        if (!this.sessionId) {
+          this.messages$ = this.guestChatSessionService.messages$;
+        }
+      });
+    this.chatSessionService.attractions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(attractions => {
+        this.attractions = attractions;
       });
   }
 
@@ -121,57 +141,130 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       .pipe(
         filter(msg => !!msg.trim()),
         tap(() => this.isLoading = true),
-        exhaustMap(message => {
-          if (!this.sessionId) {
-            this.guestChatSessionService.addMessage('user', message);
-          } else {
-            this.chatSessionService
-              .addMessage(this.sessionId, { role: 'user', content: message })
-              .pipe(takeUntil(this.messageStreamDestroy$))
-              .subscribe();
-          }
-
-          const chatRequest$ = !this.sessionId
-            ? this.chatService.guestChatAsk(message)
-            : this.chatService.chatAsk(this.sessionId, message);
-
-          return chatRequest$.pipe(
-            tap((res: ChatResponse) => {
-              if (res?.reply) {
-                if (!this.sessionId) {
-                  this.guestChatSessionService.addMessage('assistant', res.reply);
-                } else {
-                  this.chatSessionService
-                    .addMessage(this.sessionId, { role: 'assistant', content: res.reply })
-                    .pipe(takeUntil(this.messageStreamDestroy$))
-                    .subscribe();
-                }
-                this.scheduleScroll();
-              }
-              if (res?.places) {
-                this.attractions = res.places;
-              }
-            }),
-            catchError(error => {
-              console.error('Chat service error:', error);
-              const errorMsg = 'Server error';
-              if (!this.sessionId) {
-                this.guestChatSessionService.addMessage('assistant', errorMsg);
-              } else {
-                this.chatSessionService
-                  .addMessage(this.sessionId, { role: 'assistant', content: errorMsg })
-                  .pipe(takeUntil(this.messageStreamDestroy$))
-                  .subscribe();
-              }
-              this.scheduleScroll();
-              return of(null);
-            }),
-            finalize(() => this.isLoading = false)
-          );
-        }),
+        exhaustMap(message => this.processMessage(message)),
         takeUntil(this.messageStreamDestroy$)
       )
       .subscribe();
+  }
+
+  private processMessage(message: string): Observable<ChatResponse | null> {
+    if (!this.sessionId) {
+      return this.processGuestOrNewAuthorizedChat(message);
+    }
+    return this.processAuthorizedChat(message);
+  }
+
+  private processGuestOrNewAuthorizedChat(message: string): Observable<ChatResponse | null> {
+    return this.authService.isLoggedIn().pipe(
+      take(1),
+      switchMap(isLoggedIn => {
+        if (isLoggedIn) {
+          return this.createAndSendAuthorizedChat(message);
+        } else {
+          return this.sendGuestMessage(message);
+        }
+      }),
+      tap(res => this.handleResponse(res)),
+      catchError(error => this.handleError(error)),
+      finalize(() => this.isLoading = false)
+    );
+  }
+
+  private processAuthorizedChat(message: string): Observable<ChatResponse | null> {
+    this.saveUserMessage(this.sessionId, message);
+
+    return this.chatService.chatAsk(this.sessionId, message).pipe(
+      tap(res => this.handleResponse(res)),
+      catchError(error => this.handleError(error)),
+      finalize(() => this.isLoading = false)
+    );
+  }
+
+  private createAndSendAuthorizedChat(message: string): Observable<ChatResponse | null> {
+    localStorage.removeItem('guestChat');
+
+    return this.createChatAndSendMessage(message).pipe(
+      tap(() => {
+        console.log('Chat created with ID:', this.sessionId);
+        this.messages$ = this.chatSessionService.messages$;
+      }),
+      switchMap(() => {
+        this.saveUserMessage(this.sessionId, message);
+        return this.chatService.chatAsk(this.sessionId, message);
+      })
+    );
+  }
+
+  private sendGuestMessage(message: string): Observable<ChatResponse | null> {
+    this.guestChatSessionService.addMessage('user', message);
+    return this.chatService.guestChatAsk(message);
+  }
+
+  private handleResponse(res: ChatResponse | null): void {
+    if (!res?.reply) return;
+    this.saveAssistantMessage(res.reply, this.sessionId);
+    if (res.places) {
+      this.attractions = res.places;
+      this.chatSessionService.setAttractions(res.places);
+    }
+    this.scheduleScroll();
+    if (this.sessionId && this.router.url !== `/chat/${this.sessionId}`) {
+      this.router.navigate(['/chat', this.sessionId],
+        { replaceUrl: true ,});
+    }
+  }
+
+  private handleError(error: any, sessionId? : number): Observable<null> {
+    console.error('Error:', error);
+    this.saveAssistantMessage('Server error', sessionId);
+    this.scheduleScroll();
+    return of(null);
+  }
+
+  private saveUserMessage(sessionId: number, content: string): void {
+    if (!sessionId) {
+      this.guestChatSessionService.addMessage('user', content);
+    } else {
+      this.chatSessionService
+        .addMessage(sessionId, { role: 'user', content })
+        .pipe(takeUntil(this.messageStreamDestroy$))
+        .subscribe({
+          error: (err) => console.error('Error:', err)
+        });
+    }
+  }
+
+  private saveAssistantMessage(content: string, sessionId?: number): void {
+    if(!sessionId) {
+      this.guestChatSessionService.addMessage('assistant', content);
+    } else {
+      this.chatSessionService
+        .addMessage(this.sessionId, { role: 'assistant', content })
+        .pipe(takeUntil(this.messageStreamDestroy$))
+        .subscribe({
+          error: (err) => console.error('Error:', err)
+        });
+    }
+  }
+
+  private createChatAndSendMessage(message: string) {
+    return this.userService.getCurrentUser().pipe(
+      switchMap(user => {
+        const dto: ICreateChatSession = {
+          userId: user.userId,
+          sessionName: message.substring(0, 50),
+          context: undefined
+        };
+
+        return this.chatSessionService.create(dto).pipe(
+          tap(newSession => {
+            this.sessionId = newSession.id;
+            this.guestChatSessionService.clearChatSession();
+            this.messages$ = this.chatSessionService.messages$;
+          })
+        );
+      })
+    );
   }
 
   handleChatInput(value: string): void {

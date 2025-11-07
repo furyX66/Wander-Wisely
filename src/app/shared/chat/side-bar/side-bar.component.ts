@@ -133,7 +133,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          console.log('Deleted');
           this.chatSessions = this.chatSessions.filter(s => s.id !== sessionId);
         },
         error: (error) => {
