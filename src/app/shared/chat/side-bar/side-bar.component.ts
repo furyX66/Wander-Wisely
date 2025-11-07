@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
-import {map, shareReplay, Subject, switchMap, takeUntil} from 'rxjs';
+import {filter, map, shareReplay, Subject, switchMap, takeUntil} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
@@ -67,11 +67,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
           if (!isLoggedIn) {
             return ([]);
           }
-          return this.userService.getCurrentUser().pipe(
+          return this.user$.pipe(
+            filter(user => !!user),
             switchMap(user => {
-              if (!user) {
-                return ([]);
-              }
               return this.chatSessionService.getUserSessions(user.userId);
             })
           );
@@ -105,6 +103,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   createNewChat(): void {
     this.user$
       .pipe(
+        filter(user => !!user),
         takeUntil(this.destroy$)
       )
       .subscribe(user => {
@@ -120,21 +119,12 @@ export class SideBarComponent implements OnInit, OnDestroy {
               console.log('Chat session created:', newSession);
               this.router.navigate(['/chat', newSession.id]);
               this.showUserMenu = false;
-              this.loadUserSessions(user.userId);
+              this.chatSessions.unshift(newSession);
             },
             error: (error) => {
               console.error('Failed to create chat:', error);
             }
           });
-      });
-    console.log('Create new chat');
-  }
-
-  private loadUserSessions(userId: number): void {
-    this.chatSessionService.getUserSessions(userId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(sessions => {
-        this.chatSessions = sessions;
       });
   }
 
