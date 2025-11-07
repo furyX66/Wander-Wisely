@@ -20,7 +20,7 @@
     <ul>
       <li>
         <button (click)="clearChat()">
-          <icon-cross/>
+          <icon-cross [strokeWidth]="1.5"/>
           Clear chat
         </button>
       </li>
@@ -33,6 +33,7 @@
       Sign up or login to get access to history, more chats etc.
     </p>
   } @else {
+    <h3 class="chats-title">Your chats</h3>
     @for (session of chatSessions; track session.id) {
       <div (click)="navigateToChat(session.id)" class="chat-element">
         <span>{{ session.sessionName }}</span>

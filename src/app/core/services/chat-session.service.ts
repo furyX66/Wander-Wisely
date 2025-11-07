@@ -4,6 +4,7 @@ import {BehaviorSubject, catchError, Observable, tap} from 'rxjs';
 import {IChatSession} from '../../../interfaces/IChatSession';
 import {IChatMessage} from '../../../interfaces/IChatMessage';
 import {SessionWithMessagesDto} from '../../../interfaces/SessionWithMessages';
+import {IAttraction} from '../../../interfaces/IAttraction';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,8 @@ export class ChatSessionService {
 
   private messagesSubject = new BehaviorSubject<IChatMessage[]>([]);
   public messages$ = this.messagesSubject.asObservable();
+  private attractionsSubject = new BehaviorSubject<IAttraction[]>([]);
+  attractions$ = this.attractionsSubject.asObservable();
 
   getUserSessions(userId: number): Observable<IChatSession[]> {
     return this.http.get<IChatSession[]>(`${this.base}/user/${userId}`);
@@ -66,7 +69,7 @@ export class ChatSessionService {
     );
   }
 
-  clearMessages(): void {
-    this.messagesSubject.next([]);
+  setAttractions(attractions: IAttraction[]): void {
+    this.attractionsSubject.next(attractions);
   }
 }

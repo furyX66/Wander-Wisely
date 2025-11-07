@@ -12,11 +12,6 @@
   background: var(--main-page-color);
 }
 
-:host-context([data-theme='light']) app-chat-input{
-  --chat-input-color: oklch(0.92 0.1705 81.36);
-  --hover-color: oklch(0.95 0.1705 81.36);
-}
-
 app-header {
   grid-area: header;
 }
@@ -32,17 +27,12 @@ main {
   grid-area: main-content;
 }
 
-app-chat-input {
-  flex: 8;
-}
-
 button {
   white-space: nowrap;
   flex: 1;
   @include poppins(500, 16px, center);
   display: flex;
-  height: 51.6px;
-  padding: 0.8rem;
+  padding: 0.8rem 2rem;
   justify-content: center;
   align-items: center;
   border-radius: 50px;
@@ -51,15 +41,6 @@ button {
   outline: none;
   border: none;
   cursor: pointer;
-  width: 100%;
-}
-
-.input-row {
-  width: clamp(360px, 960px, 50vw);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
 }
 
 @media (max-width: 768px) {

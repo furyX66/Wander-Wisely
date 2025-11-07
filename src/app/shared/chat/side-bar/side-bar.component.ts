@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
-import {map, shareReplay, Subject, takeUntil} from 'rxjs';
+import {filter, map, shareReplay, Subject, switchMap, takeUntil} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
@@ -61,15 +61,29 @@ export class SideBarComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe();
     }
-    this.user$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        if (user) {
-          this.chatSessionService.getUserSessions(user.userId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(sessions => {
-              this.chatSessions = sessions;
-            });
+    this.isLoggedIn$
+      .pipe(
+        switchMap(isLoggedIn => {
+          if (!isLoggedIn) {
+            return ([]);
+          }
+          return this.user$.pipe(
+            filter(user => !!user),
+            switchMap(user => {
+              return this.chatSessionService.getUserSessions(user.userId);
+            })
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (sessions) => {
+          console.log('Sessions loaded:', sessions);
+          this.chatSessions = sessions;
+        },
+        error: (error) => {
+          console.error('Failed to load sessions:', error);
+          this.chatSessions = [];
         }
       });
   }
@@ -89,36 +103,28 @@ export class SideBarComponent implements OnInit, OnDestroy {
   createNewChat(): void {
     this.user$
       .pipe(
+        filter(user => !!user),
         takeUntil(this.destroy$)
       )
       .subscribe(user => {
+        const lastSessionId = this.chatSessions[0].id;
         const dto: ICreateChatSession = {
           userId: user.userId,
-          sessionName: 'New Session',
+          sessionName: `New Session ${lastSessionId}`,
           context: undefined
         };
         this.chatSessionService.create(dto)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (newSession) => {
-              console.log('Chat session created:', newSession);
               this.router.navigate(['/chat', newSession.id]);
               this.showUserMenu = false;
-              this.loadUserSessions(user.userId);
+              this.chatSessions.unshift(newSession);
             },
             error: (error) => {
               console.error('Failed to create chat:', error);
             }
           });
-      });
-    console.log('Create new chat');
-  }
-
-  private loadUserSessions(userId: number): void {
-    this.chatSessionService.getUserSessions(userId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(sessions => {
-        this.chatSessions = sessions;
       });
   }
 
@@ -127,7 +133,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          console.log('Deleted');
           this.chatSessions = this.chatSessions.filter(s => s.id !== sessionId);
         },
         error: (error) => {

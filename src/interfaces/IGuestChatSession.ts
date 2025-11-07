@@ -5,4 +5,5 @@ export interface IGuestChatSession {
   messages: IChatMessage[];
   sessionName?: string;
   context?: any;
+  welcomeShown?: boolean;
 }

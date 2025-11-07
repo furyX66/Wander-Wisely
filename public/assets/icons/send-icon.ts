@@ -18,9 +18,6 @@ import {Component} from '@angular/core';
       justify-content: center;
       align-items: center;
     }
-    :host-context([data-theme='light']) svg{
-      color: oklch(0.252 0 0);
-    }
     svg{
       color: oklch(0.5712 0.1784 279.51);
     }

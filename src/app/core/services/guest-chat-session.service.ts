@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {IChatMessage} from '../../../interfaces/IChatMessage';
 import {IGuestChatSession} from '../../../interfaces/IGuestChatSession';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class GuestChatSessionService {
@@ -23,7 +23,7 @@ export class GuestChatSessionService {
       this.data = JSON.parse(raw);
       this.nextId = this.data.nextId || this.data.messages.length;
     } else {
-      this.data = {messages: [], nextId: 0, context: null, sessionName: undefined};
+      this.data = {messages: [], nextId: 0, context: null, sessionName: undefined, welcomeShown: false};
     }
   }
 
@@ -37,24 +37,6 @@ export class GuestChatSessionService {
     return this.data.messages.length > 0;
   }
 
-  getMessages(): Observable<IChatMessage[]> {
-    return this.messages$;
-  }
-
-  createNewSessionIfNotExists(meta: { sessionName?: string; context: any | null }): void {
-    if (this.sessionExists()) {
-      return;
-    }
-
-    this.data = {
-      messages: [],
-      context: meta.context,
-      sessionName: meta.sessionName,
-      nextId: 0
-    };
-    this.nextId = 0;
-    this.persist();
-  }
 
   addMessage(role: 'user' | 'assistant', content: string) {
     const msg: IChatMessage = {
@@ -72,10 +54,17 @@ export class GuestChatSessionService {
     this.data.sessionName = undefined;
     this.data.context = null;
     this.nextId = 0;
+    this.data.welcomeShown = false;
     this.persist();
   }
 
-  sessionExists(): boolean {
-    return this.data.messages.length > 0 || this.data.sessionName !== undefined;
+
+  isWelcomeShown(): boolean {
+    return this.data.welcomeShown || false;
+  }
+
+  setWelcomeShown(): void {
+    this.data.welcomeShown = true;
+    this.persist();
   }
 }
