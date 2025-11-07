@@ -60,7 +60,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.tryLocateUser();
     this.observeThemeChanges();
   }
 
@@ -78,7 +77,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private displayAttractions(attractions: IAttraction[]): void {
-    // Удаляем предыдущие маркеры
     this.clearAttractionMarkers();
 
     if (!attractions || attractions.length === 0) {
@@ -98,7 +96,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       bounds.push([attraction.latitude, attraction.longitude]);
     });
 
-    // Автоматически подстраиваем карту под все маркеры
     if (bounds.length > 0) {
       this.map.fitBounds(bounds, { padding: [50, 50] });
     }
@@ -145,37 +142,5 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private isDarkMode(): boolean {
     return document.body.classList.contains('dark-mode');
-  }
-
-  private tryLocateUser(): void {
-    if (!navigator.geolocation) {
-      console.warn('Geolocation is not supported by this browser.');
-      this.setDefaultMarker();
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
-        this.map.setView(userLatLng, 13);
-        L.marker(userLatLng)
-          .addTo(this.map)
-          .bindPopup('You are here 📍')
-          .openPopup();
-      },
-      error => {
-        console.warn('Location access denied:', error);
-        this.setDefaultMarker();
-      }
-    );
-  }
-
-  private setDefaultMarker(): void {
-    const warsawLatLng = L.latLng(52.2297, 21.0122);
-    this.map.setView(warsawLatLng, 13);
-    L.marker(warsawLatLng)
-      .addTo(this.map)
-      .bindPopup('Default place')
-      .openPopup();
   }
 }

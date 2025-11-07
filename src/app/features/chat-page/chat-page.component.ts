@@ -71,7 +71,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
         this.sessionId = Number(params['id']);
-        console.log('Loading session:', this.sessionId);
 
         this.messageStreamDestroy$.next();
 

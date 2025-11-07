@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
-import {map, shareReplay, Subject, takeUntil} from 'rxjs';
+import {map, shareReplay, Subject, switchMap, takeUntil} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
@@ -61,15 +61,31 @@ export class SideBarComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe();
     }
-    this.user$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        if (user) {
-          this.chatSessionService.getUserSessions(user.userId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(sessions => {
-              this.chatSessions = sessions;
-            });
+    this.isLoggedIn$
+      .pipe(
+        switchMap(isLoggedIn => {
+          if (!isLoggedIn) {
+            return ([]);
+          }
+          return this.userService.getCurrentUser().pipe(
+            switchMap(user => {
+              if (!user) {
+                return ([]);
+              }
+              return this.chatSessionService.getUserSessions(user.userId);
+            })
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (sessions) => {
+          console.log('Sessions loaded:', sessions);
+          this.chatSessions = sessions;
+        },
+        error: (error) => {
+          console.error('Failed to load sessions:', error);
+          this.chatSessions = [];
         }
       });
   }
