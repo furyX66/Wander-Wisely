@@ -23,7 +23,7 @@ export class GuestChatSessionService {
       this.data = JSON.parse(raw);
       this.nextId = this.data.nextId || this.data.messages.length;
     } else {
-      this.data = {messages: [], nextId: 0, context: null, sessionName: undefined};
+      this.data = {messages: [], nextId: 0, context: null, sessionName: undefined, welcomeShown: false};
     }
   }
 
@@ -54,7 +54,17 @@ export class GuestChatSessionService {
     this.data.sessionName = undefined;
     this.data.context = null;
     this.nextId = 0;
+    this.data.welcomeShown = false;
     this.persist();
   }
 
+
+  isWelcomeShown(): boolean {
+    return this.data.welcomeShown || false;
+  }
+
+  setWelcomeShown(): void {
+    this.data.welcomeShown = true;
+    this.persist();
+  }
 }

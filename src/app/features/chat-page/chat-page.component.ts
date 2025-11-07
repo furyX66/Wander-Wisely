@@ -115,6 +115,10 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private loadSession(): void {
     if (!this.sessionId) {
       this.messages$ = this.guestChatSessionService.messages$;
+      if (!this.guestChatSessionService.isWelcomeShown()) {
+        this.sendWelcomeMessage();
+        this.guestChatSessionService.setWelcomeShown();
+      }
       this.setupMessageStream();
     } else {
       this.messages$ = this.chatSessionService.messages$;
@@ -265,6 +269,13 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         );
       })
     );
+  }
+
+  private sendWelcomeMessage(): void {
+    const welcomeMessage = 'Hello! 👋 I am your guide to interesting places. Ask me about attractions in your city!';
+
+    this.guestChatSessionService.addMessage('assistant', welcomeMessage);
+    this.scheduleScroll();
   }
 
   handleChatInput(value: string): void {
