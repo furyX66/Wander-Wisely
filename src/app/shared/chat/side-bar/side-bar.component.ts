@@ -18,6 +18,9 @@ import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
 import {Router} from '@angular/router';
 import {IChatSession} from '../../../../interfaces/IChatSession';
+import {
+  LoadingAnimationComponent
+} from '../../../../../public/assets/animations/loading-animation/loading-animation.component';
 
 @Component({
   selector: 'app-side-bar',
@@ -31,6 +34,7 @@ import {IChatSession} from '../../../../interfaces/IChatSession';
     SearchIconComponent,
     ButtonComponent,
     CrossIconComponent,
+    LoadingAnimationComponent,
 
   ],
   templateUrl: './side-bar.component.html',
@@ -54,6 +58,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     shareReplay(1)
   );
   user$ = this.userService.getCurrentUser().pipe(shareReplay(1));
+  isLoading$ = this.userService.isLoading$;
 
   ngOnInit() {
     if (this.authService.isInitializing()) {
@@ -78,7 +83,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (sessions) => {
-          console.log('Sessions loaded:', sessions);
           this.chatSessions = sessions;
         },
         error: (error) => {

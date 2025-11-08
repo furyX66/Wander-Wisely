@@ -5,11 +5,13 @@ import {IChatSession} from '../../../interfaces/IChatSession';
 import {IChatMessage} from '../../../interfaces/IChatMessage';
 import {SessionWithMessagesDto} from '../../../interfaces/SessionWithMessages';
 import {IAttraction} from '../../../interfaces/IAttraction';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatSessionService {
+  private router = inject(Router);
   private http = inject(HttpClient);
   private base = '/api/ChatSessions';
 
@@ -62,6 +64,11 @@ export class ChatSessionService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`).pipe(
+      tap(() => {
+        if (this.router.url === `/chat/${id}`) {
+          this.router.navigate(['/chat']);
+        }
+      }),
       catchError(error => {
         console.error('Failed to delete session:', error);
         throw error;

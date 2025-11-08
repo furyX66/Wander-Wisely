@@ -1,4 +1,6 @@
 @let isLoggedIn = (isLoggedIn$ | async);
+@let isLoading = (isLoading$ | async);
+
 <app-logo/>
 <nav class="option-buttons">
   @if (isLoggedIn) {
@@ -52,7 +54,11 @@
   <span class="user-bottom-menu">
       <button (click)="toggleUserMenu()">
         <icon-profile/>
-        <p>{{ (user$ | async)?.username }}</p>
+        @if(isLoading){
+          <app-loading-animation/>
+        } @else {
+          <p>{{ (user$ | async)?.username }}</p>
+        }
       </button>
       <app-color-scheme-switch/>
     </span>

@@ -7,11 +7,18 @@ import {of} from 'rxjs';
 export const chatGuard: CanActivateFn = (route) => {
   const chatSessionService = inject(ChatSessionService);
   const router = inject(Router);
+  const sessionIdParam = route.paramMap.get('id');
 
-  const sessionId = Number(route.paramMap.get('id'));
-
-  if (!sessionId) {
+  if (!sessionIdParam) {
     return true;
+  }
+
+  const sessionId = Number(sessionIdParam);
+
+  if (isNaN(sessionId) || sessionId <= 0) {
+    console.warn(`Invalid session ID: ${sessionIdParam}`);
+    router.navigate(['/chat']);
+    return false;
   }
 
   return chatSessionService.getSessionWithMessages(sessionId).pipe(
