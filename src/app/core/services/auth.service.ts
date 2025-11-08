@@ -65,6 +65,7 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Registration error:', error);
+        this.authStatusSubject.next(false);
         throw error;
       })
     );

@@ -28,7 +28,7 @@ export class RegisterModalComponent implements OnInit {
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required, Validators.minLength(3)],
+      username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, passwordValidator]],
       repeatPassword: ['', Validators.required]
     });
