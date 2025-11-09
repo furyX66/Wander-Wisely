@@ -56,7 +56,7 @@ export class PersonalInfoFormPartComponent implements OnInit {
         this.userService.updateUser(this.userId, patch).subscribe({
           next: (updatedUser: IUser) => {
             this.userService.currentUserSubject.next(updatedUser);
-            this.successMessage = 'IUser updated successfully';
+            this.successMessage = 'User updated successfully';
             this.oldUser = updatedUser;
           },
           error: error => {

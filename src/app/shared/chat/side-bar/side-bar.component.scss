@@ -103,12 +103,16 @@ app-logo {
     justify-content: space-between;
     align-items: center;
     border-radius: 50px;
-    padding: 1rem 0.7rem 1rem 1rem;
+    padding: 0.5rem 0.7rem 0.5rem 1rem;
     outline: none;
     border: none;
     text-decoration: none;
     background-color: transparent;
     cursor: pointer;
+
+    &.active{
+      background-color: var(--active-color);
+    }
 
     span{
       white-space: nowrap;

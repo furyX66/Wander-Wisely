@@ -1,5 +1,4 @@
 @let isLoggedIn = (isLoggedIn$ | async);
-@let isLoading = (isLoading$ | async);
 
 <app-logo/>
 <nav class="option-buttons">
@@ -37,7 +36,7 @@
   } @else {
     <h3 class="chats-title">Your chats</h3>
     @for (session of chatSessions; track session.id) {
-      <div (click)="navigateToChat(session.id)" class="chat-element">
+      <div (click)="navigateToChat(session.id)" class="chat-element" [class.active]="isActiveChat(session.id)">
         <span>{{ session.sessionName }}</span>
         <button type="button" class="delete-chat" (click)="deleteChat(session.id); $event.stopPropagation()"><icon-cross [strokeWidth]="1.5"/></button>
       </div>
@@ -54,11 +53,7 @@
   <span class="user-bottom-menu">
       <button (click)="toggleUserMenu()">
         <icon-profile/>
-        @if(isLoading){
-          <app-loading-animation/>
-        } @else {
-          <p>{{ (user$ | async)?.username }}</p>
-        }
+        <p>{{ (user$ | async)?.username }}</p>
       </button>
       <app-color-scheme-switch/>
     </span>

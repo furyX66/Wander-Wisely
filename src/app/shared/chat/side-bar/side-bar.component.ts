@@ -16,11 +16,8 @@ import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.
 import {GuestChatSessionService} from '../../../core/services/guest-chat-session.service';
 import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {IChatSession} from '../../../../interfaces/IChatSession';
-import {
-  LoadingAnimationComponent
-} from '../../../../../public/assets/animations/loading-animation/loading-animation.component';
 
 @Component({
   selector: 'app-side-bar',
@@ -34,7 +31,7 @@ import {
     SearchIconComponent,
     ButtonComponent,
     CrossIconComponent,
-    LoadingAnimationComponent,
+
 
   ],
   templateUrl: './side-bar.component.html',
@@ -52,15 +49,28 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   showUserMenu = false;
   chatSessions : IChatSession[] = [];
+  currentSessionId: number | null = null;
 
   isLoggedIn$ = this.authService.authStatus$.pipe(
     map(status => status === true),
     shareReplay(1)
   );
   user$ = this.userService.getCurrentUser().pipe(shareReplay(1));
-  isLoading$ = this.userService.isLoading$;
 
   ngOnInit() {
+    this.updateCurrentSessionId();
+
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        const urlSegments = this.router.url.split('/');
+        const idParam = urlSegments[urlSegments.length - 1];
+        this.currentSessionId = Number(idParam) || null;
+      });
+
     if (this.authService.isInitializing()) {
       this.authService.initializeAuth()
         .pipe(takeUntil(this.destroy$))
@@ -155,6 +165,17 @@ export class SideBarComponent implements OnInit, OnDestroy {
     } else{
       this.guestChatSessionService.clearChatSession();
     }
+  }
+
+  isActiveChat(sessionId: number): boolean {
+    return this.currentSessionId === sessionId;
+  }
+
+  private updateCurrentSessionId(): void {
+    const urlSegments = this.router.url.split('/');
+    const idParam = urlSegments[urlSegments.length - 1];
+    this.currentSessionId = Number(idParam) || null;
+    console.log('Current session ID:', this.currentSessionId);
   }
 
   ngOnDestroy() {

@@ -24,6 +24,6 @@ export class MainTitleComponent implements OnInit {
   startWordRotation() {
     setInterval(() => {
       this.currentWordIndex = (this.currentWordIndex + 1) % this.words.length;
-    }, 2000);
+    }, 1000);
   }
 }
