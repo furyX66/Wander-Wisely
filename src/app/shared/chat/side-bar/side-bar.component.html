@@ -36,7 +36,7 @@
   } @else {
     <h3 class="chats-title">Your chats</h3>
     @for (session of chatSessions; track session.id) {
-      <div (click)="navigateToChat(session.id)" class="chat-element" [class.active]="isActiveChat(session.id)">
+      <div (click)="navigateToChat(session.id)" class="chat-element" [class.active]="(isActiveChat(session.id) | async)">
         <span>{{ session.sessionName }}</span>
         <button type="button" class="delete-chat" (click)="deleteChat(session.id); $event.stopPropagation()"><icon-cross [strokeWidth]="1.5"/></button>
       </div>

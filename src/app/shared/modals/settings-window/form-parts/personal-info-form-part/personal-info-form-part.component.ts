@@ -28,11 +28,13 @@ export class PersonalInfoFormPartComponent implements OnInit {
   errorMessage = '';
 
   ngOnInit() {
-    this.userService.getCurrentUser()
+    this.userService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         {
           next: (user) => {
+            if (!user) return;
+
             this.oldUser = user;
             this.userId = user.userId;
             this.personalInfoForm = this.fb.group({

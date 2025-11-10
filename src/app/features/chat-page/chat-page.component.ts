@@ -5,7 +5,7 @@ import {MapComponent} from '../../shared/common-ui/map/map.component';
 import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
-import {exhaustMap, filter, finalize, Observable, of, Subject, switchMap, take, takeUntil, tap} from 'rxjs';
+import {exhaustMap, filter, finalize, Observable, of, Subject, switchMap, take, takeUntil, tap, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {
   LoadingAnimationComponent
@@ -252,8 +252,11 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private createChatAndSendMessage(message: string) {
-    return this.userService.getCurrentUser().pipe(
+    return this.userService.currentUser$.pipe(
       switchMap(user => {
+        if (!user) {
+          return throwError(() => new Error('User not loaded'));
+        }
         const dto: ICreateChatSession = {
           userId: user.userId,
           sessionName: message.substring(0, 50),

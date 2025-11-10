@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
-import {filter, map, shareReplay, Subject, switchMap, takeUntil} from 'rxjs';
+import {filter, map, Observable, shareReplay, Subject, switchMap, takeUntil} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
@@ -16,7 +16,7 @@ import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.
 import {GuestChatSessionService} from '../../../core/services/guest-chat-session.service';
 import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
-import {NavigationEnd, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {IChatSession} from '../../../../interfaces/IChatSession';
 
 @Component({
@@ -45,32 +45,23 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private guestChatSessionService = inject(GuestChatSessionService);
   private chatSessionService = inject(ChatSessionService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private destroy$ = new Subject<void>();
   showUserMenu = false;
   chatSessions : IChatSession[] = [];
-  currentSessionId: number | null = null;
 
   isLoggedIn$ = this.authService.authStatus$.pipe(
     map(status => status === true),
     shareReplay(1)
   );
-  user$ = this.userService.getCurrentUser().pipe(shareReplay(1));
+  user$ = this.userService.currentUser$;
+  currentSessionId$ = this.activatedRoute.params.pipe(
+    map(params => Number(params['id']) || null),
+    shareReplay(1)
+  );
 
   ngOnInit() {
-    this.updateCurrentSessionId();
-
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        const urlSegments = this.router.url.split('/');
-        const idParam = urlSegments[urlSegments.length - 1];
-        this.currentSessionId = Number(idParam) || null;
-      });
-
     if (this.authService.isInitializing()) {
       this.authService.initializeAuth()
         .pipe(takeUntil(this.destroy$))
@@ -80,7 +71,8 @@ export class SideBarComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(isLoggedIn => {
           if (!isLoggedIn) {
-            return ([]);
+            this.chatSessions = [];
+            return [];
           }
           return this.user$.pipe(
             filter(user => !!user),
@@ -99,7 +91,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
           console.error('Failed to load sessions:', error);
           this.chatSessions = [];
         }
-      });
+      })
   }
 
   openLoginModal(): void {
@@ -167,15 +159,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }
   }
 
-  isActiveChat(sessionId: number): boolean {
-    return this.currentSessionId === sessionId;
-  }
-
-  private updateCurrentSessionId(): void {
-    const urlSegments = this.router.url.split('/');
-    const idParam = urlSegments[urlSegments.length - 1];
-    this.currentSessionId = Number(idParam) || null;
-    console.log('Current session ID:', this.currentSessionId);
+  isActiveChat(sessionId: number): Observable<boolean> {
+    return this.currentSessionId$.pipe(
+      map(id => id === sessionId)
+    );
   }
 
   ngOnDestroy() {
