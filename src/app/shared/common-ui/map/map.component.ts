@@ -1,20 +1,24 @@
-import {AfterViewInit, Component, effect, input, OnDestroy} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, input, Injector, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
-import {AttractionsCarouselComponent} from '../../chat/attractions-carousel/attractions-carousel.component';
-import {IAttraction} from '../../../../interfaces/IAttraction';
+import { AttractionsCarouselComponent } from '../../chat/attractions-carousel/attractions-carousel.component';
+import { IAttraction } from '../../../../interfaces/IAttraction';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   standalone: true,
-  imports: [
-    AttractionsCarouselComponent
-  ],
-  styleUrls: ['./map.component.scss']
+  imports: [AttractionsCarouselComponent],
+  styleUrls: ['./map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
-  attractions = input<IAttraction[] >([]);
+  attractions = input<IAttraction[]>([]);
   private attractionMarkers: L.Marker[] = [];
+  private themeObserver?: MutationObserver;
+  private injector = inject(Injector);
+  private currentAttractionsLength = 0;
+  private mapInitialized = false;
+  private currentTheme: 'light' | 'dark' = 'light';
 
   constructor() {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -23,16 +27,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       iconUrl: '/assets/leaflet/marker-icon.png',
       shadowUrl: '/assets/leaflet/marker-shadow.png',
     });
-
-    effect(() => {
-      const currentAttractions = this.attractions();
-      if (this.map && currentAttractions.length > 0) {
-        this.displayAttractions(currentAttractions);
-      }
-    });
   }
 
   private map!: L.Map;
+  private currentTiles!: L.TileLayer;
+
   private tilesLight = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
     minZoom: 3,
@@ -45,50 +44,78 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
   });
 
-  private observeThemeChanges(): void {
-    const observer = new MutationObserver(() => {
-      this.applyTheme(this.isDarkMode());
-    });
-
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
-  }
-
-  private currentTiles!: L.TileLayer;
-
   ngAfterViewInit(): void {
     this.initMap();
     this.observeThemeChanges();
+    this.setupAttractionsEffect();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
+    this.themeObserver?.disconnect();
     this.map?.remove();
   }
 
+  private setupAttractionsEffect(): void {
+    effect(() => {
+      const currentAttractions = this.attractions();
+      if (this.mapInitialized && currentAttractions.length !== this.currentAttractionsLength) {
+        this.currentAttractionsLength = currentAttractions.length;
+
+        if (currentAttractions.length > 0) {
+          this.displayAttractions(currentAttractions);
+        } else {
+          this.clearAttractionMarkers();
+        }
+      }
+    }, { injector: this.injector });
+  }
+
   private initMap(): void {
+    const mapElement = document.getElementById('map');
+    if (!mapElement) {
+      console.error('Map container element not found');
+      return;
+    }
+
     this.map = L.map('map', {
       center: [52.2297, 21.0122],
       zoom: 3
     });
 
-    this.applyTheme(this.isDarkMode());
+    const isDark = this.isDarkMode();
+    this.currentTheme = isDark ? 'dark' : 'light';
+    this.applyTheme(isDark);
+    this.mapInitialized = true;
+  }
+
+  private observeThemeChanges(): void {
+    this.themeObserver = new MutationObserver(() => {
+      const isDark = this.isDarkMode();
+      const newTheme = isDark ? 'dark' : 'light';
+
+      if (newTheme !== this.currentTheme) {
+        this.currentTheme = newTheme;
+        this.applyTheme(isDark);
+      }
+    });
+
+    this.themeObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
   }
 
   private displayAttractions(attractions: IAttraction[]): void {
     this.clearAttractionMarkers();
 
-    if (!attractions || attractions.length === 0) {
+    if (!attractions?.length) {
       return;
     }
 
-    const bounds: L.LatLngBoundsExpression = [];
+    const bounds: Array<[number, number]> = [];
 
     attractions.forEach(attraction => {
-      const latLng = L.latLng(attraction.latitude, attraction.longitude);
-
-      const marker = L.marker(latLng)
+      const marker = L.marker([attraction.latitude, attraction.longitude])
         .addTo(this.map)
         .bindPopup(this.createPopupContent(attraction));
 
@@ -127,13 +154,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private clearAttractionMarkers(): void {
     this.attractionMarkers.forEach(marker => {
-      this.map.removeLayer(marker);
+      if (this.map.hasLayer(marker)) {
+        this.map.removeLayer(marker);
+      }
     });
     this.attractionMarkers = [];
   }
 
   private applyTheme(isDark: boolean): void {
-    if (this.currentTiles) {
+    if (this.currentTiles && this.map.hasLayer(this.currentTiles)) {
       this.map.removeLayer(this.currentTiles);
     }
     this.currentTiles = isDark ? this.tilesDark : this.tilesLight;
