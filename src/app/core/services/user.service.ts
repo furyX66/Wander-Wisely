@@ -44,8 +44,4 @@ export class UserService {
   changePassword(data: { currentPassword: string; newPassword: string }) {
     return this.http.post(`/api/user/change-password`, data);
   }
-
-  getUserById(id: number): Observable<any> {
-    return this.http.get(`/api/user/${id}`);
-  }
 }
