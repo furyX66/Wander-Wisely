@@ -69,6 +69,8 @@ export class ChatSessionService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`).pipe(
       tap(() => {
+        this.messagesSubject.next([]);
+        this.attractionsSubject.next([]);
         if (this.router.url === `/chat/${id}`) {
           this.router.navigate(['/chat']);
         }
