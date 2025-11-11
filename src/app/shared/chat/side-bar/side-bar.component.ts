@@ -113,10 +113,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(user => {
-        const lastSessionId = this.chatSessions[0].id;
         const dto: ICreateChatSession = {
           userId: user.userId,
-          sessionName: `New Session ${lastSessionId}`,
+          sessionName: `Chat ${new Date().toLocaleString('pl-PL')}`,
           context: undefined
         };
         this.chatSessionService.create(dto)
