@@ -85,6 +85,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         filter(status => status === true),
       )
       .subscribe(() => {
+        this.chatSessionService.clearAttractions();
         this.guestChatSessionService.clearChatSession();
         if (!this.sessionId) {
           this.messages$ = this.guestChatSessionService.messages$;

@@ -99,4 +99,8 @@ export class ChatSessionService {
       rating: place.rating,
     };
   }
+
+  clearAttractions(): void {
+    this.attractionsSubject.next([]);
+  }
 }
