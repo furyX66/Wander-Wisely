@@ -4,7 +4,7 @@ import {
   Component,
   ElementRef,
   inject,
-  input,
+  OnInit,
   signal,
   ViewChild
 } from '@angular/core';
@@ -16,6 +16,9 @@ import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dro
 import {StarIconComponent} from '../../../../../public/assets/icons/star-icon.component';
 import {MoneyIconComponent} from '../../../../../public/assets/icons/money-icon.component';
 import {ImageLoaderService} from '../../../core/services/image-loader.service';
+import {ChatSessionService} from '../../../core/services/chat-session.service';
+import {Observable} from 'rxjs';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-attractions-carousel',
@@ -25,7 +28,8 @@ import {ImageLoaderService} from '../../../core/services/image-loader.service';
     CrossIconComponent,
     DropdownArrowIconComponent,
     StarIconComponent,
-    MoneyIconComponent
+    MoneyIconComponent,
+    AsyncPipe
   ],
   templateUrl: './attractions-carousel.component.html',
   styleUrl: './attractions-carousel.component.scss',
@@ -33,19 +37,24 @@ import {ImageLoaderService} from '../../../core/services/image-loader.service';
 })
 
 
-export class AttractionsCarouselComponent implements AfterViewInit {
+export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
+  private chatSessionService = inject(ChatSessionService);
   private imageLoader = inject(ImageLoaderService);
-
   canScrollLeft = signal(false);
   canScrollRight = signal(true);
   isShown = signal(true);
-  attractions = input<IAttraction[]>([]);
   currentPage = signal(0)
   private cardsPerPage!: number;
   private cardStep = 182;
   private observer!: IntersectionObserver;
 
+  attractions$!: Observable<IAttraction[]>;
+
   @ViewChild('cardsContainer') cardsContainer!: ElementRef<HTMLElement>;
+
+  ngOnInit() {
+    this.attractions$ = this.chatSessionService.attractions$;
+  }
 
   ngAfterViewInit() {
     const c = this.cardsContainer.nativeElement;

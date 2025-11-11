@@ -21,7 +21,7 @@ export const chatGuard: CanActivateFn = (route) => {
     return false;
   }
 
-  return chatSessionService.getSessionWithMessages(sessionId).pipe(
+  return chatSessionService.getSessionById(sessionId).pipe(
     map(session => {
       if (!session) {
         console.warn(`Chat ${sessionId} not found`);

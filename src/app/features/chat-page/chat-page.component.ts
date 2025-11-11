@@ -64,7 +64,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   sessionId!: number;
   session!: IChatSession;
   contextObj?: any;
-  attractions: IAttraction[] = [];
   showScrollButton = false;
   shouldScrollToBottom = false;
   isUserScrolledUp = false;
@@ -93,9 +92,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
     this.chatSessionService.attractions$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(attractions => {
-        this.attractions = attractions;
-      });
+      .subscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -123,7 +120,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     } else {
       this.messages$ = this.chatSessionService.messages$;
 
-      this.chatSessionService.getSessionWithMessages(this.sessionId)
+      this.chatSessionService.getSessionById(this.sessionId)
         .pipe(takeUntil(this.destroy$))
         .subscribe(dto => {
           this.session = dto.session;
@@ -208,7 +205,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     if (!res?.reply) return;
     this.saveAssistantMessage(res.reply, this.sessionId);
     if (res.places) {
-      this.attractions = res.places;
       this.chatSessionService.setAttractions(res.places);
     }
     this.scheduleScroll();

@@ -1,24 +1,27 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, input, Injector, OnDestroy } from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import * as L from 'leaflet';
-import { AttractionsCarouselComponent } from '../../chat/attractions-carousel/attractions-carousel.component';
-import { IAttraction } from '../../../../interfaces/IAttraction';
+import {AttractionsCarouselComponent} from '../../chat/attractions-carousel/attractions-carousel.component';
+import {IAttraction} from '../../../../interfaces/IAttraction';
+import {Observable, Subject, takeUntil} from 'rxjs';
+import {ChatSessionService} from '../../../core/services/chat-session.service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   standalone: true,
-  imports: [AttractionsCarouselComponent],
+  imports: [AttractionsCarouselComponent, AsyncPipe],
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MapComponent implements AfterViewInit, OnDestroy {
-  attractions = input<IAttraction[]>([]);
+export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
+  private destroy$ = new Subject<void>();
+  private chatSessionService = inject(ChatSessionService);
   private attractionMarkers: L.Marker[] = [];
   private themeObserver?: MutationObserver;
-  private injector = inject(Injector);
-  private currentAttractionsLength = 0;
   private mapInitialized = false;
   private currentTheme: 'light' | 'dark' = 'light';
+  attractions$!: Observable<IAttraction[]>;
 
   constructor() {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -27,6 +30,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       iconUrl: '/assets/leaflet/marker-icon.png',
       shadowUrl: '/assets/leaflet/marker-shadow.png',
     });
+  }
+
+  ngOnInit() {
+    this.attractions$ = this.chatSessionService.attractions$;
   }
 
   private map!: L.Map;
@@ -56,18 +63,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private setupAttractionsEffect(): void {
-    effect(() => {
-      const currentAttractions = this.attractions();
-      if (this.mapInitialized && currentAttractions.length !== this.currentAttractionsLength) {
-        this.currentAttractionsLength = currentAttractions.length;
-
-        if (currentAttractions.length > 0) {
-          this.displayAttractions(currentAttractions);
-        } else {
-          this.clearAttractionMarkers();
+    this.attractions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(attractions => {
+        if (this.mapInitialized) {
+          if (attractions.length > 0) {
+            this.displayAttractions(attractions);
+          } else {
+            this.clearAttractionMarkers();
+          }
         }
-      }
-    }, { injector: this.injector });
+      });
   }
 
   private initMap(): void {
@@ -79,7 +85,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.map = L.map('map', {
       center: [52.2297, 21.0122],
-      zoom: 3
+      zoom: 3,
     });
 
     const isDark = this.isDarkMode();
@@ -131,14 +137,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private createPopupContent(attraction: IAttraction): string {
     const stars = '⭐'.repeat(Math.round(attraction.rating));
     const price = attraction.price !== null ? `${attraction.price} zł` : 'Free';
-    const photo = attraction.photoUrl
-      ? `<img src="${attraction.photoUrl}" alt="${attraction.name}" style="width: 100%; max-width: 200px; height: auto; border-radius: 4px; margin-bottom: 8px;">`
+    const photo = attraction.imageUrl
+      ? `<img src="${attraction.imageUrl}" alt="${attraction.title}" style="width: 100%; max-width: 200px; height: auto; border-radius: 4px; margin-bottom: 8px;">`
       : '';
 
     return `
       <div style="min-width: 150px;">
         ${photo}
-        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${attraction.name}</h3>
+        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${attraction.title}</h3>
         <p style="margin: 4px 0; font-size: 14px;">
           <strong>Rating:</strong> ${stars} (${attraction.rating})
         </p>

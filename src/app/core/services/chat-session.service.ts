@@ -24,23 +24,27 @@ export class ChatSessionService {
     return this.http.get<IChatSession[]>(`${this.base}/user/${userId}`);
   }
 
-  getSessionWithMessages(id: number): Observable<SessionWithMessagesDto> {
+  getSessionById(id: number): Observable<SessionWithMessagesDto> {
     return this.http.get<SessionWithMessagesDto>(`${this.base}/${id}`).pipe(
       tap(dto => {
         this.messagesSubject.next(dto.messages || []);
+        this.attractionsSubject.next(dto.attractions || [])
       }),
       catchError(error => {
         console.error('Failed to load session:', error);
         this.messagesSubject.next([]);
+        this.attractionsSubject.next([]);
         throw error;
       })
     );
   }
 
+
   create(session: Partial<IChatSession>): Observable<IChatSession> {
     return this.http.post<IChatSession>(this.base, session).pipe(
       tap(() => {
         this.messagesSubject.next([]);
+        this.attractionsSubject.next([]);
       }),
       catchError(error => {
         console.error('Failed to create session:', error);
@@ -77,6 +81,20 @@ export class ChatSessionService {
   }
 
   setAttractions(attractions: IAttraction[]): void {
-    this.attractionsSubject.next(attractions);
+    const converted = attractions.map(((place,index) => this.convertAIResponseToAttraction(place,  index)))
+    this.attractionsSubject.next(converted);
+  }
+
+  private convertAIResponseToAttraction(place: any, index: number): IAttraction {
+    return {
+      id: index,
+      title: place.name,
+      latitude: place.latitude,
+      longitude: place.longitude,
+      type: place.type,
+      imageUrl: place.photoUrl,
+      price: place.price,
+      rating: place.rating,
+    };
   }
 }

@@ -1,14 +1,17 @@
-<div class="carousel-wrapper" [class.closed]="!isShown()">
-  <icon-arrow (click)="scrollLeft()" [class.disabled]="!canScrollLeft()" [strokeWidth]="0"/>
-  <div class="cards-container" #cardsContainer (scroll)="onScroll($event)">
-    @if (attractions().length > 0) {
-      @for (attraction of attractions(); track attraction) {
+@let attractions = attractions$ | async;
+
+@if (attractions && attractions.length>0) {
+  <div class="carousel-wrapper" [class.closed]="!isShown()">
+    <icon-arrow (click)="scrollLeft()" [class.disabled]="!canScrollLeft()" [strokeWidth]="0"/>
+    <div class="cards-container" #cardsContainer (scroll)="onScroll($event)">
+
+      @for (attraction of attractions; track attraction.id) {
         <div class="card">
           <icon-favorite/>
-          <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.photoUrl"
+          <img loading="lazy" [src]="attraction.imageUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.imageUrl"
                alt="IAttraction image">
           <div class="card-info">
-            <h3 class="font-s-semiBold">{{ attraction.name }}</h3>
+            <h3 class="font-s-semiBold">{{ attraction.title }}</h3>
             <span class="row">
               <icon-star/>
               <p class="font-s-normal"> {{ attraction.rating }}</p>
@@ -22,20 +25,19 @@
           </div>
         </div>
       }
-    }
+    </div>
+    <icon-arrow class="arrow-right" (click)="scrollRight()" [strokeWidth]="0" [class.disabled]="!canScrollRight()"/>
   </div>
-  <icon-arrow class="arrow-right" (click)="scrollRight()" [strokeWidth]="0" [class.disabled]="!canScrollRight()"/>
-</div>
 
-<button class="btn" [class.btn-closed]="!isShown()" (click)="onButtonClick()">
-  @if (!isShown()) {
-    <icon-dropdown-arrow [strokeWidth]="2"/>
-    Open
-  } @else {
-    <icon-cross [size]="12" [strokeWidth]="2"/>
-    Close
-  }
-</button>
-
+  <button class="btn" [class.btn-closed]="!isShown()" (click)="onButtonClick()">
+    @if (!isShown()) {
+      <icon-dropdown-arrow [strokeWidth]="2"/>
+      Open
+    } @else {
+      <icon-cross [size]="12" [strokeWidth]="2"/>
+      Close
+    }
+  </button>
+}
 
 

@@ -1,7 +1,9 @@
+@let attractions = attractions$ | async;
+
 <div class="map-container">
   <div class="map-frame">
-    @if (attractions() && attractions()!.length > 0) {
-      <app-attractions-carousel [attractions]="attractions()"/>
+    @if (attractions && attractions.length>0) {
+      <app-attractions-carousel/>
     }
     <div id="map"></div>
   </div>
