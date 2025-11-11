@@ -14,10 +14,10 @@ export class ChatSessionService {
   private router = inject(Router);
   private http = inject(HttpClient);
   private base = '/api/ChatSessions';
-
   private messagesSubject = new BehaviorSubject<IChatMessage[]>([]);
-  public messages$ = this.messagesSubject.asObservable();
   private attractionsSubject = new BehaviorSubject<IAttraction[]>([]);
+
+  messages$ = this.messagesSubject.asObservable();
   attractions$ = this.attractionsSubject.asObservable();
 
   getUserSessions(userId: number): Observable<IChatSession[]> {
