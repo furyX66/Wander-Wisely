@@ -22,6 +22,7 @@ import {IChatMessage} from '../../../interfaces/IChatMessage';
 import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
 import {UserService} from '../../core/services/user.service';
 import {AuthService} from '../../core/services/auth.service';
+import {OptionsBarComponent} from '../../shared/chat/options-bar/options-bar.component';
 
 export interface ChatResponse {
   reply: string;
@@ -39,7 +40,8 @@ export interface ChatResponse {
     ArrowIconComponent,
     LoadingAnimationComponent,
     AssistantIconComponent,
-    AsyncPipe
+    AsyncPipe,
+    OptionsBarComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,

@@ -1,0 +1,49 @@
+@use "colors" as *;
+@use "mixins" as *;
+
+:host{
+  background: var(--modal-bg-color);
+  display: flex;
+  padding: 0.5rem 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 0 20px 20px;
+
+  --text: $gray;
+}
+
+:host-context([data-theme='light']) :host{
+  outline: 1px solid $light-gray;
+}
+
+button {
+  @include poppins(500, 14px);
+  box-sizing: border-box;
+  height: 100%;
+  width: 7rem;
+  white-space: nowrap;
+  display: flex;
+  padding: 0.25rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background: transparent;
+  flex-direction: column;
+  text-align: center;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+
+  span{
+    @include poppins(300, 14px);
+    color: $blue;
+  }
+
+  &:hover {
+    background: var(--hover-color);
+  }
+}
+
+
+
