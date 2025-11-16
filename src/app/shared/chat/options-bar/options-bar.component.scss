@@ -51,7 +51,6 @@ button {
 .dropdown-menu{
   display: flex;
   padding: 0.5rem;
-  align-items: center;
   flex-direction: column;
   position: absolute;
   top:100%;
@@ -70,9 +69,8 @@ button {
     background: var(--hover-color);
   }
 }
-
-.option-element{
-  height: 100%;
+.rotate{
+  transform: rotate(180deg);
 }
 
 

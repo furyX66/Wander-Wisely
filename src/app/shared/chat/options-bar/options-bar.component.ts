@@ -1,11 +1,13 @@
 import {Component, signal} from '@angular/core';
 import {IBudgetOption} from '../../../../interfaces/IBudgetOption';
 import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outside.directive';
+import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
 
 @Component({
   selector: 'app-options-bar',
   imports: [
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    DropdownArrowIconComponent
   ],
   templateUrl: './options-bar.component.html',
   styleUrl: './options-bar.component.scss'
