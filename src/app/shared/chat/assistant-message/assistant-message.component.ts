@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AssistantIconComponent} from '../../../../../public/assets/icons/assistant-icon';
+import {AssistantIconComponent} from '../../../../../public/assets/icons/assistant-icon.component';
 
 @Component({
   selector: 'app-assistant-message',

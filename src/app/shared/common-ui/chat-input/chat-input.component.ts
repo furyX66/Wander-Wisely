@@ -1,7 +1,7 @@
 import {Component, input, output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {SendIconComponent} from '../../../../../public/assets/icons/send-icon';
+import {SendIconComponent} from '../../../../../public/assets/icons/send-icon.component';
 
 @Component({
   selector: 'app-chat-input',

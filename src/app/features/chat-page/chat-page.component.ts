@@ -10,7 +10,7 @@ import {catchError} from 'rxjs/operators';
 import {
   LoadingAnimationComponent
 } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
-import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon';
+import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon.component';
 import {ChatService} from '../../core/services/chat.service';
 import {IAttraction} from '../../../interfaces/IAttraction';
 import {ActivatedRoute, Router} from '@angular/router';

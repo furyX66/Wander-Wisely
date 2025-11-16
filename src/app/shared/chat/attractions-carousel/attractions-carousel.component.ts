@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {IAttraction} from '../../../../interfaces/IAttraction';
 import {ArrowIconComponent} from '../../../../../public/assets/icons/arrow-icon.component';
-import {FavoriteIcon} from '../../../../../public/assets/icons/favorite-icon';
+import {FavoriteIconComponent} from '../../../../../public/assets/icons/favorite-icon.component';
 import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.component';
 import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
 import {StarIconComponent} from '../../../../../public/assets/icons/star-icon.component';
@@ -24,7 +24,7 @@ import {AsyncPipe} from '@angular/common';
   selector: 'app-attractions-carousel',
   imports: [
     ArrowIconComponent,
-    FavoriteIcon,
+    FavoriteIconComponent,
     CrossIconComponent,
     DropdownArrowIconComponent,
     StarIconComponent,

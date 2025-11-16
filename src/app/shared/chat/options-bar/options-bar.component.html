@@ -1,6 +1,21 @@
 <button>Where from:<span>{{ whereFrom() }}</span></button>
 <button>Where to:<span>{{ whereTo() }}</span></button>
 <button>Dates:<span>{{ dates() }}</span></button>
-<button>Budget:<span>{{ budget() }}</span></button>
+<span class="option-element">
+  <button (click)="toggleBudgetDropdown()">Budget:&#8201;<span>{{ getDollarSign()}}</span>
+  </button>
+  @if (isBudgetDropdownOpen()) {
+    <div class="dropdown-menu" (clickOutside)="closeBudgetDropdown()">
+      @for (option of budgetOptions; track option.id) {
+        <button
+          class="dropdown-item"
+          [class.selected]="budget() === option.label"
+          (click)="selectBudgedOption(option)">
+          {{ option.label }}
+        </button>
+      }
+    </div>
+  }
+</span>
 
 

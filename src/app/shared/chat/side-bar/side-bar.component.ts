@@ -7,7 +7,7 @@ import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
-import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-icon';
+import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-icon.component';
 import {ModalService} from '../../../core/services/modal.service';
 import {ModalType} from '../../../enums/ModalType';
 import {SearchIconComponent} from '../../../../../public/assets/icons/search-icon.component';

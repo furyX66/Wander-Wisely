@@ -14,6 +14,6 @@ import { Component } from '@angular/core';
     }
   `
 })
-export class FavoriteIcon {
+export class FavoriteIconComponent {
 
 }

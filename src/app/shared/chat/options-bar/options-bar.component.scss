@@ -2,33 +2,36 @@
 @use "mixins" as *;
 
 :host{
+  position: relative;
   background: var(--modal-bg-color);
   display: flex;
-  padding: 0.5rem 1rem;
+  height: 4rem;
+  padding: 0.25rem 1.5rem;
   justify-content: center;
   align-items: center;
-  border-radius: 0 0 20px 20px;
-
-  --text: $gray;
+  border-radius: 0 0 36px 36px;
 }
 
 :host-context([data-theme='light']) :host{
   outline: 1px solid $light-gray;
 }
 
+:host-context([data-theme='light']) .dropdown-menu{
+  outline: 1px solid $light-gray;
+}
+
 button {
-  @include poppins(500, 14px);
+  @include poppins(400, 14px);
   box-sizing: border-box;
   height: 100%;
-  width: 7rem;
+  width: 10rem;
   white-space: nowrap;
   display: flex;
-  padding: 0.25rem 1.5rem;
+  padding: 0.25rem;
   justify-content: center;
   align-items: center;
-  border-radius: 12px;
+  border-radius: 50px;
   background: transparent;
-  flex-direction: column;
   text-align: center;
   outline: none;
   border: none;
@@ -36,13 +39,40 @@ button {
   color: var(--text-color);
 
   span{
-    @include poppins(300, 14px);
+    @include poppins(400, 14px);
     color: $blue;
   }
 
   &:hover {
     background: var(--hover-color);
   }
+}
+
+.dropdown-menu{
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top:100%;
+  right: 0;
+  background: var(--modal-bg-color);
+  border-radius: 32px;
+  z-index: 1000;
+
+  .dropdown-item{
+    @include poppins(400, 14px);
+    width: 100%;
+    padding: 0.8rem;
+  }
+
+  .selected{
+    background: var(--hover-color);
+  }
+}
+
+.option-element{
+  height: 100%;
 }
 
 
