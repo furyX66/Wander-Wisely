@@ -4,6 +4,7 @@
 @use "variables" as *;
 @use "text-styles" as *;
 @use "utilities" as *;
+@use "datepicker" as *;
 
 *, :root{
   margin: 0;
@@ -18,4 +19,5 @@ body {
   min-height: 100dvh;
   transition: background 0.2s;
 }
+
 

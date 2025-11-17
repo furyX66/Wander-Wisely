@@ -1,7 +1,7 @@
-<button>Where from:<span>{{ whereFrom() }}</span></button>
-<button>Where to:<span>{{ whereTo() }}</span></button>
-<button>Dates:<span>{{ dates() }}</span></button>
-<button (click)="toggleBudgetDropdown()"><icon-dropdown-arrow [class.rotate]="isBudgetDropdownOpen()" [strokeWidth]="2"/>&#8201;Budget:&#8201;<span>{{ getDollarSign() }}</span> </button>
+<button>Where from<span>{{ whereFrom() }}</span></button>
+<button>Where to<span>{{ whereTo() }}</span></button>
+<app-date-picker/>
+<button (click)="toggleBudgetDropdown()"><icon-dropdown-arrow [class.rotate]="isBudgetDropdownOpen()" [strokeWidth]="2"/>&#8201;Budget&#8201;<span>{{ getDollarSign() }}</span> </button>
 @if (isBudgetDropdownOpen()) {
   <div class="dropdown-menu" (clickOutside)="closeBudgetDropdown()">
     @for (option of budgetOptions; track option.id) {

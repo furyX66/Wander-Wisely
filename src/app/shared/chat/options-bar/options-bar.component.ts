@@ -2,12 +2,15 @@ import {Component, signal} from '@angular/core';
 import {IBudgetOption} from '../../../../interfaces/IBudgetOption';
 import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outside.directive';
 import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
+import {DatePickerComponent} from '../date-picker/date-picker.component';
 
 @Component({
   selector: 'app-options-bar',
   imports: [
     ClickOutsideDirective,
-    DropdownArrowIconComponent
+    DropdownArrowIconComponent,
+    DatePickerComponent,
+    DatePickerComponent
   ],
   templateUrl: './options-bar.component.html',
   styleUrl: './options-bar.component.scss'

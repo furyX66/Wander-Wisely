@@ -1,0 +1,23 @@
+@use "colors" as *;
+
+.flatpickr-calendar {
+  width: fit-content !important;
+  min-width: 320px !important;
+  background: var(--modal-bg-color) !important;
+  border-radius: 2rem !important;
+  border: var(--assistant-message-border) !important;
+  box-shadow: none !important;
+  padding: 0.8rem !important;
+}
+
+.flatpickr-calendar.multiMonth {
+  width: 640px !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: $blue !important;
+  color: $white !important;
+  border: none !important;
+}

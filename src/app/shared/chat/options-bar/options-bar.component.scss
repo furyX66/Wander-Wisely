@@ -6,10 +6,10 @@
   background: var(--modal-bg-color);
   display: flex;
   height: 4rem;
-  padding: 0.25rem 1.5rem;
+  padding: 0.25rem;
   justify-content: center;
   align-items: center;
-  border-radius: 0 0 36px 36px;
+  border-radius: 0 0 30px 30px;
 }
 
 :host-context([data-theme='light']) :host{
@@ -69,6 +69,11 @@ button {
     background: var(--hover-color);
   }
 }
+
+app-date-picker{
+  height: 100%;
+}
+
 .rotate{
   transform: rotate(180deg);
 }

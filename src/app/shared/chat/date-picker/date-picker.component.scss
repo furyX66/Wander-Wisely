@@ -1,0 +1,35 @@
+@use "colors" as *;
+@use "mixins" as *;
+
+.date-btn {
+  position: relative;
+  @include poppins(400, 14px);
+  box-sizing: border-box;
+  height: 100%;
+  width: 10rem;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  background: transparent;
+  text-align: center;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+
+  span{
+    @include poppins(400, 14px);
+    color: $blue;
+  }
+
+  &:hover {
+    background: var(--hover-color);
+  }
+}
+
+
+
