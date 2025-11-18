@@ -21,3 +21,25 @@
   color: $white !important;
   border: none !important;
 }
+
+.flatpickr-months{
+  display: flex;
+  align-items: center;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  position: static !important;
+  aspect-ratio: 1/1;
+  padding: 0 !important;
+  background: transparent;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--hover-color);
+  }
+}

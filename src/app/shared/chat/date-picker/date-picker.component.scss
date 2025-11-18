@@ -1,7 +1,7 @@
 @use "colors" as *;
 @use "mixins" as *;
 
-.date-btn {
+button {
   position: relative;
   @include poppins(400, 14px);
   box-sizing: border-box;
