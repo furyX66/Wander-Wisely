@@ -3,6 +3,7 @@ import {IBudgetOption} from '../../../../interfaces/IBudgetOption';
 import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outside.directive';
 import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
 import {DatePickerComponent} from '../date-picker/date-picker.component';
+import {CityAutocompleteInputComponent} from '../city-autocomplete-input/city-autocomplete-input.component';
 
 @Component({
   selector: 'app-options-bar',
@@ -10,6 +11,7 @@ import {DatePickerComponent} from '../date-picker/date-picker.component';
     ClickOutsideDirective,
     DropdownArrowIconComponent,
     DatePickerComponent,
+    CityAutocompleteInputComponent,
   ],
   templateUrl: './options-bar.component.html',
   styleUrl: './options-bar.component.scss'
@@ -18,7 +20,9 @@ export class OptionsBarComponent {
   whereFrom = signal<string>("")
   whereTo = signal<string>("")
   budget = signal<string>("")
+
   isBudgetDropdownOpen = signal<boolean>(false);
+  isWhereToDropdownOpen = signal<boolean>(false);
 
   budgetOptions: IBudgetOption[] = [
     {id: '1', label: '$ (Budget)'},
@@ -31,8 +35,16 @@ export class OptionsBarComponent {
     this.isBudgetDropdownOpen.update(v => !v);
   }
 
+  toggleWhereToInput(): void {
+    this.isWhereToDropdownOpen.update(v => !v);
+  }
+
   closeBudgetDropdown(): void {
     this.isBudgetDropdownOpen.set(false);
+  }
+
+  closeWhereToDropdown(): void {
+    this.isWhereToDropdownOpen.set(false);
   }
 
   selectBudgedOption(option: IBudgetOption): void {
@@ -44,7 +56,7 @@ export class OptionsBarComponent {
     this.closeBudgetDropdown();
   }
 
-    getDollarSign(): string {
+  getDollarSign(): string {
     if (this.budget() === "") return "";
     const match = this.budget().match(/^\$+/);
     return match ? match[0] : '$$';

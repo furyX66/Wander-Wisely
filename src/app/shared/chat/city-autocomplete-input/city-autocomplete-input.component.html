@@ -1,0 +1,11 @@
+<input type="text" [formControl]="searchControl">
+@if(cities().length>0){
+  <ul class="autocomplete-list">
+    @for(option of cities(); track $index){
+      <li (click)="selectOption(option)">{{option}}</li>
+    }
+  </ul>
+}
+@if(isLoading()){
+  <app-loading-animation/>
+}
