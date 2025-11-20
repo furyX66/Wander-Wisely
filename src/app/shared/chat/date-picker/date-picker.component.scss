@@ -1,15 +1,15 @@
 @use "colors" as *;
 @use "mixins" as *;
 
-button {
+.date-button {
   position: relative;
   @include poppins(400, 14px);
+  flex-direction: column;
   box-sizing: border-box;
   height: 100%;
   width: 10rem;
   white-space: nowrap;
   display: flex;
-  flex-direction: column;
   padding: 0.25rem;
   justify-content: center;
   align-items: center;
@@ -21,7 +21,7 @@ button {
   cursor: pointer;
   color: var(--text-color);
 
-  span{
+  .dates{
     @include poppins(400, 14px);
     color: $blue;
   }

@@ -10,7 +10,6 @@ import {DatePickerComponent} from '../date-picker/date-picker.component';
     ClickOutsideDirective,
     DropdownArrowIconComponent,
     DatePickerComponent,
-    DatePickerComponent
   ],
   templateUrl: './options-bar.component.html',
   styleUrl: './options-bar.component.scss'
@@ -18,7 +17,6 @@ import {DatePickerComponent} from '../date-picker/date-picker.component';
 export class OptionsBarComponent {
   whereFrom = signal<string>("")
   whereTo = signal<string>("")
-  dates = signal<string>("")
   budget = signal<string>("")
   isBudgetDropdownOpen = signal<boolean>(false);
 

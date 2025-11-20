@@ -37,6 +37,35 @@ export class DatePickerComponent implements AfterViewInit {
           const start = this.format(selectedDates[0]);
           this.dates.set(start);
         }
+      },
+      onReady: (selectedDates, dateStr, instance) => {
+        const calendar = instance.calendarContainer;
+        let clearBtn = calendar.querySelector('.custom-clear-btn') as HTMLElement;
+        if (!clearBtn) {
+          clearBtn = document.createElement('button');
+          clearBtn.textContent = 'Clear';
+          clearBtn.className = 'custom-clear-btn';
+          clearBtn.style.cssText = `
+          margin: 0.5rem auto 0 auto;
+          padding: 0.5rem 2rem;
+          border:none;
+          border-radius: 50px;
+          background: transparent;
+          color: var(--text-color);
+          cursor: pointer;
+        `;
+          clearBtn.onmouseenter = () => {
+            clearBtn.style.background = 'var(--hover-color, )';
+          };
+          clearBtn.onmouseleave = () => {
+            clearBtn.style.background = 'transparent';
+          };
+          clearBtn.onclick = () => {
+            this.dates.set('');
+            instance.clear();
+          };
+          calendar.appendChild(clearBtn);
+        }
       }
     });
   }
