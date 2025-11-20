@@ -23,6 +23,7 @@ export class OptionsBarComponent {
 
   isBudgetDropdownOpen = signal<boolean>(false);
   isWhereToDropdownOpen = signal<boolean>(false);
+  isWhereFromDropdownOpen = signal<boolean>(false);
 
   budgetOptions: IBudgetOption[] = [
     {id: '1', label: '$ (Budget)'},
@@ -39,12 +40,20 @@ export class OptionsBarComponent {
     this.isWhereToDropdownOpen.update(v => !v);
   }
 
+  toggleWhereFromInput(): void {
+    this.isWhereFromDropdownOpen.update(v => !v);
+  }
+
   closeBudgetDropdown(): void {
     this.isBudgetDropdownOpen.set(false);
   }
 
   closeWhereToDropdown(): void {
     this.isWhereToDropdownOpen.set(false);
+  }
+
+  closeWhereFromDropdown(): void {
+    this.isWhereFromDropdownOpen.set(false);
   }
 
   selectBudgedOption(option: IBudgetOption): void {

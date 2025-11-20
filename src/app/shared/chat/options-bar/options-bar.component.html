@@ -1,7 +1,11 @@
-<button>Where from<span>{{ whereFrom() }}</span></button>
+<button (click)="toggleWhereFromInput()">Where from<span>{{ whereFrom() }}</span></button>
 <button (click)="toggleWhereToInput()">Where to<span>{{ whereTo() }}</span></button>
 <app-date-picker/>
-<button (click)="toggleBudgetDropdown()"><icon-dropdown-arrow [class.rotate]="isBudgetDropdownOpen()" [strokeWidth]="2"/>&#8201;Budget&#8201;<span>{{ getDollarSign() }}</span></button>
+<button class="budget-button" (click)="toggleBudgetDropdown()">
+  <icon-dropdown-arrow [class.rotate]="isBudgetDropdownOpen()" [strokeWidth]="2"/>
+  Budget
+  <span>{{ getDollarSign() }}</span>
+</button>
 
 @if (isBudgetDropdownOpen()) {
   <div class="dropdown-menu" (clickOutside)="closeBudgetDropdown()">
@@ -16,9 +20,16 @@
   </div>
 }
 @if(isWhereToDropdownOpen()){
-  <div class="where-to-menu" (clickOutside)="closeWhereToDropdown()">
+  <div class="city-menu" (clickOutside)="closeWhereToDropdown()">
     <span>Please enter where you want to travel</span>
-    <app-city-autocomplete-input/>
+    <app-city-autocomplete-input (citySelected)="whereTo.set($event)"/>
+  </div>
+}
+
+@if(isWhereFromDropdownOpen()){
+  <div class="city-menu where-from" (clickOutside)="closeWhereFromDropdown()">
+    <span>Please enter where from you want to travel</span>
+    <app-city-autocomplete-input (citySelected)="whereFrom.set($event)"/>
   </div>
 }
 

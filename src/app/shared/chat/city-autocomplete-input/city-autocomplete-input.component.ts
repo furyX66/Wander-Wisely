@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit, output, signal} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, map, of, switchMap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -6,6 +6,11 @@ import {HttpClient} from '@angular/common/http';
 import {
   LoadingAnimationComponent
 } from '../../../../../public/assets/animations/loading-animation/loading-animation.component';
+
+interface CityOption {
+  displayName: string;
+  cityName: string;
+}
 
 interface NominatimResult {
   display_name: string;
@@ -34,8 +39,10 @@ interface NominatimResult {
 export class CityAutocompleteInputComponent implements OnInit {
   private http = inject(HttpClient);
   searchControl = new FormControl('');
-  cities = signal<string[]>([]);
+  cities = signal<CityOption[]>([]);
   isLoading = signal<boolean>(false);
+
+  citySelected = output<string>();
 
   ngOnInit(): void {
     this.searchControl.valueChanges.pipe(
@@ -70,32 +77,51 @@ export class CityAutocompleteInputComponent implements OnInit {
               r.type === 'hamlet'
             );
 
-            const formatted = filtered.map(r => {
+            // Формируем массив CityOption с двумя полями
+            const formatted: CityOption[] = filtered.map(r => {
               const addr = r.address;
-              if (!addr) return r.display_name;
+              const cityName = addr?.city || addr?.town || addr?.village || r.name;
+
+              if (!addr) {
+                return {
+                  displayName: r.display_name,
+                  cityName: r.name
+                };
+              }
 
               const parts: string[] = [];
-              const city = addr.city || addr.town || addr.village;
-              if (city) parts.push(city);
+              if (cityName) parts.push(cityName);
               if (addr.state) parts.push(addr.state);
               if (addr.country) parts.push(addr.country);
 
-              return parts.join(', ') || r.display_name;
+              return {
+                displayName: parts.join(', ') || r.display_name,
+                cityName: cityName
+              };
             });
 
-            return [...new Set(formatted)];
+            // Удаляем дубликаты по displayName
+            const uniqueMap = new Map<string, CityOption>();
+            formatted.forEach(item => {
+              if (!uniqueMap.has(item.displayName)) {
+                uniqueMap.set(item.displayName, item);
+              }
+            });
+
+            return Array.from(uniqueMap.values());
           }),
           catchError(() => of([]))
         );
       })
-    ).subscribe(cityNames => {
-      this.cities.set(cityNames);
+    ).subscribe(cityOptions => {
+      this.cities.set(cityOptions);
       this.isLoading.set(false);
     });
   }
 
-  selectOption(country: string) {
-    this.searchControl.setValue(country);
+  selectOption(option: CityOption) {
+    this.searchControl.setValue(option.displayName);
     this.cities.set([]);
+    this.citySelected.emit(option.cityName);
   }
 }

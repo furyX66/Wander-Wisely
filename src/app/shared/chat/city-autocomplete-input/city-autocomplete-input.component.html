@@ -2,7 +2,7 @@
 @if(cities().length>0){
   <ul class="autocomplete-list">
     @for(option of cities(); track $index){
-      <li (click)="selectOption(option)">{{option}}</li>
+      <li (click)="selectOption(option)">{{option.displayName}}</li>
     }
   </ul>
 }
