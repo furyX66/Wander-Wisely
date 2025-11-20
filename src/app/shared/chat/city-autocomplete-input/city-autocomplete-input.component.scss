@@ -22,6 +22,10 @@ input{
   border: none;
   outline: 1px solid $light-gray;
   background: transparent;
+
+  &:focus {
+    outline: 1px solid var(--text-color);;
+  }
 }
 
 .autocomplete-list {
