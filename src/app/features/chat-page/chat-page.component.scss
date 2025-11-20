@@ -33,7 +33,7 @@ app-map {
 
 .chat-area {
   position: relative;
-  padding-top: 16px;
+  align-items: center;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -46,8 +46,8 @@ app-map {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 32px;
+  gap: 1rem;
+  margin-top: 2rem;
   scrollbar-width: none;
 }
 
@@ -97,7 +97,7 @@ icon-arrow {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1300px) {
   app-side-bar {
     display: none;
   }

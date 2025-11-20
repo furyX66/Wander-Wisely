@@ -11,14 +11,12 @@ export class ChatService {
 
   chatAsk(sessionId: number, message: string): Observable<ChatResponse> {
     return this.http.post<ChatResponse>(
-      `/api/ChatSessions/${sessionId}/ask`,
-      { message }
+      `/api/ChatSessions/${sessionId}/ask`, { message }
     );
   }
   guestChatAsk( message: string): Observable<ChatResponse> {
     return this.http.post<ChatResponse>(
-      `/api/ChatSessions/ask`,
-      { message }
+      `/api/Chat/ask`, { message }
     );
   }
 }

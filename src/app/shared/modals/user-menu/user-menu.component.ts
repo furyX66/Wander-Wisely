@@ -6,13 +6,15 @@ import {LogoutIconComponent} from '../../../../../public/assets/icons/logout-ico
 import {SettingsIconComponent} from '../../../../../public/assets/icons/settings-icon.component';
 import {UserIconComponent} from '../../../../../public/assets/icons/user-icon.component';
 import {Router} from '@angular/router';
+import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outside.directive';
 
 @Component({
   selector: 'app-user-menu',
   imports: [
     LogoutIconComponent,
     SettingsIconComponent,
-    UserIconComponent
+    UserIconComponent,
+    ClickOutsideDirective
   ],
   templateUrl: './user-menu.component.html',
   styleUrl: './user-menu.component.scss'
@@ -32,6 +34,11 @@ export class UserMenuComponent {
 
   openUserSettingsModal() {
     this.modalService.openModal(ModalType.EDIT_PROFILE);
+    this.closeMenu.emit();
+  }
+
+  close(){
+    console.log("Closed user menu");
     this.closeMenu.emit();
   }
 }

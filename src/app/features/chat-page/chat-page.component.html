@@ -1,5 +1,6 @@
 <app-side-bar/>
 <section class="chat-area">
+  <app-options-bar/>
   <div class="chat-messages" id="chatContainer" #chatContainer (scroll)="onScroll()">
     @for ((msg of messages$ | async); track msg.id) {
       @if (msg.role === 'user') {

@@ -60,6 +60,6 @@
 }
 
 @if (showUserMenu) {
-  <app-user-menu/>
+  <app-user-menu (closeMenu)="toggleUserMenu()"/>
 }
 
