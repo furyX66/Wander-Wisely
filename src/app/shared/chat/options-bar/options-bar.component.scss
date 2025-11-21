@@ -2,7 +2,7 @@
 @use "mixins" as *;
 @use "../chat-shared" as *;
 
-:host{
+:host {
   position: relative;
   background: var(--modal-bg-color);
   display: flex;
@@ -14,69 +14,91 @@
   outline: var(--assistant-message-border);
 }
 
-.budget-button{
+.budget-button {
   display: flex;
   align-items: center;
   position: relative;
 }
 
-icon-dropdown-arrow{
+icon-dropdown-arrow {
+  transition: transform 180ms ease;
   position: absolute;
   right: 130px;
 }
 
-.dropdown-menu{
+.dropdown-menu {
   display: flex;
   padding: 0.5rem;
   flex-direction: column;
   position: absolute;
-  top:100%;
+  top: 100%;
   right: 0;
   background: var(--modal-bg-color);
   outline: var(--assistant-message-border);
   border-radius: 32px;
   z-index: 1000;
 
-  .dropdown-item{
+  .dropdown-item {
     @include poppins(400, 14px);
     width: 100%;
     padding: 0.8rem;
   }
 
-  .selected{
+  .selected {
     background: var(--hover-color);
   }
 }
 
-app-date-picker{
+app-date-picker {
   height: 100%;
 }
 
-.rotate{
+.rotate {
   transform: rotate(180deg);
 }
 
-.city-menu{
+.city-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  top:100%;
+  top: 100%;
   background: var(--modal-bg-color);
   position: absolute;
-  padding:1rem;
+  padding: 1rem;
   outline: var(--assistant-message-border);
   z-index: 1000;
   border-radius: 30px;
 
-  .clear-button{
+  .clear-button {
     height: 2rem;
   }
 }
 
-.where-from{
-  left:0;
+.where-from {
+  left: 0;
 }
+
+.enter-animation {
+  animation: slide-fade 100ms;
+}
+
+.leave-animation {
+  animation: slide-fade reverse 100ms;
+}
+
+@keyframes slide-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 
 
 

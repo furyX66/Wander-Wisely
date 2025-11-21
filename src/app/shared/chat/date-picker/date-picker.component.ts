@@ -15,6 +15,7 @@ export class DatePickerComponent implements AfterViewInit {
 
   dates = signal<string>('');
   picker: any;
+  pickerOpen = signal(false);
 
   ngAfterViewInit(): void {
     this.picker = flatpickr(this.dateInput.nativeElement, {
@@ -70,8 +71,14 @@ export class DatePickerComponent implements AfterViewInit {
     });
   }
 
-  openPicker(): void {
-    this.picker?.open();
+  togglePicker(): void {
+    this.pickerOpen.update(open => !open);
+    if (!this.picker) return;
+    if (this.pickerOpen()) {
+      this.picker.open();
+    } else {
+      this.picker.close();
+    }
   }
 
   format(date: Date): string {
