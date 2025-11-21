@@ -56,6 +56,14 @@ export class OptionsBarComponent {
     this.isWhereFromDropdownOpen.set(false);
   }
 
+  clearWhereFrom(): void {
+    this.whereFrom.set("")
+  }
+
+  clearWhereTo(): void {
+    this.whereTo.set("")
+  }
+
   selectBudgedOption(option: IBudgetOption): void {
     if (this.budget() === option.label) {
       this.budget.set('');

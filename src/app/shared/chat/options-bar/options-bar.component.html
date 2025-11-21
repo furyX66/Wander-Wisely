@@ -19,17 +19,18 @@
     }
   </div>
 }
-@if(isWhereToDropdownOpen()){
-  <div class="city-menu" (clickOutside)="closeWhereToDropdown()">
-    <span>Please enter where you want to travel</span>
-    <app-city-autocomplete-input (citySelected)="whereTo.set($event)"/>
-  </div>
-}
-
-@if(isWhereFromDropdownOpen()){
+@if (isWhereFromDropdownOpen()) {
   <div class="city-menu where-from" (clickOutside)="closeWhereFromDropdown()">
     <span>Please enter where from you want to travel</span>
-    <app-city-autocomplete-input (citySelected)="whereFrom.set($event)"/>
+    <app-city-autocomplete-input [(cityModel)]="whereFrom"/>
+    <button (click)="clearWhereFrom()" class="clear-button">Clear</button>
+  </div>
+}
+@if (isWhereToDropdownOpen()) {
+  <div class="city-menu" (clickOutside)="closeWhereToDropdown()">
+    <span>Please enter where you want to travel</span>
+    <app-city-autocomplete-input [(cityModel)]="whereTo"/>
+    <button (click)="clearWhereTo()" class="clear-button">Clear</button>
   </div>
 }
 

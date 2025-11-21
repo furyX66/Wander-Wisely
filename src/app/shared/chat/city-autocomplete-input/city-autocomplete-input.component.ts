@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, output, signal} from '@angular/core';
+import {Component, effect, inject, input, OnInit, output, signal} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, map, of, switchMap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -37,12 +37,23 @@ interface NominatimResult {
   styleUrl: './city-autocomplete-input.component.scss'
 })
 export class CityAutocompleteInputComponent implements OnInit {
+
   private http = inject(HttpClient);
   searchControl = new FormControl('');
   cities = signal<CityOption[]>([]);
   isLoading = signal<boolean>(false);
 
-  citySelected = output<string>();
+  cityModel = input<string>();
+  cityModelChange  = output<string>();
+
+  constructor() {
+    effect(() => {
+      const value = this.cityModel();
+      if (value !== this.searchControl.value) {
+        this.searchControl.setValue(value || '', { emitEvent: false });
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.searchControl.valueChanges.pipe(
@@ -77,7 +88,6 @@ export class CityAutocompleteInputComponent implements OnInit {
               r.type === 'hamlet'
             );
 
-            // Формируем массив CityOption с двумя полями
             const formatted: CityOption[] = filtered.map(r => {
               const addr = r.address;
               const cityName = addr?.city || addr?.town || addr?.village || r.name;
@@ -100,7 +110,6 @@ export class CityAutocompleteInputComponent implements OnInit {
               };
             });
 
-            // Удаляем дубликаты по displayName
             const uniqueMap = new Map<string, CityOption>();
             formatted.forEach(item => {
               if (!uniqueMap.has(item.displayName)) {
@@ -122,6 +131,6 @@ export class CityAutocompleteInputComponent implements OnInit {
   selectOption(option: CityOption) {
     this.searchControl.setValue(option.displayName);
     this.cities.set([]);
-    this.citySelected.emit(option.cityName);
+    this.cityModelChange.emit(option.cityName);
   }
 }

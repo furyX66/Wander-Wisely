@@ -96,11 +96,16 @@ app-date-picker{
   outline: var(--assistant-message-border);
   z-index: 1000;
   border-radius: 30px;
+
+  .clear-button{
+    height: 2rem;
+  }
 }
 
 .where-from{
   left:0;
 }
+
 
 
 
