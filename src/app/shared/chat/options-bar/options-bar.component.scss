@@ -1,5 +1,6 @@
 @use "colors" as *;
 @use "mixins" as *;
+@use "../chat-shared" as *;
 
 :host{
   position: relative;
@@ -13,39 +14,10 @@
   outline: var(--assistant-message-border);
 }
 
-button {
-  @include poppins(400, 14px);
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 100%;
-  min-width: 10rem;
-  white-space: nowrap;
+.budget-button{
   display: flex;
-  padding: 0.25rem;
-  justify-content: center;
   align-items: center;
-  border-radius: 50px;
-  background: transparent;
-  text-align: center;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-color);
-
-  span{
-    @include poppins(400, 14px);
-    color: $blue;
-  }
-
-  .budget-button{
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
-
-  &:hover {
-    background: var(--hover-color);
-  }
+  position: relative;
 }
 
 icon-dropdown-arrow{
