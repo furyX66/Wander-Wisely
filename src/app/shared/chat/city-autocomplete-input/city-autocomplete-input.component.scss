@@ -33,7 +33,7 @@ input{
   scroll-behavior: smooth;
   scrollbar-width: none;
   top: 100%;
-  background: $gray;
+  background: var(--modal-bg-color);
   width: 100%;
   z-index: 10;
 
