@@ -82,7 +82,7 @@ icon-arrow {
 .loading-message {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   animation: fadeInUp 0.4s cubic-bezier(.24, .56, .81, .89) forwards;
 
   app-loading-animation {
