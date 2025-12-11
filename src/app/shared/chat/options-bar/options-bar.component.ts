@@ -29,7 +29,7 @@ export class OptionsBarComponent {
     {id: '1', label: '$ (Budget)'},
     {id: '2', label: '$$ (Moderate)'},
     {id: '3', label: '$$$ (Expensive)'},
-    {id: '4', label: '$$$$ (Very Expensive)'}
+    {id: '4', label: '$$$$ (Luxury)'}
   ];
 
   toggleBudgetDropdown(): void {

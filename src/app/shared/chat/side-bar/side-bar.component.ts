@@ -16,7 +16,7 @@ import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.
 import {GuestChatSessionService} from '../../../core/services/guest-chat-session.service';
 import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {IChatSession} from '../../../../interfaces/IChatSession';
 
 @Component({
@@ -31,6 +31,7 @@ import {IChatSession} from '../../../../interfaces/IChatSession';
     SearchIconComponent,
     ButtonComponent,
     CrossIconComponent,
+    RouterLink,
 
 
   ],
@@ -133,7 +134,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteChat(sessionId: number): void {
+  deleteChat(sessionId: number, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
     this.chatSessionService.delete(sessionId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

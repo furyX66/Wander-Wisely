@@ -3,4 +3,4 @@ export interface IBudgetOption {
   label: Price;
 }
 
-type Price = "$ (Budget)" | "$$ (Moderate)" | "$$$ (Expensive)"| "$$$$ (Very Expensive)"
+type Price = "$ (Budget)" | "$$ (Moderate)" | "$$$ (Expensive)"| "$$$$ (Luxury)"

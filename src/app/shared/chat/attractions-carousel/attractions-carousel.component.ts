@@ -73,7 +73,7 @@ export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
   scrollToPage(deltaCards: number) {
     const container = this.cardsContainer.nativeElement;
     const target = container.scrollLeft + deltaCards * this.cardStep;
-    container.scrollTo({left: target, behavior: 'smooth'});
+    container.scrollTo({left: target, behavior: "smooth"});
   }
 
   scrollLeft() {

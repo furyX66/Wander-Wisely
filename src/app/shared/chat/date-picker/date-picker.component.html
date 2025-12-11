@@ -1,4 +1,5 @@
-<button class="date-button" (click)="openPicker()" #dateButton>
-  Dates <span class="dates">{{ dates() }}</span>
+<button (click)="togglePicker()" #dateButton>
+  Dates
+  <span>{{ dates() }}</span>
 </button>
 <input #dateInput type="text" style="display: none;"/>
