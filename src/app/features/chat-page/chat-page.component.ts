@@ -5,7 +5,20 @@ import {MapComponent} from '../../shared/common-ui/map/map.component';
 import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
-import {exhaustMap, filter, finalize, Observable, of, Subject, switchMap, take, takeUntil, tap, throwError} from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  finalize,
+  forkJoin,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+  throwError
+} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {
   LoadingAnimationComponent
@@ -23,6 +36,9 @@ import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
 import {UserService} from '../../core/services/user.service';
 import {AuthService} from '../../core/services/auth.service';
 import {OptionsBarComponent} from '../../shared/chat/options-bar/options-bar.component';
+import {TripService} from '../../core/services/trip.service';
+import {ICreateTrip} from '../../../interfaces/ICreateTrip';
+import {ButtonComponent} from '../../shared/common-ui/button/button.component';
 
 export interface ChatResponse {
   reply: string;
@@ -41,7 +57,8 @@ export interface ChatResponse {
     LoadingAnimationComponent,
     AssistantIconComponent,
     AsyncPipe,
-    OptionsBarComponent
+    OptionsBarComponent,
+    ButtonComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
@@ -54,6 +71,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private chatService = inject(ChatService);
   private chatSessionService = inject(ChatSessionService);
   private guestChatSessionService = inject(GuestChatSessionService);
+  private tripService = inject(TripService);
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -70,6 +88,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   shouldScrollToBottom = false;
   isUserScrolledUp = false;
   isLoading = false;
+  isSavingTrip = false;
 
   private messageSend$ = new Subject<string>();
 
@@ -206,6 +225,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private handleResponse(res: ChatResponse | null): void {
     if (!res?.reply) return;
+    console.log('Received response:', res);
     this.saveAssistantMessage(res.reply, this.sessionId);
     if (res.places) {
       this.chatSessionService.setAttractions(res.places);
@@ -280,6 +300,47 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.scheduleScroll();
   }
 
+  saveTrip(): void {
+    this.chatSessionService.attractions$
+      .pipe(take(1))
+      .subscribe(attractions => {
+        if (!attractions || attractions.length === 0) {
+          return;
+        }
+
+        const tripDto: ICreateTrip = {
+          name: this.session?.sessionName ?? 'My trip',
+          startDate: null,
+          endDate: null,
+          whereFrom: null,
+          whereTo: null,
+          budget: null
+        };
+
+        this.isSavingTrip = true;
+
+        this.tripService.createTrip(tripDto).pipe(
+          switchMap(trip => {
+            const tripId = trip.id;
+
+            return forkJoin(
+              attractions.map(dto =>
+                this.tripService.addPlace(tripId, dto)
+              )
+            );
+          }),
+          finalize(() => this.isSavingTrip = false)
+        ).subscribe({
+          next: () => {
+            console.log('Trip saved');
+          },
+          error: err => {
+            console.error('Save trip error', err);
+          }
+        });
+      });
+  }
+
   handleChatInput(value: string): void {
     if (!value.trim() || this.isLoading) return;
     this.scheduleScroll();
@@ -314,4 +375,3 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 }
-

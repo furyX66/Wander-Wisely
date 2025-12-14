@@ -8,10 +8,10 @@
       @for (attraction of attractions; track attraction.id) {
         <div class="card">
           <icon-favorite/>
-          <img loading="lazy" [src]="attraction.imageUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.imageUrl"
+          <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.photoUrl"
                alt="Attraction image">
           <div class="card-info">
-            <h3 class="font-s-semiBold">{{ attraction.title }}</h3>
+            <h3 class="font-s-semiBold">{{ attraction.name }}</h3>
             <span class="row">
               <icon-star/>
               <p class="font-s-normal"> {{ attraction.rating }}</p>

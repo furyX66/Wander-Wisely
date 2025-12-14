@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, tap} from 'rxjs';
 import {IChatSession} from '../../../interfaces/IChatSession';
 import {IChatMessage} from '../../../interfaces/IChatMessage';
-import {SessionWithMessagesDto} from '../../../interfaces/SessionWithMessages';
+import {SessionWithMessagesDto} from '../../../interfaces/ISessionWithMessages';
 import {IAttraction} from '../../../interfaces/IAttraction';
 import {Router} from '@angular/router';
 
@@ -87,16 +87,10 @@ export class ChatSessionService {
     this.attractionsSubject.next(converted);
   }
 
-  private convertAIResponseToAttraction(place: any, index: number): IAttraction {
+  private convertAIResponseToAttraction(place: IAttraction, index: number): IAttraction {
     return {
-      id: index,
-      title: place.name,
-      latitude: place.latitude,
-      longitude: place.longitude,
-      type: place.type,
-      imageUrl: place.photoUrl,
-      price: place.price,
-      rating: place.rating,
+      ...place,
+      id: index
     };
   }
 

@@ -137,14 +137,14 @@ export class MapComponent implements AfterViewInit, OnDestroy, OnInit {
   private createPopupContent(attraction: IAttraction): string {
     const stars = '⭐'.repeat(Math.round(attraction.rating));
     const price = attraction.price !== null ? `${attraction.price} zł` : 'Free';
-    const photo = attraction.imageUrl
-      ? `<img src="${attraction.imageUrl}" alt="${attraction.title}" style="width: 100%; max-width: 200px; height: auto; border-radius: 4px; margin-bottom: 8px;">`
+    const photo = attraction.photoUrl
+      ? `<img src="${attraction.photoUrl}" alt="${attraction.name}" style="width: 100%; max-width: 200px; height: auto; border-radius: 4px; margin-bottom: 8px;">`
       : '';
 
     return `
       <div style="min-width: 150px;">
         ${photo}
-        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${attraction.title}</h3>
+        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${attraction.name}</h3>
         <p style="margin: 4px 0; font-size: 14px;">
           <strong>Rating:</strong> ${stars} (${attraction.rating})
         </p>
