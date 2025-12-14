@@ -16,7 +16,7 @@ export class ChatService {
   }
   guestChatAsk( message: string): Observable<ChatResponse> {
     return this.http.post<ChatResponse>(
-      `/api/Chat/ask`, { message }
+      `/api/ChatSessions/ask`, { message }
     );
   }
 }
