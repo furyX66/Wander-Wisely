@@ -39,6 +39,7 @@ import {OptionsBarComponent} from '../../shared/chat/options-bar/options-bar.com
 import {TripService} from '../../core/services/trip.service';
 import {ICreateTrip} from '../../../interfaces/ICreateTrip';
 import {ButtonComponent} from '../../shared/common-ui/button/button.component';
+import {ITrip} from '../../../interfaces/ITrip';
 
 export interface ChatResponse {
   reply: string;
@@ -76,27 +77,27 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private destroy$ = new Subject<void>();
-
   private messageStreamDestroy$ = new Subject<void>();
-
+  private messageSend$ = new Subject<string>();
   messages$!: Observable<IChatMessage[]>;
 
-  sessionId!: number;
+  sessionId: number | null = null;
+  trip?: ITrip | null;
   session!: IChatSession;
   contextObj?: any;
   showScrollButton = false;
   shouldScrollToBottom = false;
   isUserScrolledUp = false;
   isLoading = false;
-  isSavingTrip = false;
-
-  private messageSend$ = new Subject<string>();
+  selectedAttractions: Set<number> = new Set();
 
   ngOnInit(): void {
     this.route.params
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
-        this.sessionId = Number(params['id']);
+        const idParam = params['id'];
+        this.sessionId = idParam ? Number(idParam) : null;
+        this.chatSessionService.clearAttractions(null);
         this.messageStreamDestroy$.next();
         this.loadSession();
       });
@@ -106,7 +107,9 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         filter(status => status === true),
       )
       .subscribe(() => {
-        this.chatSessionService.clearAttractions();
+        if (!this.sessionId) {
+          this.chatSessionService.clearAttractions(null);
+        }
         this.guestChatSessionService.clearChatSession();
         if (!this.sessionId) {
           this.messages$ = this.guestChatSessionService.messages$;
@@ -133,19 +136,23 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private loadSession(): void {
     if (!this.sessionId) {
+      console.log('Guest session - loading from storage');
       this.messages$ = this.guestChatSessionService.messages$;
+      this.chatSessionService.loadAttractionsFromStorage(null);
       if (!this.guestChatSessionService.isWelcomeShown()) {
         this.sendWelcomeMessage();
         this.guestChatSessionService.setWelcomeShown();
       }
       this.setupMessageStream();
     } else {
+      console.log('Authorized session - loading from server, sessionId:', this.sessionId);
       this.messages$ = this.chatSessionService.messages$;
 
       this.chatSessionService.getSessionById(this.sessionId)
         .pipe(takeUntil(this.destroy$))
         .subscribe(dto => {
           this.session = dto.session;
+          this.trip = dto.trip;
           if (this.session.context) {
             try {
               this.contextObj = JSON.parse(this.session.context);
@@ -194,9 +201,9 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private processAuthorizedChat(message: string): Observable<ChatResponse | null> {
-    this.saveUserMessage(this.sessionId, message);
+    this.saveUserMessage(this.sessionId!, message);
 
-    return this.chatService.chatAsk(this.sessionId, message).pipe(
+    return this.chatService.chatAsk(this.sessionId!, message).pipe(
       tap(res => this.handleResponse(res)),
       catchError(error => this.handleError(error)),
       finalize(() => this.isLoading = false)
@@ -212,8 +219,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.messages$ = this.chatSessionService.messages$;
       }),
       switchMap(() => {
-        this.saveUserMessage(this.sessionId, message);
-        return this.chatService.chatAsk(this.sessionId, message);
+        this.saveUserMessage(this.sessionId!, message);
+        return this.chatService.chatAsk(this.sessionId!, message);
       })
     );
   }
@@ -226,9 +233,9 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private handleResponse(res: ChatResponse | null): void {
     if (!res?.reply) return;
     console.log('Received response:', res);
-    this.saveAssistantMessage(res.reply, this.sessionId);
+    this.saveAssistantMessage(res.reply, this.sessionId!);
     if (res.places) {
-      this.chatSessionService.setAttractions(res.places);
+      this.chatSessionService.setAttractions(this.sessionId, res.places);
     }
     this.scheduleScroll();
     if (this.sessionId && this.router.url !== `/chat/${this.sessionId}`) {
@@ -262,7 +269,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.guestChatSessionService.addMessage('assistant', content);
     } else {
       this.chatSessionService
-        .addMessage(this.sessionId, { role: 'assistant', content })
+        .addMessage(this.sessionId!, { role: 'assistant', content })
         .pipe(takeUntil(this.messageStreamDestroy$))
         .subscribe({
           error: (err) => console.error('Error:', err)
@@ -317,8 +324,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
           budget: null
         };
 
-        this.isSavingTrip = true;
-
         this.tripService.createTrip(tripDto).pipe(
           switchMap(trip => {
             const tripId = trip.id;
@@ -329,7 +334,6 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
               )
             );
           }),
-          finalize(() => this.isSavingTrip = false)
         ).subscribe({
           next: () => {
             console.log('Trip saved');
@@ -373,5 +377,9 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     } catch (error) {
       console.error('Scroll error:', error);
     }
+  }
+
+  get attractions$() {
+    return this.chatSessionService.attractions$;
   }
 }

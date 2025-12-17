@@ -18,4 +18,8 @@ export class TripService {
   addPlace(tripId: number, dto: IAttraction): Observable<ITripAttraction> {
     return this.http.post<ITripAttraction>(`${this.base}/${tripId}/attractions`, dto);
   }
+
+  getTrip(tripId: number): Observable<ITrip[]> {
+    return this.http.get<ITrip[]>(`${this.base}/${tripId}`);
+  }
 }

@@ -75,7 +75,7 @@ app-user-message, app-assistant-message {
 icon-arrow {
   position: absolute;
   left: 50%;
-  bottom: 72px;
+  bottom: 80px;
   transform: translateX(-50%) rotate(-90deg);
 }
 
@@ -96,6 +96,13 @@ icon-arrow {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+app-button{
+  position: absolute;
+  left: 50%;
+  top: 72px;
+  transform: translateX(-50%)
 }
 
 @media (max-width: 1300px) {

@@ -12,6 +12,7 @@
   align-items: center;
   border-radius: 0 0 30px 30px;
   outline: var(--assistant-message-border);
+  z-index: 1000;
 }
 
 .budget-button {

@@ -1,11 +1,6 @@
-export interface ITripAttraction {
-  id: number;
+import {IAttraction} from './IAttraction';
+
+export interface ITripAttraction extends IAttraction{
   orderIndex: number;
   status: string;
-  attractionId: number;
-  name: string;
-  latitude?: number;
-  longitude?: number;
-  imageUrl?: string | null;
-  price?: string | null;
 }

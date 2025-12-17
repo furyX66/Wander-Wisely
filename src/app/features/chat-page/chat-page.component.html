@@ -5,12 +5,12 @@
     @for ((msg of messages$ | async); track msg.id) {
       @if (msg.role === 'user') {
         <app-user-message>
-          <p>{{msg.content}}</p>
+          <p>{{ msg.content }}</p>
         </app-user-message>
       }
       @if (msg.role === 'assistant') {
         <app-assistant-message>
-          <p>{{msg.content}}</p>
+          <p>{{ msg.content }}</p>
         </app-assistant-message>
       }
     }
@@ -24,7 +24,9 @@
       </div>
     }
   </div>
-  <app-button (click)="saveTrip()">Save trip</app-button>
+  @if ((attractions$ | async)?.length && sessionId) {
+    <app-button [variant]="'animated'" (click)="saveTrip()">Save trip</app-button>
+  }
   <app-chat-input [disabled]="isLoading" (onClick)="handleChatInput($event)"/>
 </section>
 <app-map/>
