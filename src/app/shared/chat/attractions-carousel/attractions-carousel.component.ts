@@ -1,7 +1,8 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
+  effect,
   ElementRef,
   inject,
   OnInit,
@@ -19,6 +20,7 @@ import {ImageLoaderService} from '../../../core/services/image-loader.service';
 import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
+import {AttractionService} from '../../../core/services/attraction.service';
 
 @Component({
   selector: 'app-attractions-carousel',
@@ -40,10 +42,14 @@ import {AsyncPipe} from '@angular/common';
 export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
   private chatSessionService = inject(ChatSessionService);
   private imageLoader = inject(ImageLoaderService);
+  private attractionService = inject(AttractionService);
+  private cdr = inject(ChangeDetectorRef);
+
   canScrollLeft = signal(false);
   canScrollRight = signal(true);
   isShown = signal(true);
-  currentPage = signal(0)
+  currentPage = signal(0);
+
   private cardsPerPage!: number;
   private cardStep = 182;
   private observer!: IntersectionObserver;
@@ -51,6 +57,14 @@ export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
   attractions$!: Observable<IAttraction[]>;
 
   @ViewChild('cardsContainer') cardsContainer!: ElementRef<HTMLElement>;
+
+  constructor() {
+    effect(() => {
+      this.attractions$?.subscribe(() => {
+        setTimeout(() => this.reInitObserver(), 0);
+      });
+    });
+  }
 
   ngOnInit() {
     this.attractions$ = this.chatSessionService.attractions$;
@@ -86,6 +100,15 @@ export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
 
   onButtonClick(){
     this.isShown.set(!this.isShown());
+  }
+
+  toggleAttractionSelection(attractionId: number): void {
+    this.attractionService.toggle(attractionId);
+    this.cdr.markForCheck();
+  }
+
+  isAttractionSelected(attractionId: number | undefined): boolean {
+    return this.attractionService.isSelected(attractionId);
   }
 
   private updateScrollSignals(container: HTMLElement): void {
@@ -127,6 +150,11 @@ export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
 
     const images: NodeListOf<HTMLImageElement> =
       this.cardsContainer.nativeElement.querySelectorAll('img.lazy-img');
+    images.forEach(img => this.observer.observe(img));
+  }
+
+  private reInitObserver() {
+    const images = this.cardsContainer.nativeElement.querySelectorAll('img.lazy-img');
     images.forEach(img => this.observer.observe(img));
   }
 }

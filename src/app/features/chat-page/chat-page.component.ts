@@ -40,6 +40,7 @@ import {TripService} from '../../core/services/trip.service';
 import {ICreateTrip} from '../../../interfaces/ICreateTrip';
 import {ButtonComponent} from '../../shared/common-ui/button/button.component';
 import {ITrip} from '../../../interfaces/ITrip';
+import {AttractionService} from '../../core/services/attraction.service';
 
 export interface ChatResponse {
   reply: string;
@@ -72,6 +73,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private chatService = inject(ChatService);
   private chatSessionService = inject(ChatSessionService);
   private guestChatSessionService = inject(GuestChatSessionService);
+  private attractionService = inject(AttractionService);
   private tripService = inject(TripService);
   private userService = inject(UserService);
   private authService = inject(AuthService);
@@ -101,6 +103,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.messageStreamDestroy$.next();
         this.loadSession();
       });
+
     this.authService.authStatus$
       .pipe(
         takeUntil(this.destroy$),
@@ -109,15 +112,20 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe(() => {
         if (!this.sessionId) {
           this.chatSessionService.clearAttractions(null);
-        }
-        this.guestChatSessionService.clearChatSession();
-        if (!this.sessionId) {
           this.messages$ = this.guestChatSessionService.messages$;
         }
+        this.guestChatSessionService.clearChatSession();
       });
+
     this.chatSessionService.attractions$
       .pipe(takeUntil(this.destroy$))
       .subscribe();
+
+    this.attractionService.selected$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(selected => {
+        this.selectedAttractions = selected;
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -311,7 +319,18 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.chatSessionService.attractions$
       .pipe(take(1))
       .subscribe(attractions => {
-        if (!attractions || attractions.length === 0) {
+        const selectedIds = this.attractionService.getSelected();
+
+        if (!selectedIds || selectedIds.size === 0) {
+          console.warn('No attractions selected');
+          return;
+        }
+
+        const selectedAttractions = attractions.filter(a =>
+          selectedIds.has(a.id ?? -1)
+        );
+
+        if (!selectedAttractions || selectedAttractions.length === 0) {
           return;
         }
 
@@ -329,14 +348,15 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
             const tripId = trip.id;
 
             return forkJoin(
-              attractions.map(dto =>
+              selectedAttractions.map(dto =>
                 this.tripService.addPlace(tripId, dto)
               )
             );
           }),
         ).subscribe({
           next: () => {
-            console.log('Trip saved');
+            console.log('Trip saved with', selectedAttractions.length, 'attractions');
+            this.attractionService.clear();
           },
           error: err => {
             console.error('Save trip error', err);

@@ -5,9 +5,12 @@
     <icon-arrow (click)="scrollLeft()" [class.disabled]="!canScrollLeft()" [strokeWidth]="0"/>
     <div class="cards-container" #cardsContainer (scroll)="onScroll($event)">
 
-      @for (attraction of attractions; track attraction.id) {
+      @for (attraction of attractions; track attraction.id;) {
         <div class="card">
-          <icon-favorite/>
+          <icon-favorite
+            (click)="toggleAttractionSelection(attraction.id)"
+            [filled]="isAttractionSelected(attraction.id)"
+          />
           <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.photoUrl"
                alt="Attraction image">
           <div class="card-info">
