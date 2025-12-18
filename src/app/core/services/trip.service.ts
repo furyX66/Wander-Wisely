@@ -22,4 +22,8 @@ export class TripService {
   getTrip(tripId: number): Observable<ITrip[]> {
     return this.http.get<ITrip[]>(`${this.base}/${tripId}`);
   }
+
+  getTripList(): Observable<ITrip[]> {
+    return this.http.get<ITrip[]>(`${this.base}`);
+  }
 }

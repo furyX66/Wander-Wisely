@@ -7,5 +7,5 @@ export interface ITrip {
   startDate: string;
   endDate: string;
   budget: string;
-  attractions: ITripAttraction[];
+  route: ITripAttraction[];
 }

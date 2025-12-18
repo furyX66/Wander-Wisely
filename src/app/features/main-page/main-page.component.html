@@ -1,6 +1,26 @@
 <app-header/>
 <main>
-  <app-main-title/>
-  <button (click)="startChatting()">Start chatting</button>
+  <section class="main-page">
+    <app-main-title/>
+    <div class="button-row">
+      <button (click)="startChatting()">Start chatting</button>
+      <button class="outlined" (click)="scrollToTrips()">Explore trips</button>
+    </div>
+  </section>
+  <section class="trips">
+    <h1 id="trips">Trips we prepared for you</h1>
+    <div class="trips-list">
+      @let trips = tripList | async;
+      @for (trip of trips; track trip.id) {
+        <div class="trip-card">
+          <img src="assets/img/stas.png" alt="Trip image">
+          <div class="trip-card-info">
+            <h3>{{ trip.name }}</h3>
+            <p>{{ trip.budget }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
 </main>
 

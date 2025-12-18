@@ -21,6 +21,7 @@ import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {Observable} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {AttractionService} from '../../../core/services/attraction.service';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-attractions-carousel',
@@ -40,6 +41,7 @@ import {AttractionService} from '../../../core/services/attraction.service';
 
 
 export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
+  private authService = inject(AuthService);
   private chatSessionService = inject(ChatSessionService);
   private imageLoader = inject(ImageLoaderService);
   private attractionService = inject(AttractionService);
@@ -57,6 +59,7 @@ export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
   attractions$!: Observable<IAttraction[]>;
 
   @ViewChild('cardsContainer') cardsContainer!: ElementRef<HTMLElement>;
+  isLoggedIn$ = this.authService.isLoggedIn();
 
   constructor() {
     effect(() => {

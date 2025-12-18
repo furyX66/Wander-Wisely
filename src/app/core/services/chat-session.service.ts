@@ -28,7 +28,7 @@ export class ChatSessionService {
     return this.http.get<SessionWithMessagesDto>(`${this.base}/${id}`).pipe(
       tap(dto => {
         this.messagesSubject.next(dto.messages || []);
-        const attractions = dto.trip?.attractions || [];
+        const attractions = dto.trip?.route || [];
 
         if (attractions.length > 0) {
           this.attractionsSubject.next(attractions);
