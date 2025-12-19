@@ -1,10 +1,10 @@
 export interface IAttraction {
-  id: number;
-  title: string;
-  latitude: number;
-  longitude: number;
-  type: string;
-  rating: number;
-  price: number | null;
-  imageUrl: string | null;
+  id: number
+  name: string
+  latitude: number
+  longitude: number
+  rating: number
+  type: string
+  price: number | null
+  photoUrl: string | null
 }

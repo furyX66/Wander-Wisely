@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, tap} from 'rxjs';
 import {IChatSession} from '../../../interfaces/IChatSession';
 import {IChatMessage} from '../../../interfaces/IChatMessage';
-import {SessionWithMessagesDto} from '../../../interfaces/SessionWithMessages';
+import {SessionWithMessagesDto} from '../../../interfaces/ISessionWithMessages';
 import {IAttraction} from '../../../interfaces/IAttraction';
 import {Router} from '@angular/router';
 
@@ -28,7 +28,14 @@ export class ChatSessionService {
     return this.http.get<SessionWithMessagesDto>(`${this.base}/${id}`).pipe(
       tap(dto => {
         this.messagesSubject.next(dto.messages || []);
-        this.attractionsSubject.next(dto.attractions || [])
+        const attractions = dto.trip?.route || [];
+
+        if (attractions.length > 0) {
+          this.attractionsSubject.next(attractions);
+          localStorage.setItem(this.getStorageKey(id), JSON.stringify(attractions));
+        } else {
+          this.loadAttractionsFromStorage(id);
+        }
       }),
       catchError(error => {
         console.error('Failed to load session:', error);
@@ -38,7 +45,6 @@ export class ChatSessionService {
       })
     );
   }
-
 
   create(session: Partial<IChatSession>): Observable<IChatSession> {
     return this.http.post<IChatSession>(this.base, session).pipe(
@@ -71,6 +77,9 @@ export class ChatSessionService {
       tap(() => {
         this.messagesSubject.next([]);
         this.attractionsSubject.next([]);
+
+        localStorage.removeItem(this.getStorageKey(id));
+
         if (this.router.url === `/chat/${id}`) {
           this.router.navigate(['/chat']);
         }
@@ -82,25 +91,54 @@ export class ChatSessionService {
     );
   }
 
-  setAttractions(attractions: IAttraction[]): void {
-    const converted = attractions.map(((place,index) => this.convertAIResponseToAttraction(place,  index)))
+  setAttractions(sessionId: number | null | undefined, attractions: IAttraction[]): void {
+    const converted = attractions.map((place, index) =>
+      this.convertAIResponseToAttraction(place, index)
+    );
+    console.log("Attractions set", converted);
     this.attractionsSubject.next(converted);
+    localStorage.setItem(this.getStorageKey(sessionId), JSON.stringify(converted));
   }
 
-  private convertAIResponseToAttraction(place: any, index: number): IAttraction {
-    return {
-      id: index,
-      title: place.name,
-      latitude: place.latitude,
-      longitude: place.longitude,
-      type: place.type,
-      imageUrl: place.photoUrl,
-      price: place.price,
-      rating: place.rating,
-    };
+  loadAttractionsFromStorage(sessionId: number | null | undefined): void {
+    const stored = localStorage.getItem(this.getStorageKey(sessionId));
+    if (stored) {
+      try {
+        const attractions = JSON.parse(stored);
+        this.attractionsSubject.next(attractions);
+      } catch {
+        console.warn('Failed to parse stored attractions');
+      }
+    }
   }
 
-  clearAttractions(): void {
+  clearAttractions(sessionId: number | null | undefined): void {
     this.attractionsSubject.next([]);
+    localStorage.removeItem(this.getStorageKey(sessionId));
+  }
+
+  clearAllAttractions(): void {
+    localStorage.removeItem(this.getStorageKey(null));
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('chat_attractions_')) {
+        localStorage.removeItem(key);
+      }
+    }
+
+    this.attractionsSubject.next([]);
+  }
+
+  private getStorageKey(sessionId: number | null | undefined): string {
+    const id = sessionId && !isNaN(sessionId) ? sessionId : 0;
+    return `chat_attractions_${id}`;
+  }
+
+  private convertAIResponseToAttraction(place: IAttraction, index: number): IAttraction {
+    return {
+      ...place,
+      id: index
+    };
   }
 }

@@ -1,17 +1,24 @@
 @let attractions = attractions$ | async;
 
-@if (attractions && attractions.length>0) {
+@if (attractions && attractions.length > 0) {
   <div class="carousel-wrapper" [class.closed]="!isShown()">
     <icon-arrow (click)="scrollLeft()" [class.disabled]="!canScrollLeft()" [strokeWidth]="0"/>
     <div class="cards-container" #cardsContainer (scroll)="onScroll($event)">
 
-      @for (attraction of attractions; track attraction.id) {
+      @for (attraction of attractions; track attraction.id; ) {
         <div class="card">
-          <icon-favorite/>
-          <img loading="lazy" [src]="attraction.imageUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.imageUrl"
+          @if (isLoggedIn$ | async) {
+            <abbr title="Add to trip">
+              <icon-favorite
+                (click)="toggleAttractionSelection(attraction.id)"
+                [filled]="isAttractionSelected(attraction.id)"
+              />
+            </abbr>
+          }
+          <img loading="lazy" [src]="attraction.photoUrl || 'assets/img/stas.png'" [attr.data-src]="attraction.photoUrl"
                alt="Attraction image">
           <div class="card-info">
-            <h3 class="font-s-semiBold">{{ attraction.title }}</h3>
+            <h3 class="font-s-semiBold">{{ attraction.name }}</h3>
             <span class="row">
               <icon-star/>
               <p class="font-s-normal"> {{ attraction.rating }}</p>

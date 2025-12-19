@@ -5,7 +5,20 @@ import {MapComponent} from '../../shared/common-ui/map/map.component';
 import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
 import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
 import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
-import {exhaustMap, filter, finalize, Observable, of, Subject, switchMap, take, takeUntil, tap, throwError} from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  finalize,
+  forkJoin,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+  throwError
+} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {
   LoadingAnimationComponent
@@ -23,6 +36,11 @@ import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
 import {UserService} from '../../core/services/user.service';
 import {AuthService} from '../../core/services/auth.service';
 import {OptionsBarComponent} from '../../shared/chat/options-bar/options-bar.component';
+import {TripService} from '../../core/services/trip.service';
+import {ICreateTrip} from '../../../interfaces/ICreateTrip';
+import {ITrip} from '../../../interfaces/ITrip';
+import {AttractionService} from '../../core/services/attraction.service';
+import {NotificationService} from '../../core/services/notification.service';
 
 export interface ChatResponse {
   reply: string;
@@ -50,52 +68,64 @@ export interface ChatResponse {
 export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
+  private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private chatService = inject(ChatService);
   private chatSessionService = inject(ChatSessionService);
   private guestChatSessionService = inject(GuestChatSessionService);
+  private attractionService = inject(AttractionService);
+  private tripService = inject(TripService);
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private router = inject(Router);
   private destroy$ = new Subject<void>();
-
   private messageStreamDestroy$ = new Subject<void>();
-
+  private messageSend$ = new Subject<string>();
   messages$!: Observable<IChatMessage[]>;
 
-  sessionId!: number;
+  sessionId: number | null = null;
+  trip?: ITrip | null;
   session!: IChatSession;
   contextObj?: any;
   showScrollButton = false;
   shouldScrollToBottom = false;
   isUserScrolledUp = false;
   isLoading = false;
-
-  private messageSend$ = new Subject<string>();
+  selectedAttractions: Set<number> = new Set();
 
   ngOnInit(): void {
     this.route.params
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
-        this.sessionId = Number(params['id']);
+        const idParam = params['id'];
+        this.sessionId = idParam ? Number(idParam) : null;
+        this.chatSessionService.clearAttractions(null);
         this.messageStreamDestroy$.next();
         this.loadSession();
       });
+
     this.authService.authStatus$
       .pipe(
         takeUntil(this.destroy$),
         filter(status => status === true),
       )
       .subscribe(() => {
-        this.chatSessionService.clearAttractions();
-        this.guestChatSessionService.clearChatSession();
         if (!this.sessionId) {
+          this.chatSessionService.clearAttractions(null);
           this.messages$ = this.guestChatSessionService.messages$;
         }
+        this.guestChatSessionService.clearChatSession();
       });
+
     this.chatSessionService.attractions$
       .pipe(takeUntil(this.destroy$))
       .subscribe();
+
+    this.attractionService.selected$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(selected => {
+        this.selectedAttractions = selected;
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -114,30 +144,45 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private loadSession(): void {
     if (!this.sessionId) {
+      console.log('No sessionId → new/guest session');
       this.messages$ = this.guestChatSessionService.messages$;
       if (!this.guestChatSessionService.isWelcomeShown()) {
         this.sendWelcomeMessage();
         this.guestChatSessionService.setWelcomeShown();
       }
       this.setupMessageStream();
-    } else {
-      this.messages$ = this.chatSessionService.messages$;
-
-      this.chatSessionService.getSessionById(this.sessionId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(dto => {
-          this.session = dto.session;
-          if (this.session.context) {
-            try {
-              this.contextObj = JSON.parse(this.session.context);
-            } catch {
-              console.warn('Invalid JSON context');
-            }
-          }
-        });
-
-      this.setupMessageStream();
+      return;
     }
+
+    console.log('Authorized session - loading from server, sessionId:', this.sessionId);
+    this.messages$ = this.chatSessionService.messages$;
+
+    this.chatSessionService.getSessionById(this.sessionId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(dto => {
+        this.session = dto.session;
+
+        this.trip = dto.trip;
+        console.log(this.trip);
+        if (this.trip && this.trip.route && this.trip.route.length > 0) {
+          this.chatSessionService.setAttractions(this.sessionId, this.trip.route);
+        }
+
+        if (this.trip && this.trip.id && (!dto.messages || dto.messages.length === 0)) {
+          this.sendTripWelcomeMessage();
+        }
+
+        if (this.session.context) {
+          try {
+            this.contextObj = JSON.parse(this.session.context);
+          } catch {
+            console.warn('Invalid JSON context');
+          }
+        }
+      });
+
+    this.chatSessionService.loadAttractionsFromStorage(this.sessionId);
+    this.setupMessageStream();
   }
 
   private setupMessageStream(): void {
@@ -175,9 +220,9 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private processAuthorizedChat(message: string): Observable<ChatResponse | null> {
-    this.saveUserMessage(this.sessionId, message);
+    this.saveUserMessage(this.sessionId!, message);
 
-    return this.chatService.chatAsk(this.sessionId, message).pipe(
+    return this.chatService.chatAsk(this.sessionId!, message).pipe(
       tap(res => this.handleResponse(res)),
       catchError(error => this.handleError(error)),
       finalize(() => this.isLoading = false)
@@ -193,8 +238,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.messages$ = this.chatSessionService.messages$;
       }),
       switchMap(() => {
-        this.saveUserMessage(this.sessionId, message);
-        return this.chatService.chatAsk(this.sessionId, message);
+        this.saveUserMessage(this.sessionId!, message);
+        return this.chatService.chatAsk(this.sessionId!, message);
       })
     );
   }
@@ -206,9 +251,10 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private handleResponse(res: ChatResponse | null): void {
     if (!res?.reply) return;
-    this.saveAssistantMessage(res.reply, this.sessionId);
+    console.log('Received response:', res);
+    this.saveAssistantMessage(res.reply, this.sessionId!);
     if (res.places) {
-      this.chatSessionService.setAttractions(res.places);
+      this.chatSessionService.setAttractions(this.sessionId, res.places);
     }
     this.scheduleScroll();
     if (this.sessionId && this.router.url !== `/chat/${this.sessionId}`) {
@@ -242,7 +288,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.guestChatSessionService.addMessage('assistant', content);
     } else {
       this.chatSessionService
-        .addMessage(this.sessionId, { role: 'assistant', content })
+        .addMessage(this.sessionId!, { role: 'assistant', content })
         .pipe(takeUntil(this.messageStreamDestroy$))
         .subscribe({
           error: (err) => console.error('Error:', err)
@@ -259,7 +305,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         const dto: ICreateChatSession = {
           userId: user.userId,
           sessionName: message.substring(0, 50),
-          context: undefined
+          context: this.trip ? JSON.stringify(this.trip) : undefined,
+          tripId: this.trip?.id ?? null
         };
 
         return this.chatSessionService.create(dto).pipe(
@@ -278,6 +325,71 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
     this.guestChatSessionService.addMessage('assistant', welcomeMessage);
     this.scheduleScroll();
+  }
+
+  private sendTripWelcomeMessage(): void {
+    const tripWelcome = `Welcome to your trip planning! 🗺️ I see you're interested in ${this.trip?.name || 'an amazing trip'}. Let me help you discover the best attractions and experiences. Tell me what kind of places interest you, or I can suggest some popular spots!`;
+    this.chatSessionService.addMessage(this.sessionId!, {
+      role: 'assistant',
+      content: tripWelcome
+    })
+      .pipe(takeUntil(this.messageStreamDestroy$))
+      .subscribe({
+        error: (err) => console.error('Error sending trip welcome:', err)
+      });
+
+    this.scheduleScroll();
+  }
+
+  saveTrip(): void {
+    this.chatSessionService.attractions$
+      .pipe(take(1))
+      .subscribe(attractions => {
+        const selectedIds = this.attractionService.getSelected();
+
+        if (!selectedIds || selectedIds.size === 0) {
+          console.warn('No attractions selected');
+          return;
+        }
+
+        const selectedAttractions = attractions.filter(a =>
+          selectedIds.has(a.id ?? -1)
+        );
+
+        if (!selectedAttractions || selectedAttractions.length === 0) {
+          return;
+        }
+
+        const tripDto: ICreateTrip = {
+          name: this.session?.sessionName ?? 'My trip',
+          startDate: null,
+          endDate: null,
+          whereFrom: null,
+          whereTo: null,
+          budget: null
+        };
+
+        this.tripService.createTrip(tripDto).pipe(
+          switchMap(trip => {
+            const tripId = trip.id;
+
+            return forkJoin(
+              selectedAttractions.map(dto =>
+                this.tripService.addPlace(tripId, dto)
+              )
+            );
+          }),
+        ).subscribe({
+          next: () => {
+            console.log('Trip saved with', selectedAttractions.length, 'attractions');
+            this.notificationService.showSuccess('✅ Trip saved successfully!');
+          },
+          error: err => {
+            this.notificationService.showError('❌ Failed to save trip');
+            console.error('Save trip error', err);
+          }
+        });
+      });
   }
 
   handleChatInput(value: string): void {
@@ -314,4 +426,3 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 }
-

@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, input, output, signal} from '@angular/core';
 import {IBudgetOption} from '../../../../interfaces/IBudgetOption';
 import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outside.directive';
 import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
@@ -12,6 +12,7 @@ import {CityAutocompleteInputComponent} from '../city-autocomplete-input/city-au
     DropdownArrowIconComponent,
     DatePickerComponent,
     CityAutocompleteInputComponent,
+
   ],
   templateUrl: './options-bar.component.html',
   styleUrl: './options-bar.component.scss'
@@ -20,6 +21,9 @@ export class OptionsBarComponent {
   whereFrom = signal<string>("")
   whereTo = signal<string>("")
   budget = signal<string>("")
+
+  hasSelectedAttractions  = input<boolean>(false);
+  saveTrip = output<void>()
 
   isBudgetDropdownOpen = signal<boolean>(false);
   isWhereToDropdownOpen = signal<boolean>(false);
@@ -71,6 +75,10 @@ export class OptionsBarComponent {
       this.budget.set(option.label);
     }
     this.closeBudgetDropdown();
+  }
+
+  onSaveTrip(): void {
+    this.saveTrip.emit();
   }
 
   getDollarSign(): string {

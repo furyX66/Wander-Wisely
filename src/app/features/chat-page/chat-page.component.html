@@ -1,16 +1,16 @@
 <app-side-bar/>
 <section class="chat-area">
-  <app-options-bar/>
+  <app-options-bar (saveTrip)="saveTrip()" [hasSelectedAttractions]="selectedAttractions.size > 0"/>
   <div class="chat-messages" id="chatContainer" #chatContainer (scroll)="onScroll()">
     @for ((msg of messages$ | async); track msg.id) {
       @if (msg.role === 'user') {
         <app-user-message>
-          <p>{{msg.content}}</p>
+          <p>{{ msg.content }}</p>
         </app-user-message>
       }
       @if (msg.role === 'assistant') {
         <app-assistant-message>
-          <p>{{msg.content}}</p>
+          <p>{{ msg.content }}</p>
         </app-assistant-message>
       }
     }

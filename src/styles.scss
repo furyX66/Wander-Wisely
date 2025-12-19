@@ -10,12 +10,13 @@
   margin: 0;
   padding: 0;
   @include poppins();
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--bg-color);
   color: var(--text-color);
-  width: 100dvw;
+  max-width: 100dvw;
   min-height: 100dvh;
   transition: background 0.2s;
 }
