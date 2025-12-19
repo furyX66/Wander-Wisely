@@ -6,10 +6,11 @@ import {
 } from './shared/modals/modal-container-component/modal-container-component.component';
 import {UserService} from './core/services/user.service';
 import {filter, switchMap} from 'rxjs';
+import {NotificationComponent} from './shared/common-ui/notification/notification.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ModalContainerComponentComponent],
+  imports: [RouterOutlet, ModalContainerComponentComponent, NotificationComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.scss'

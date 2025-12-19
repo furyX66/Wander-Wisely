@@ -10,6 +10,8 @@ import {AuthService} from '../../core/services/auth.service';
 import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
 import {UserService} from '../../core/services/user.service';
 import {ChatSessionService} from '../../core/services/chat-session.service';
+import {ModalType} from '../../enums/ModalType';
+import {ModalService} from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-main-page',
@@ -23,12 +25,11 @@ export class MainPageComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private tripService = inject(TripService);
+  private modalService = inject(ModalService);
   private chatSessionService = inject(ChatSessionService);
   private scroller = inject(ViewportScroller);
 
   tripList!: Observable<ITrip[]>;
-
-  isRegisterOfferShown = false;
 
   ngOnInit() {
     this.tripList = this.tripService.getTripList();
@@ -44,9 +45,7 @@ export class MainPageComponent implements OnInit {
         take(1),
         switchMap(isLogged => {
           if (!isLogged) {
-            this.router.navigate(['/chat'], {
-              queryParams: { tripId: trip.id }
-            });
+            this.modalService.openModal(ModalType.LOGIN);
             return of(null);
           }
 

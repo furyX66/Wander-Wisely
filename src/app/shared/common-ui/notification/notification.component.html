@@ -1,0 +1,5 @@
+@if (notification()) {
+  <div class="notification" [class]="'notification-' + notification()!.type">
+    <span>{{ notification()!.message }}</span>
+  </div>
+}

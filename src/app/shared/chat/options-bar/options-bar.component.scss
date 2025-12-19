@@ -33,7 +33,7 @@ icon-dropdown-arrow {
   flex-direction: column;
   position: absolute;
   top: 100%;
-  right: 0;
+  right: 158px;
   background: var(--modal-bg-color);
   outline: var(--assistant-message-border);
   border-radius: 32px;
@@ -52,6 +52,42 @@ icon-dropdown-arrow {
 
 app-date-picker {
   height: 100%;
+}
+
+.disabled{
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.save-button{
+  position: relative;
+  background: $yellow-gradient;
+  font-weight: 500;
+  color: $black;
+
+  &:hover{
+    background: $yellow-gradient;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: inherit;
+    background: inherit;
+    filter: blur(0);
+    opacity: 0;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  &:hover::before {
+    filter: blur(6px);
+    opacity: 0.6;
+  }
 }
 
 .rotate {

@@ -38,9 +38,9 @@ import {AuthService} from '../../core/services/auth.service';
 import {OptionsBarComponent} from '../../shared/chat/options-bar/options-bar.component';
 import {TripService} from '../../core/services/trip.service';
 import {ICreateTrip} from '../../../interfaces/ICreateTrip';
-import {ButtonComponent} from '../../shared/common-ui/button/button.component';
 import {ITrip} from '../../../interfaces/ITrip';
 import {AttractionService} from '../../core/services/attraction.service';
+import {NotificationService} from '../../core/services/notification.service';
 
 export interface ChatResponse {
   reply: string;
@@ -59,8 +59,7 @@ export interface ChatResponse {
     LoadingAnimationComponent,
     AssistantIconComponent,
     AsyncPipe,
-    OptionsBarComponent,
-    ButtonComponent
+    OptionsBarComponent
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
@@ -69,6 +68,7 @@ export interface ChatResponse {
 export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
+  private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private chatService = inject(ChatService);
   private chatSessionService = inject(ChatSessionService);
@@ -166,6 +166,10 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         console.log(this.trip);
         if (this.trip && this.trip.route && this.trip.route.length > 0) {
           this.chatSessionService.setAttractions(this.sessionId, this.trip.route);
+        }
+
+        if (this.trip && this.trip.id && (!dto.messages || dto.messages.length === 0)) {
+          this.sendTripWelcomeMessage();
         }
 
         if (this.session.context) {
@@ -323,6 +327,20 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.scheduleScroll();
   }
 
+  private sendTripWelcomeMessage(): void {
+    const tripWelcome = `Welcome to your trip planning! 🗺️ I see you're interested in ${this.trip?.name || 'an amazing trip'}. Let me help you discover the best attractions and experiences. Tell me what kind of places interest you, or I can suggest some popular spots!`;
+    this.chatSessionService.addMessage(this.sessionId!, {
+      role: 'assistant',
+      content: tripWelcome
+    })
+      .pipe(takeUntil(this.messageStreamDestroy$))
+      .subscribe({
+        error: (err) => console.error('Error sending trip welcome:', err)
+      });
+
+    this.scheduleScroll();
+  }
+
   saveTrip(): void {
     this.chatSessionService.attractions$
       .pipe(take(1))
@@ -364,9 +382,10 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         ).subscribe({
           next: () => {
             console.log('Trip saved with', selectedAttractions.length, 'attractions');
-            this.attractionService.clear();
+            this.notificationService.showSuccess('✅ Trip saved successfully!');
           },
           error: err => {
+            this.notificationService.showError('❌ Failed to save trip');
             console.error('Save trip error', err);
           }
         });
@@ -405,9 +424,5 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     } catch (error) {
       console.error('Scroll error:', error);
     }
-  }
-
-  get attractions$() {
-    return this.chatSessionService.attractions$;
   }
 }
