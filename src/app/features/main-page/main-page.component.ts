@@ -3,9 +3,13 @@ import {MainTitleComponent} from '../../shared/main-screen/main-title/main-title
 import {HeaderComponent} from '../../shared/main-screen/header/header.component';
 import {Router} from '@angular/router';
 import {TripService} from '../../core/services/trip.service';
-import {Observable} from 'rxjs';
+import {filter, Observable, of, switchMap, take} from 'rxjs';
 import {ITrip} from '../../../interfaces/ITrip';
 import {AsyncPipe, ViewportScroller} from '@angular/common';
+import {AuthService} from '../../core/services/auth.service';
+import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
+import {UserService} from '../../core/services/user.service';
+import {ChatSessionService} from '../../core/services/chat-session.service';
 
 @Component({
   selector: 'app-main-page',
@@ -16,18 +20,64 @@ import {AsyncPipe, ViewportScroller} from '@angular/common';
 })
 export class MainPageComponent implements OnInit {
   private router = inject(Router);
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
   private tripService = inject(TripService);
+  private chatSessionService = inject(ChatSessionService);
   private scroller = inject(ViewportScroller);
 
   tripList!: Observable<ITrip[]>;
 
+  isRegisterOfferShown = false;
+
   ngOnInit() {
     this.tripList = this.tripService.getTripList();
-    this.tripList.subscribe(console.log)
   }
 
   startChatting(): void {
     this.router.navigate(['/chat']);
+  }
+
+  openTripInChat(trip: ITrip): void {
+    this.authService.isLoggedIn()
+      .pipe(
+        take(1),
+        switchMap(isLogged => {
+          if (!isLogged) {
+            this.router.navigate(['/chat'], {
+              queryParams: { tripId: trip.id }
+            });
+            return of(null);
+          }
+
+          return this.userService.currentUser$.pipe(
+            filter(user => !!user),
+            take(1),
+            switchMap(user => {
+              const dto: ICreateChatSession = {
+                userId: user.userId,
+                sessionName: trip.name,
+                context: JSON.stringify(trip),
+                tripId: trip.id
+              };
+              return this.chatSessionService.create(dto);
+            })
+          );
+        })
+      )
+      .subscribe({
+        next: (session: any) => {
+          if (session && session.id) {
+            this.router.navigate(['/chat', session.id]);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to create session:', err);
+          this.router.navigate(['/chat'], {
+            queryParams: { tripId: trip.id }
+          });
+        }
+      });
   }
 
   scrollToTrips(): void {

@@ -12,11 +12,11 @@
     <div class="trips-list">
       @let trips = tripList | async;
       @for (trip of trips; track trip.id) {
-        <div class="trip-card">
-          <img src="assets/img/stas.png" alt="Trip image">
+        <div class="trip-card" (click)="openTripInChat(trip)">
+          <img [src]="trip.route[0]?.photoUrl" alt="Trip image">
           <div class="trip-card-info">
             <h3>{{ trip.name }}</h3>
-            <p>{{ trip.budget }}</p>
+            <p>Budget: <span>{{ trip.budget }}$</span></p>
           </div>
         </div>
       }

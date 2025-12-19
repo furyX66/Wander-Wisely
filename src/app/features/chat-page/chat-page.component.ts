@@ -144,34 +144,41 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private loadSession(): void {
     if (!this.sessionId) {
-      console.log('Guest session - loading from storage');
+      console.log('No sessionId → new/guest session');
       this.messages$ = this.guestChatSessionService.messages$;
-      this.chatSessionService.loadAttractionsFromStorage(null);
       if (!this.guestChatSessionService.isWelcomeShown()) {
         this.sendWelcomeMessage();
         this.guestChatSessionService.setWelcomeShown();
       }
       this.setupMessageStream();
-    } else {
-      console.log('Authorized session - loading from server, sessionId:', this.sessionId);
-      this.messages$ = this.chatSessionService.messages$;
-
-      this.chatSessionService.getSessionById(this.sessionId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(dto => {
-          this.session = dto.session;
-          this.trip = dto.trip;
-          if (this.session.context) {
-            try {
-              this.contextObj = JSON.parse(this.session.context);
-            } catch {
-              console.warn('Invalid JSON context');
-            }
-          }
-        });
-
-      this.setupMessageStream();
+      return;
     }
+
+    console.log('Authorized session - loading from server, sessionId:', this.sessionId);
+    this.messages$ = this.chatSessionService.messages$;
+
+    this.chatSessionService.getSessionById(this.sessionId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(dto => {
+        this.session = dto.session;
+
+        this.trip = dto.trip;
+        console.log(this.trip);
+        if (this.trip && this.trip.route && this.trip.route.length > 0) {
+          this.chatSessionService.setAttractions(this.sessionId, this.trip.route);
+        }
+
+        if (this.session.context) {
+          try {
+            this.contextObj = JSON.parse(this.session.context);
+          } catch {
+            console.warn('Invalid JSON context');
+          }
+        }
+      });
+
+    this.chatSessionService.loadAttractionsFromStorage(this.sessionId);
+    this.setupMessageStream();
   }
 
   private setupMessageStream(): void {
@@ -294,7 +301,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         const dto: ICreateChatSession = {
           userId: user.userId,
           sessionName: message.substring(0, 50),
-          context: undefined
+          context: this.trip ? JSON.stringify(this.trip) : undefined,
+          tripId: this.trip?.id ?? null
         };
 
         return this.chatSessionService.create(dto).pipe(

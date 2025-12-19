@@ -19,8 +19,8 @@ export class TripService {
     return this.http.post<ITripAttraction>(`${this.base}/${tripId}/attractions`, dto);
   }
 
-  getTrip(tripId: number): Observable<ITrip[]> {
-    return this.http.get<ITrip[]>(`${this.base}/${tripId}`);
+  getTripById(tripId: number): Observable<ITrip> {
+    return this.http.get<ITrip>(`${this.base}/${tripId}`);
   }
 
   getTripList(): Observable<ITrip[]> {
