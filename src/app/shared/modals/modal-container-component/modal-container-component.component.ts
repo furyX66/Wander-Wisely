@@ -4,8 +4,8 @@ import {EmailInputModalComponent} from '../forgot-password/email-input-modal/ema
 import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {RegisterModalComponent} from '../register-modal/register-modal.component';
 import {SettingsWindowComponent} from '../settings-window/settings-window.component';
-import {ModalType} from '../../../enums/ModalType';
 import {ModalService} from '../../../core/services/modal.service';
+import { ModalType} from '../../../../enums/ModalType';
 import {
   VerificationCodeInputComponent
 } from '../forgot-password/verification-code-input/verification-code-input.component';

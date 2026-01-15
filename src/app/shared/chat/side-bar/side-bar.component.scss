@@ -57,10 +57,48 @@ ul {
         background-color: var(--hover-color);
       }
     }
+
+    .search-input-container {
+      position: relative;
+      display: flex;
+
+      icon-search {
+        left: 0.8rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .search-input {
+        box-sizing: border-box;
+        display: flex;
+        border-radius: 50px;
+        border: none;
+        outline: 1px solid $light-gray;
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        width: 100%;
+        height: 49.6px;
+        &:focus {
+          outline: 1px solid var(--text-color);
+        }
+      }
+      .search-clear-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        right: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        position: absolute;
+      }
+    }
   }
 }
 
-.chats-title{
+
+.chats-title {
   margin-bottom: 0.5rem;
   color: $blue;
   margin-left: 1rem;
@@ -93,7 +131,7 @@ app-logo {
     display: none;
   }
 
-  .chat-element{
+  .chat-element {
     color: var(--text-color);
     box-sizing: border-box;
     flex-grow: 0;
@@ -110,11 +148,11 @@ app-logo {
     background-color: transparent;
     cursor: pointer;
 
-    &.active{
+    &.active {
       background-color: var(--active-color);
     }
 
-    span{
+    span {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -122,14 +160,14 @@ app-logo {
       flex: 1;
     }
 
-    .delete-chat{
+    .delete-chat {
       display: none;
     }
 
     &:hover {
       background-color: var(--hover-color);
 
-      .delete-chat{
+      .delete-chat {
         padding: 0.5em;
         display: flex;
         background: transparent;
@@ -139,7 +177,7 @@ app-logo {
         border-radius: 100%;
         border: none;
 
-        &:hover{
+        &:hover {
           background-color: var(--modal-bg-color);
         }
       }

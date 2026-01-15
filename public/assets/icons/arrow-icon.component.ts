@@ -30,5 +30,5 @@ import {Component, input} from '@angular/core';
 })
 export class ArrowIconComponent {
   size = input<number>(36);
-  strokeWidth = input<number | string>(1);
+  strokeWidth = input<number>(1);
 }

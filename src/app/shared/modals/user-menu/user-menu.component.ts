@@ -1,7 +1,7 @@
 import {Component, inject, output} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
 import {ModalService} from '../../../core/services/modal.service';
-import {ModalType} from '../../../enums/ModalType';
+import {ModalType} from '../../../../enums/ModalType';
 import {LogoutIconComponent} from '../../../../../public/assets/icons/logout-icon.component';
 import {SettingsIconComponent} from '../../../../../public/assets/icons/settings-icon.component';
 import {UserIconComponent} from '../../../../../public/assets/icons/user-icon.component';

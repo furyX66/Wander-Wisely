@@ -4,7 +4,7 @@ import {InputComponent} from '../../../common-ui/input/input.component';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/auth.service';
 import {passwordValidator} from '../../../../core/helpers/validators/passwordValidator';
-import {ModalType} from '../../../../enums/ModalType';
+import {ModalType } from '../../../../../enums/ModalType';
 import {ModalService} from '../../../../core/services/modal.service';
 
 @Component({

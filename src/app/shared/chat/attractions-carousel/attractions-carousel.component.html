@@ -29,6 +29,9 @@
                   <p class="font-s-normal">{{ attraction.price }}</p>
                 }
             </span>
+            @if (attraction.type) {
+              <p class="font-s-normal type"> {{ formatType(attraction.type) }}</p>
+            }
           </div>
         </div>
       }

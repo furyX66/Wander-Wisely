@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ColorSchemeSwitchComponent} from '../../common-ui/color-scheme-switch/color-scheme-switch.component';
 import {LogoComponent} from '../../common-ui/logo/logo.component';
 import {AuthService} from '../../../core/services/auth.service';
@@ -9,7 +9,7 @@ import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {UserService} from '../../../core/services/user.service';
 import {NewChatIconComponent} from '../../../../../public/assets/icons/new-chat-icon.component';
 import {ModalService} from '../../../core/services/modal.service';
-import {ModalType} from '../../../enums/ModalType';
+import {ModalType} from '../../../../enums/ModalType';
 import {SearchIconComponent} from '../../../../../public/assets/icons/search-icon.component';
 import {ButtonComponent} from '../../common-ui/button/button.component';
 import {CrossIconComponent} from '../../../../../public/assets/icons/cross-icon.component';
@@ -18,6 +18,7 @@ import {ChatSessionService} from '../../../core/services/chat-session.service';
 import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {IChatSession} from '../../../../interfaces/IChatSession';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-side-bar',
@@ -32,6 +33,7 @@ import {IChatSession} from '../../../../interfaces/IChatSession';
     ButtonComponent,
     CrossIconComponent,
     RouterLink,
+    FormsModule,
 
 
   ],
@@ -41,6 +43,8 @@ import {IChatSession} from '../../../../interfaces/IChatSession';
 })
 
 export class SideBarComponent implements OnInit, OnDestroy {
+  @ViewChild('searchInput') searchInputRef!: ElementRef<HTMLInputElement>;
+
   private modalService = inject(ModalService);
   private userService = inject(UserService);
   private guestChatSessionService = inject(GuestChatSessionService);
@@ -50,7 +54,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private destroy$ = new Subject<void>();
   showUserMenu = false;
+  showSearchInput = false;
   chatSessions : IChatSession[] = [];
+  searchQuery: string = '';
 
   isLoggedIn$ = this.authService.authStatus$.pipe(
     map(status => status === true),
@@ -149,10 +155,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
       });
   }
 
-  navigateToChat(id : number): void {
-    this.router.navigate(['/chat', id]);
-  }
-
   clearChat(): void {
     if (this.guestChatSessionService.hasMessages()) {
       this.modalService.openModal(ModalType.CLEAR_CHAT);
@@ -164,6 +166,43 @@ export class SideBarComponent implements OnInit, OnDestroy {
   isActiveChat(sessionId: number): Observable<boolean> {
     return this.currentSessionId$.pipe(
       map(id => id === sessionId)
+    );
+  }
+
+  onSearch(event: KeyboardEvent): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery = input.value.trim();
+    if (!this.searchQuery) {
+      this.showSearchInput = false;
+    }
+  }
+
+  toggleSearch(): void {
+    this.showSearchInput = !this.showSearchInput;
+    if (this.showSearchInput) {
+      setTimeout(() => this.searchInputRef.nativeElement.focus(), 0);
+    } else {
+      this.clearSearch();
+    }
+  }
+
+  hideSearchIfEmpty(): void {
+    if (!this.searchQuery?.trim()) {
+      this.showSearchInput = false;
+    }
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+  }
+
+  get filteredChats(): IChatSession[] {
+    if (!this.searchQuery.trim()) {
+      return this.chatSessions;
+    }
+    const lowerQuery = this.searchQuery.toLowerCase().trim();
+    return this.chatSessions.filter(session =>
+      session.sessionName.toLowerCase().includes(lowerQuery)
     );
   }
 

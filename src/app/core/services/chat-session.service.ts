@@ -117,19 +117,6 @@ export class ChatSessionService {
     localStorage.removeItem(this.getStorageKey(sessionId));
   }
 
-  clearAllAttractions(): void {
-    localStorage.removeItem(this.getStorageKey(null));
-
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('chat_attractions_')) {
-        localStorage.removeItem(key);
-      }
-    }
-
-    this.attractionsSubject.next([]);
-  }
-
   private getStorageKey(sessionId: number | null | undefined): string {
     const id = sessionId && !isNaN(sessionId) ? sessionId : 0;
     return `chat_attractions_${id}`;

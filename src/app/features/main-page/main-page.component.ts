@@ -10,7 +10,7 @@ import {AuthService} from '../../core/services/auth.service';
 import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
 import {UserService} from '../../core/services/user.service';
 import {ChatSessionService} from '../../core/services/chat-session.service';
-import {ModalType} from '../../enums/ModalType';
+import {ModalType} from '../../../enums/ModalType';
 import {ModalService} from '../../core/services/modal.service';
 
 @Component({

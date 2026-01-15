@@ -44,4 +44,10 @@ export class UserService {
   changePassword(data: { currentPassword: string; newPassword: string }) {
     return this.http.post(`/api/user/change-password`, data);
   }
+
+  clearCache(): void {
+    this.getCurrentUserCached$ = null;
+    this.hasRequestedUser = false;
+    this.currentUserSubject.next(null);
+  }
 }

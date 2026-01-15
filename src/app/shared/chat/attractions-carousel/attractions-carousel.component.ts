@@ -22,6 +22,7 @@ import {Observable} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {AttractionService} from '../../../core/services/attraction.service';
 import {AuthService} from '../../../core/services/auth.service';
+import {AttractionTypeMapper} from '../../../core/helpers/mappers/AttractionMapper';
 
 @Component({
   selector: 'app-attractions-carousel',
@@ -112,6 +113,10 @@ export class AttractionsCarouselComponent implements AfterViewInit, OnInit {
 
   isAttractionSelected(attractionId: number | undefined): boolean {
     return this.attractionService.isSelected(attractionId);
+  }
+
+  formatType(type: string): string {
+    return AttractionTypeMapper.mapType(type);
   }
 
   private updateScrollSignals(container: HTMLElement): void {

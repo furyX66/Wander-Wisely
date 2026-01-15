@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {IChatMessage} from '../../../interfaces/IChatMessage';
-import {IGuestChatSession} from '../../../interfaces/IGuestChatSession';
-import {BehaviorSubject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { IChatMessage } from '../../../interfaces/IChatMessage';
+import { IGuestChatSession } from '../../../interfaces/IGuestChatSession';
+import { BehaviorSubject } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class GuestChatSessionService {
   private STORAGE_KEY = 'guestChat';
   private data!: IGuestChatSession;
@@ -23,7 +23,13 @@ export class GuestChatSessionService {
       this.data = JSON.parse(raw);
       this.nextId = this.data.nextId || this.data.messages.length;
     } else {
-      this.data = {messages: [], nextId: 0, context: null, sessionName: undefined, welcomeShown: false};
+      this.data = {
+        messages: [],
+        nextId: 0,
+        context: null,
+        sessionName: undefined,
+        welcomeShown: false,
+      };
     }
   }
 
@@ -33,17 +39,12 @@ export class GuestChatSessionService {
     this.messagesSubject.next([...this.data.messages]);
   }
 
-  hasMessages(): boolean {
-    return this.data.messages.length > 0;
-  }
-
-
   addMessage(role: 'user' | 'assistant', content: string) {
     const msg: IChatMessage = {
       id: this.nextId++,
       role,
       content,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     this.data.messages.push(msg);
     this.persist();
@@ -58,6 +59,9 @@ export class GuestChatSessionService {
     this.persist();
   }
 
+  hasMessages(): boolean {
+    return this.data.messages.length > 0;
+  }
 
   isWelcomeShown(): boolean {
     return this.data.welcomeShown || false;

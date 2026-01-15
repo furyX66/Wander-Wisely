@@ -5,7 +5,7 @@ import {AuthService} from '../../../core/services/auth.service';
 import {AsyncPipe} from '@angular/common';
 import {ProfileIconComponent} from '../../../../../public/assets/icons/profile-icon.component';
 import {UserService} from '../../../core/services/user.service';
-import {ModalType} from '../../../enums/ModalType';
+import {ModalType} from '../../../../enums/ModalType';
 import {ModalService} from '../../../core/services/modal.service';
 import {UserMenuComponent} from '../../modals/user-menu/user-menu.component';
 import {ButtonComponent} from '../../common-ui/button/button.component';

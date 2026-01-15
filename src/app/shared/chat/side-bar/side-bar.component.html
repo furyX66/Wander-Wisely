@@ -5,10 +5,27 @@
   @if (isLoggedIn) {
     <ul>
       <li>
-        <button>
-          <icon-search/>
-          Search chats
-        </button>
+        @if (!showSearchInput) {
+          <button (click)="toggleSearch()">
+            <icon-search/>
+            Search chats
+          </button>
+        } @else {
+          <div class="search-input-container">
+            <icon-search/>
+            <input
+              #searchInput
+              type="text"
+              placeholder="Search chats..."
+              [(ngModel)]="searchQuery"
+              class="search-input"
+              (blur)="hideSearchIfEmpty()"
+              autofocus>
+            <button class="search-clear-btn" (click)="clearSearch()" type="button">
+              <icon-cross [strokeWidth]="1.5"/>
+            </button>
+          </div>
+        }
       </li>
       <li>
         <button (click)="createNewChat()">
@@ -35,7 +52,7 @@
     </p>
   } @else {
     <h3 class="chats-title">Your chats</h3>
-    @for (session of chatSessions; track session.id) {
+    @for (session of filteredChats; track session.id) {
       <a [routerLink]="['/chat', session.id]" class="chat-element" [class.active]="(isActiveChat(session.id) | async)">
         <span>{{ session.sessionName }}</span>
         <button type="button" class="delete-chat" (click)="deleteChat(session.id, $event);"><icon-cross [strokeWidth]="1.5"/></button>

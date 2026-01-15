@@ -1,10 +1,18 @@
-import {AfterViewChecked, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {SideBarComponent} from '../../shared/chat/side-bar/side-bar.component';
-import {ChatInputComponent} from '../../shared/common-ui/chat-input/chat-input.component';
-import {MapComponent} from '../../shared/common-ui/map/map.component';
-import {UserMessageComponent} from '../../shared/chat/user-message/user-message.component';
-import {AssistantMessageComponent} from '../../shared/chat/assistant-message/assistant-message.component';
-import {ArrowIconComponent} from '../../../../public/assets/icons/arrow-icon.component';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { SideBarComponent } from '../../shared/chat/side-bar/side-bar.component';
+import { ChatInputComponent } from '../../shared/common-ui/chat-input/chat-input.component';
+import { MapComponent } from '../../shared/common-ui/map/map.component';
+import { UserMessageComponent } from '../../shared/chat/user-message/user-message.component';
+import { AssistantMessageComponent } from '../../shared/chat/assistant-message/assistant-message.component';
+import { ArrowIconComponent } from '../../../../public/assets/icons/arrow-icon.component';
 import {
   exhaustMap,
   filter,
@@ -17,30 +25,28 @@ import {
   take,
   takeUntil,
   tap,
-  throwError
+  throwError,
 } from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {
-  LoadingAnimationComponent
-} from '../../../../public/assets/animations/loading-animation/loading-animation.component';
-import {AssistantIconComponent} from '../../../../public/assets/icons/assistant-icon.component';
-import {ChatService} from '../../core/services/chat.service';
-import {IAttraction} from '../../../interfaces/IAttraction';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ChatSessionService} from '../../core/services/chat-session.service';
-import {IChatSession} from '../../../interfaces/IChatSession';
-import {GuestChatSessionService} from '../../core/services/guest-chat-session.service';
-import {AsyncPipe} from '@angular/common';
-import {IChatMessage} from '../../../interfaces/IChatMessage';
-import {ICreateChatSession} from '../../../interfaces/ICreateChatSession';
-import {UserService} from '../../core/services/user.service';
-import {AuthService} from '../../core/services/auth.service';
-import {OptionsBarComponent} from '../../shared/chat/options-bar/options-bar.component';
-import {TripService} from '../../core/services/trip.service';
-import {ICreateTrip} from '../../../interfaces/ICreateTrip';
-import {ITrip} from '../../../interfaces/ITrip';
-import {AttractionService} from '../../core/services/attraction.service';
-import {NotificationService} from '../../core/services/notification.service';
+import { catchError } from 'rxjs/operators';
+import { LoadingAnimationComponent } from '../../../../public/assets/animations/loading-animation/loading-animation.component';
+import { AssistantIconComponent } from '../../../../public/assets/icons/assistant-icon.component';
+import { ChatService } from '../../core/services/chat.service';
+import { IAttraction } from '../../../interfaces/IAttraction';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ChatSessionService } from '../../core/services/chat-session.service';
+import { IChatSession } from '../../../interfaces/IChatSession';
+import { GuestChatSessionService } from '../../core/services/guest-chat-session.service';
+import { AsyncPipe } from '@angular/common';
+import { IChatMessage } from '../../../interfaces/IChatMessage';
+import { ICreateChatSession } from '../../../interfaces/ICreateChatSession';
+import { UserService } from '../../core/services/user.service';
+import { AuthService } from '../../core/services/auth.service';
+import { OptionsBarComponent } from '../../shared/chat/options-bar/options-bar.component';
+import { TripService } from '../../core/services/trip.service';
+import { ICreateTrip } from '../../../interfaces/ICreateTrip';
+import { ITrip } from '../../../interfaces/ITrip';
+import { NotificationService } from '../../core/services/notification.service';
+import { AttractionService } from '../../core/services/attraction.service';
 
 export interface ChatResponse {
   reply: string;
@@ -59,30 +65,43 @@ export interface ChatResponse {
     LoadingAnimationComponent,
     AssistantIconComponent,
     AsyncPipe,
-    OptionsBarComponent
+    OptionsBarComponent,
   ],
   templateUrl: './chat-page.component.html',
   standalone: true,
-  styleUrl: './chat-page.component.scss'
+  styleUrl: './chat-page.component.scss',
 })
 export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   private notificationService = inject(NotificationService);
-  private route = inject(ActivatedRoute);
-  private chatService = inject(ChatService);
-  private chatSessionService = inject(ChatSessionService);
-  private guestChatSessionService = inject(GuestChatSessionService);
-  private attractionService = inject(AttractionService);
-  private tripService = inject(TripService);
-  private userService = inject(UserService);
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private destroy$ = new Subject<void>();
-  private messageStreamDestroy$ = new Subject<void>();
-  private messageSend$ = new Subject<string>();
-  messages$!: Observable<IChatMessage[]>;
 
+  private route = inject(ActivatedRoute);
+
+  private chatService = inject(ChatService);
+
+  private chatSessionService = inject(ChatSessionService);
+
+  private guestChatSessionService = inject(GuestChatSessionService);
+
+  private attractionService = inject(AttractionService);
+
+  private tripService = inject(TripService);
+
+  private userService = inject(UserService);
+
+  private authService = inject(AuthService);
+
+  private router = inject(Router);
+
+  private destroy$ = new Subject<void>();
+
+  private messageStreamDestroy$ = new Subject<void>();
+
+  private messageSend$ = new Subject<string>();
+
+
+  messages$!: Observable<IChatMessage[]>;
   sessionId: number | null = null;
   trip?: ITrip | null;
   session!: IChatSession;
@@ -94,20 +113,18 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   selectedAttractions: Set<number> = new Set();
 
   ngOnInit(): void {
-    this.route.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        const idParam = params['id'];
-        this.sessionId = idParam ? Number(idParam) : null;
-        this.chatSessionService.clearAttractions(null);
-        this.messageStreamDestroy$.next();
-        this.loadSession();
-      });
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const idParam = params['id'];
+      this.sessionId = idParam ? Number(idParam) : null;
+      this.chatSessionService.clearAttractions(null);
+      this.messageStreamDestroy$.next();
+      this.loadSession();
+    });
 
     this.authService.authStatus$
       .pipe(
         takeUntil(this.destroy$),
-        filter(status => status === true),
+        filter((status) => status === true)
       )
       .subscribe(() => {
         if (!this.sessionId) {
@@ -123,7 +140,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
     this.attractionService.selected$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(selected => {
+      .subscribe((selected) => {
         this.selectedAttractions = selected;
       });
   }
@@ -154,21 +171,32 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
       return;
     }
 
-    console.log('Authorized session - loading from server, sessionId:', this.sessionId);
+    console.log(
+      'Authorized session - loading from server, sessionId:',
+      this.sessionId
+    );
     this.messages$ = this.chatSessionService.messages$;
 
-    this.chatSessionService.getSessionById(this.sessionId)
+    this.chatSessionService
+      .getSessionById(this.sessionId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(dto => {
+      .subscribe((dto) => {
         this.session = dto.session;
 
         this.trip = dto.trip;
         console.log(this.trip);
         if (this.trip && this.trip.route && this.trip.route.length > 0) {
-          this.chatSessionService.setAttractions(this.sessionId, this.trip.route);
+          this.chatSessionService.setAttractions(
+            this.sessionId,
+            this.trip.route
+          );
         }
 
-        if (this.trip && this.trip.id && (!dto.messages || dto.messages.length === 0)) {
+        if (
+          this.trip &&
+          this.trip.id &&
+          (!dto.messages || dto.messages.length === 0)
+        ) {
           this.sendTripWelcomeMessage();
         }
 
@@ -188,9 +216,9 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private setupMessageStream(): void {
     this.messageSend$
       .pipe(
-        filter(msg => !!msg.trim()),
-        tap(() => this.isLoading = true),
-        exhaustMap(message => this.processMessage(message)),
+        filter((msg) => !!msg.trim()),
+        tap(() => (this.isLoading = true)),
+        exhaustMap((message) => this.processMessage(message)),
         takeUntil(this.messageStreamDestroy$)
       )
       .subscribe();
@@ -203,33 +231,39 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     return this.processAuthorizedChat(message);
   }
 
-  private processGuestOrNewAuthorizedChat(message: string): Observable<ChatResponse | null> {
+  private processGuestOrNewAuthorizedChat(
+    message: string
+  ): Observable<ChatResponse | null> {
     return this.authService.isLoggedIn().pipe(
       take(1),
-      switchMap(isLoggedIn => {
+      switchMap((isLoggedIn) => {
         if (isLoggedIn) {
           return this.createAndSendAuthorizedChat(message);
         } else {
           return this.sendGuestMessage(message);
         }
       }),
-      tap(res => this.handleResponse(res)),
-      catchError(error => this.handleError(error)),
-      finalize(() => this.isLoading = false)
+      tap((res) => this.handleResponse(res)),
+      catchError((error) => this.handleError(error)),
+      finalize(() => (this.isLoading = false))
     );
   }
 
-  private processAuthorizedChat(message: string): Observable<ChatResponse | null> {
+  private processAuthorizedChat(
+    message: string
+  ): Observable<ChatResponse | null> {
     this.saveUserMessage(this.sessionId!, message);
 
     return this.chatService.chatAsk(this.sessionId!, message).pipe(
-      tap(res => this.handleResponse(res)),
-      catchError(error => this.handleError(error)),
-      finalize(() => this.isLoading = false)
+      tap((res) => this.handleResponse(res)),
+      catchError((error) => this.handleError(error)),
+      finalize(() => (this.isLoading = false))
     );
   }
 
-  private createAndSendAuthorizedChat(message: string): Observable<ChatResponse | null> {
+  private createAndSendAuthorizedChat(
+    message: string
+  ): Observable<ChatResponse | null> {
     localStorage.removeItem('guestChat');
 
     return this.createChatAndSendMessage(message).pipe(
@@ -258,12 +292,11 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
     this.scheduleScroll();
     if (this.sessionId && this.router.url !== `/chat/${this.sessionId}`) {
-      this.router.navigate(['/chat', this.sessionId],
-        { replaceUrl: true ,});
+      this.router.navigate(['/chat', this.sessionId], { replaceUrl: true });
     }
   }
 
-  private handleError(error: any, sessionId? : number): Observable<null> {
+  private handleError(error: any, sessionId?: number): Observable<null> {
     console.error('Error:', error);
     this.saveAssistantMessage('Server error', sessionId);
     this.scheduleScroll();
@@ -278,27 +311,27 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
         .addMessage(sessionId, { role: 'user', content })
         .pipe(takeUntil(this.messageStreamDestroy$))
         .subscribe({
-          error: (err) => console.error('Error:', err)
+          error: (err) => console.error('Error:', err),
         });
     }
   }
 
   private saveAssistantMessage(content: string, sessionId?: number): void {
-    if(!sessionId) {
+    if (!sessionId) {
       this.guestChatSessionService.addMessage('assistant', content);
     } else {
       this.chatSessionService
         .addMessage(this.sessionId!, { role: 'assistant', content })
         .pipe(takeUntil(this.messageStreamDestroy$))
         .subscribe({
-          error: (err) => console.error('Error:', err)
+          error: (err) => console.error('Error:', err),
         });
     }
   }
 
   private createChatAndSendMessage(message: string) {
     return this.userService.currentUser$.pipe(
-      switchMap(user => {
+      switchMap((user) => {
         if (!user) {
           return throwError(() => new Error('User not loaded'));
         }
@@ -306,11 +339,11 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
           userId: user.userId,
           sessionName: message.substring(0, 50),
           context: this.trip ? JSON.stringify(this.trip) : undefined,
-          tripId: this.trip?.id ?? null
+          tripId: this.trip?.id ?? null,
         };
 
         return this.chatSessionService.create(dto).pipe(
-          tap(newSession => {
+          tap((newSession) => {
             this.sessionId = newSession.id;
             this.guestChatSessionService.clearChatSession();
             this.messages$ = this.chatSessionService.messages$;
@@ -321,21 +354,25 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private sendWelcomeMessage(): void {
-    const welcomeMessage = 'Hello! 👋 I am your guide to interesting places. Ask me about attractions in your city!';
+    const welcomeMessage =
+      'Hello! 👋 I am your guide to interesting places. Ask me about attractions in your city!';
 
     this.guestChatSessionService.addMessage('assistant', welcomeMessage);
     this.scheduleScroll();
   }
 
   private sendTripWelcomeMessage(): void {
-    const tripWelcome = `Welcome to your trip planning! 🗺️ I see you're interested in ${this.trip?.name || 'an amazing trip'}. Let me help you discover the best attractions and experiences. Tell me what kind of places interest you, or I can suggest some popular spots!`;
-    this.chatSessionService.addMessage(this.sessionId!, {
-      role: 'assistant',
-      content: tripWelcome
-    })
+    const tripWelcome = `Welcome to your trip planning! 🗺️ I see you're interested in ${
+      this.trip?.name || 'an amazing trip'
+    }. Let me help you discover the best attractions and experiences. Tell me what kind of places interest you, or I can suggest some popular spots!`;
+    this.chatSessionService
+      .addMessage(this.sessionId!, {
+        role: 'assistant',
+        content: tripWelcome,
+      })
       .pipe(takeUntil(this.messageStreamDestroy$))
       .subscribe({
-        error: (err) => console.error('Error sending trip welcome:', err)
+        error: (err) => console.error('Error sending trip welcome:', err),
       });
 
     this.scheduleScroll();
@@ -344,7 +381,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
   saveTrip(): void {
     this.chatSessionService.attractions$
       .pipe(take(1))
-      .subscribe(attractions => {
+      .subscribe((attractions) => {
         const selectedIds = this.attractionService.getSelected();
 
         if (!selectedIds || selectedIds.size === 0) {
@@ -352,7 +389,7 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
           return;
         }
 
-        const selectedAttractions = attractions.filter(a =>
+        const selectedAttractions = attractions.filter((a) =>
           selectedIds.has(a.id ?? -1)
         );
 
@@ -366,29 +403,38 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
           endDate: null,
           whereFrom: null,
           whereTo: null,
-          budget: null
+          budget: null,
         };
 
-        this.tripService.createTrip(tripDto).pipe(
-          switchMap(trip => {
-            const tripId = trip.id;
+        this.tripService
+          .createTrip(tripDto)
+          .pipe(
+            switchMap((trip) => {
+              const tripId = trip.id;
 
-            return forkJoin(
-              selectedAttractions.map(dto =>
-                this.tripService.addPlace(tripId, dto)
-              )
-            );
-          }),
-        ).subscribe({
-          next: () => {
-            console.log('Trip saved with', selectedAttractions.length, 'attractions');
-            this.notificationService.showSuccess('✅ Trip saved successfully!');
-          },
-          error: err => {
-            this.notificationService.showError('❌ Failed to save trip');
-            console.error('Save trip error', err);
-          }
-        });
+              return forkJoin(
+                selectedAttractions.map((dto) =>
+                  this.tripService.addPlace(tripId, dto)
+                )
+              );
+            })
+          )
+          .subscribe({
+            next: () => {
+              console.log(
+                'Trip saved with',
+                selectedAttractions.length,
+                'attractions'
+              );
+              this.notificationService.showSuccess(
+                '✅ Trip saved successfully!'
+              );
+            },
+            error: (err) => {
+              this.notificationService.showError('❌ Failed to save trip');
+              console.error('Save trip error', err);
+            },
+          });
       });
   }
 
@@ -400,7 +446,8 @@ export class ChatPageComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   onScroll(): void {
     const el = this.chatContainer.nativeElement;
-    const atBottom = Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < 5;
+    const atBottom =
+      Math.abs(el.scrollHeight - el.scrollTop - el.clientHeight) < 5;
     this.isUserScrolledUp = !atBottom;
     this.showScrollButton = this.isUserScrolledUp;
   }

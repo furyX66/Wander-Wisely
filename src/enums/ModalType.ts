@@ -3,7 +3,6 @@ export enum ModalType {
   LOGIN = 'login',
   REGISTER = 'register',
   FORGOT_PASSWORD = 'forgotPassword',
-  USER_MENU = 'userMenu',
   CODE_INPUT = 'codeInput',
   NEW_PASSWORD_INPUT = 'newPasswordInput',
   CLOSE_MODAL = 'closeModal',

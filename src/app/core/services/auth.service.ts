@@ -1,7 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, map, Observable, of, shareReplay, tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, of, shareReplay, switchMap, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {UserService} from './user.service';
 
 interface RegistrationData {
   username: string;
@@ -19,6 +20,7 @@ interface LoginData {
 })
 export class AuthService {
   private http = inject(HttpClient);
+  private userService = inject(UserService);
   private authStatusSubject = new BehaviorSubject<boolean | null>(null);
   authStatus$: Observable<boolean | null> = this.authStatusSubject.asObservable();
 
@@ -73,18 +75,20 @@ export class AuthService {
 
   login(credentials: LoginData): Observable<any> {
     return this.http.post(`/api/auth/login`, credentials).pipe(
-      tap(() => {
-        this.authStatusSubject.next(true);
-        this.isInitialized = true;
+      switchMap(() => {
+        this.isInitialized = false;
+        this.authStatusSubject.next(null);
+
+        return this.initializeAuth();
       }),
       catchError(error => {
         console.error('Login error:', error);
         this.authStatusSubject.next(false);
+        this.isInitialized = false;
         throw error;
       })
     );
   }
-
 
   forgotPassword(email: string): Observable<string> {
     return this.http.post<{ message: string }>(`/api/auth/forgot-password`, { email })
@@ -121,16 +125,20 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    this.authStatusSubject.next(false);
-    this.isInitialized = false;
+
 
     return this.http.post<void>(`/api/auth/logout`, {}).pipe(
       tap(() => {
-        console.log('Successfully logged out from server');
+        this.userService.clearCache();
+        this.authStatusSubject.next(false);
+        this.isInitialized = false;
+        console.log('Successfully logged out');
       }),
-
       catchError(error => {
         console.warn('Server logout failed, but local state is cleared:', error);
+        this.userService.clearCache();
+        this.authStatusSubject.next(false);
+        this.isInitialized = false;
         return of(void 0);
       })
     );
