@@ -1,21 +1,27 @@
 import {Routes} from '@angular/router';
-import {MainPageComponent} from './features/main-page/main-page.component';
-import {ChatPageComponent} from './features/chat-page/chat-page.component';
 import {chatGuard} from './core/guards/chat-guard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: MainPageComponent,
+    loadComponent: () => import("./features/main-page/main-page.component")
+      .then(c => c.MainPageComponent)
   },
   {
     path: 'chat',
-    component: ChatPageComponent,
+    loadComponent: () => import("./features/chat-page/chat-page.component")
+      .then(c => c.ChatPageComponent),
   },
   {
     path: 'chat/:id',
-    component: ChatPageComponent,
+    loadComponent: () => import("./features/chat-page/chat-page.component")
+      .then(c => c.ChatPageComponent),
     canActivate: [chatGuard]
+  },
+  {
+    path: 'my-trips',
+    loadComponent: () => import("./features/user-trips-page/user-trips-page.component")
+      .then(c => c.UserTripsPageComponent),
   },
   {
     path: '**',

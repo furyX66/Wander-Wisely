@@ -6,7 +6,7 @@ import {ITrip} from '../../../interfaces/ITrip';
 import {ITripAttraction} from '../../../interfaces/ITripAttraction';
 import {IAttraction} from '../../../interfaces/IAttraction';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class TripService {
   private http = inject(HttpClient);
   private base = '/api/trip';
@@ -21,6 +21,10 @@ export class TripService {
 
   getTripById(tripId: number): Observable<ITrip> {
     return this.http.get<ITrip>(`${this.base}/${tripId}`);
+  }
+
+  getMyTrips(): Observable<ITrip[]> {
+    return this.http.get<ITrip[]>(`${this.base}/my`);
   }
 
   getTripList(): Observable<ITrip[]> {

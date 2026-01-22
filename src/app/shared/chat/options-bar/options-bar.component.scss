@@ -135,6 +135,15 @@ app-date-picker {
   }
 }
 
+@media (max-width: 768px) {
+  :host{
+    width: 100%;
+  }
+  .hide-on-mobile{
+    display: none !important;
+  }
+}
+
 
 
 

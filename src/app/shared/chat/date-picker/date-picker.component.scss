@@ -1,4 +1,11 @@
 @use "../chat-shared" as *;
 
-
+@media (max-width: 768px) {
+  button{
+    display: none !important;
+  }
+  input{
+    display: none !important;
+  }
+}
 
