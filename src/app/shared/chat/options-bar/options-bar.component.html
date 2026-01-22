@@ -1,7 +1,7 @@
-<button (click)="toggleWhereFromInput()">Where from<span>{{ whereFrom() }}</span></button>
-<button (click)="toggleWhereToInput()">Where to<span>{{ whereTo() }}</span></button>
+<button class="hide-on-mobile" (click)="toggleWhereFromInput()">Where from<span>{{ whereFrom() }}</span></button>
+<button class="hide-on-mobile" (click)="toggleWhereToInput()">Where to<span>{{ whereTo() }}</span></button>
 <app-date-picker/>
-<button class="budget-button" (click)="toggleBudgetDropdown()">
+<button class="budget-button hide-on-mobile" (click)="toggleBudgetDropdown()">
   <icon-dropdown-arrow [class.rotate]="isBudgetDropdownOpen()" [strokeWidth]="2"/>
   Budget
   <span>{{ getDollarSign() }}</span>

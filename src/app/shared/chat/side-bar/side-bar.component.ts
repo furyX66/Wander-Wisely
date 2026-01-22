@@ -169,14 +169,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSearch(event: KeyboardEvent): void {
-    const input = event.target as HTMLInputElement;
-    this.searchQuery = input.value.trim();
-    if (!this.searchQuery) {
-      this.showSearchInput = false;
-    }
-  }
-
   toggleSearch(): void {
     this.showSearchInput = !this.showSearchInput;
     if (this.showSearchInput) {

@@ -7,6 +7,7 @@ import {SettingsIconComponent} from '../../../../../public/assets/icons/settings
 import {UserIconComponent} from '../../../../../public/assets/icons/user-icon.component';
 import {Router} from '@angular/router';
 import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outside.directive';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-user-menu',
@@ -22,6 +23,7 @@ import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outs
 export class UserMenuComponent {
   private authService = inject(AuthService);
   private modalService =  inject(ModalService);
+  private http = inject(HttpClient);
   private router = inject(Router);
 
   closeMenu = output<void>();
@@ -34,6 +36,11 @@ export class UserMenuComponent {
 
   openUserSettingsModal() {
     this.modalService.openModal(ModalType.EDIT_PROFILE);
+    this.closeMenu.emit();
+  }
+
+  navigateToTrips() {
+    this.router.navigate(['/my-trips']);
     this.closeMenu.emit();
   }
 
