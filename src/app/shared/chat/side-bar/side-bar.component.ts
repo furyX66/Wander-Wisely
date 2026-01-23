@@ -34,8 +34,6 @@ import {FormsModule} from '@angular/forms';
     CrossIconComponent,
     RouterLink,
     FormsModule,
-
-
   ],
   templateUrl: './side-bar.component.html',
   standalone: true,
@@ -55,7 +53,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   showUserMenu = false;
   showSearchInput = false;
-  chatSessions : IChatSession[] = [];
+  chatSessions: IChatSession[] = [];
   searchQuery: string = '';
 
   isLoggedIn$ = this.authService.authStatus$.pipe(
@@ -158,7 +156,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   clearChat(): void {
     if (this.guestChatSessionService.hasMessages()) {
       this.modalService.openModal(ModalType.CLEAR_CHAT);
-    } else{
+    } else {
       this.guestChatSessionService.clearChatSession();
     }
   }
