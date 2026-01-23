@@ -39,7 +39,7 @@ import {catchError} from 'rxjs/operators';
 import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
 import {ICreateTrip} from '../../../../interfaces/ICreateTrip';
 import {ChatResponse} from '../../../features/chat-page/chat-page.component';
-import {MapComponent} from '../../common-ui/map/map.component';
+import {MapComponent} from '../map/map.component';
 
 @Component({
   selector: 'app-chat-session',

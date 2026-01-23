@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import * as L from 'leaflet';
-import {AttractionsCarouselComponent} from '../../chat/attractions-carousel/attractions-carousel.component';
+import {AttractionsCarouselComponent} from '../attractions-carousel/attractions-carousel.component';
 import {IAttraction} from '../../../../interfaces/IAttraction';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {ChatSessionService} from '../../../core/services/chat-session.service';

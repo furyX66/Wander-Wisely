@@ -5,6 +5,7 @@ button {
   @include poppins(400, 14px);
   flex-direction: column;
   box-sizing: border-box;
+  height: 3.5rem;
   width: 10rem;
   white-space: nowrap;
   display: flex;
