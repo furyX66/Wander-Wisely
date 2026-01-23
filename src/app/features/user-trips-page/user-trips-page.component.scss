@@ -1,35 +1,84 @@
 @use "colors" as *;
 
+:host-context([data-theme='dark']) .search-input-container .search-input {
+  outline: none;
+}
+
 :host{
   padding: 2rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   max-width: 100dvw;
   height: 100dvh;
   background: var(--bg-color);
+  transition: background 0.2s;
 }
 
 h1{
+  color: $green;
   font-size: 2rem;
   font-weight: 500;
   margin-bottom: 1rem;
 }
 
-h2{
-  color: $green;
-  font-size: 1.75rem;
-  font-weight: 500;
+.search-input-container {
   margin-bottom: 1rem;
+  width: 30%;
+  position: relative;
+  display: flex;
+
+  icon-search {
+    left: 0.8rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .search-input {
+    color: var(--text-color);
+    background: var(--chat-input-color);
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 50px;
+    border: none;
+    outline: 1px solid $light-gray;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    width: 100%;
+    height: 49.6px;
+
+    &:focus {
+      outline: 1px solid var(--text-color);
+    }
+  }
+
+  .search-clear-btn {
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 50px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 0.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+
+    &:hover {
+      background-color: var(--hover-color);
+    }
+  }
 }
 
 .trips-list {
-  padding: 1rem 0;
+  padding: 1rem;
   overflow: auto;
   scroll-behavior: smooth;
-  max-width: 80%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -50,7 +99,6 @@ h2{
 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
     }
 
     &-info {
