@@ -2,114 +2,31 @@
 
 :host {
   display: grid;
-  grid-template-columns: 280px 1fr 1fr;
+  grid-template-columns: 280px 1fr;
   grid-template-areas:
-  "sidebar chatarea map";
+  "sidebar chatarea";
   grid-template-rows: 1fr;
   height: 100dvh;
-}
-
-
-:host-context([data-theme='light']) app-chat-input{
-  outline: 1px solid $light-gray;
 }
 
 app-side-bar {
   grid-area: sidebar;
 }
 
-app-chat-input {
-  align-self: center;
-  flex: 0 0 auto;
-  margin: 16px 0;
-  width: 91%;
-  flex-shrink: 0;
+app-chat-seession{
+  grid-area: chatarea;
 }
 
-app-map {
-  grid-area: map;
-  position: relative;
+app-user-trips-page{
+  grid-area: chatarea;
 }
 
-.chat-area {
-  position: relative;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chat-messages {
-  box-sizing: border-box;
-  padding: clamp(0.5rem, calc(1.2vw + 1rem), 1rem);
-  height: 100%;
-  width: 100%;
-  scroll-behavior: smooth;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  scrollbar-width: none;
-}
-
-.chat-messages::-webkit-scrollbar {
+router-outlet {
   display: none;
-}
-
-app-user-message {
-  max-width: 60%;
-  align-self: flex-end;
-}
-
-app-assistant-message {
-  max-width: 80%;
-  align-self: flex-start;
-}
-
-app-user-message, app-assistant-message {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: fadeInUp 0.4s cubic-bezier(.24, .56, .81, .89) forwards;
-}
-
-icon-arrow {
-  position: absolute;
-  left: 50%;
-  bottom: 80px;
-  transform: translateX(-50%) rotate(-90deg);
-}
-
-.loading-message {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  animation: fadeInUp 0.4s cubic-bezier(.24, .56, .81, .89) forwards;
-
-  app-loading-animation {
-    height: 50px;
-    width: 50px;
-  }
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-app-button{
-  position: absolute;
-  left: 50%;
-  top: 72px;
-  transform: translateX(-50%)
 }
 
 @media (max-width: 1300px) {
   app-side-bar {
-    display: none;
-  }
-  app-map {
     display: none;
   }
   :host {

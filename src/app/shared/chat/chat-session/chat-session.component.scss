@@ -1,0 +1,111 @@
+@use "colors" as *;
+
+:host{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "chat map";
+  grid-template-rows: 1fr;
+  height: 100dvh;
+}
+
+:host-context([data-theme='light']) app-chat-input{
+  outline: 1px solid $light-gray;
+}
+
+app-map{
+  grid-area: map;
+  position: relative;
+}
+
+chat-area{
+  grid-area: chat;
+}
+
+.chat-area {
+  position: relative;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  app-chat-input {
+    align-self: center;
+    flex: 0 0 auto;
+    margin: 16px 0;
+    width: 91%;
+    flex-shrink: 0;
+  }
+
+  .chat-messages {
+    box-sizing: border-box;
+    padding: clamp(0.5rem, calc(1.2vw + 1rem), 1rem);
+    height: 100%;
+    width: 100%;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scrollbar-width: none;
+  }
+
+  app-user-message {
+    max-width: 60%;
+    align-self: flex-end;
+  }
+
+  app-assistant-message {
+    max-width: 80%;
+    align-self: flex-start;
+  }
+
+  app-user-message, app-assistant-message {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeInUp 0.4s cubic-bezier(.24, .56, .81, .89) forwards;
+  }
+
+  icon-arrow {
+    position: absolute;
+    left: 50%;
+    bottom: 80px;
+    transform: translateX(-50%) rotate(-90deg);
+  }
+
+  .loading-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeInUp 0.4s cubic-bezier(.24, .56, .81, .89) forwards;
+
+    app-loading-animation {
+      height: 50px;
+      width: 50px;
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1300px) {
+  :host {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "chat"
+  }
+  .chat-area {
+    height: 100%;
+    margin: 0;
+    align-self: end;
+  }
+  .chat-messages {
+    flex: 1;
+    padding: 16px 8px;
+  }
+}
+

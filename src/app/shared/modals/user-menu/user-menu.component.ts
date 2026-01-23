@@ -23,7 +23,6 @@ import {HttpClient} from '@angular/common/http';
 export class UserMenuComponent {
   private authService = inject(AuthService);
   private modalService =  inject(ModalService);
-  private http = inject(HttpClient);
   private router = inject(Router);
 
   closeMenu = output<void>();
@@ -40,7 +39,7 @@ export class UserMenuComponent {
   }
 
   navigateToTrips() {
-    this.router.navigate(['/my-trips']);
+    this.router.navigate(['/chat/my-trips']);
     this.closeMenu.emit();
   }
 
