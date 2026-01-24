@@ -5,7 +5,7 @@ import {AssistantMessageComponent} from "../assistant-message/assistant-message.
 import {AsyncPipe} from "@angular/common";
 import {ChatInputComponent} from "../../common-ui/chat-input/chat-input.component";
 import {
-    LoadingAnimationComponent
+  LoadingAnimationComponent
 } from "../../../../../public/assets/animations/loading-animation/loading-animation.component";
 import {OptionsBarComponent} from "../options-bar/options-bar.component";
 import {UserMessageComponent} from "../user-message/user-message.component";
@@ -40,6 +40,7 @@ import {ICreateChatSession} from '../../../../interfaces/ICreateChatSession';
 import {ICreateTrip} from '../../../../interfaces/ICreateTrip';
 import {ChatResponse} from '../../../features/chat-page/chat-page.component';
 import {MapComponent} from '../map/map.component';
+import {ModalService} from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-chat-session',
@@ -61,6 +62,7 @@ export class ChatSessionComponent implements OnInit, AfterViewChecked, OnDestroy
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   private notificationService = inject(NotificationService);
+  private modalService = inject(ModalService);
   private route = inject(ActivatedRoute);
   private chatService = inject(ChatService);
   private chatSessionService = inject(ChatSessionService);
@@ -86,6 +88,14 @@ export class ChatSessionComponent implements OnInit, AfterViewChecked, OnDestroy
   selectedAttractions: Set<number> = new Set();
 
   ngOnInit(): void {
+    this.modalService.saveTripRequested$
+      .pipe(
+        filter(name => name !== null),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((tripName) => {
+        this.saveTrip(tripName);
+      });
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const idParam = params['id'];
       this.sessionId = idParam ? Number(idParam) : null;
@@ -351,7 +361,8 @@ export class ChatSessionComponent implements OnInit, AfterViewChecked, OnDestroy
     this.scheduleScroll();
   }
 
-  saveTrip(): void {
+  saveTrip(tripName: string | null): void {
+    console.log('Received response:', tripName);
     this.chatSessionService.attractions$
       .pipe(take(1))
       .subscribe((attractions) => {
@@ -371,7 +382,7 @@ export class ChatSessionComponent implements OnInit, AfterViewChecked, OnDestroy
         }
 
         const tripDto: ICreateTrip = {
-          name: this.session?.sessionName ?? 'My trip',
+          name: tripName || "My Trip",
           startDate: null,
           endDate: null,
           whereFrom: null,

@@ -1,0 +1,9 @@
+<div class="modal-backdrop" style="z-index: 2000;" (click)="closeModal()"></div>
+<div class="modal-wrapper" style="z-index: 2000;">
+  <h1>Enter trip name</h1>
+  <app-input [(ngModel)]="tripName"/>
+  <div class="button-row">
+    <app-button [variant]="'animated'" (click)="handleSave()">Save trip</app-button>
+    <app-button [variant]="'outlined'" (click)="closeModal()">Cancel</app-button>
+  </div>
+</div>

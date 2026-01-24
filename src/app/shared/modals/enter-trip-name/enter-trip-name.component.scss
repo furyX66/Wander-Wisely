@@ -1,0 +1,9 @@
+@use "../modals-shared" as *;
+
+.button-row{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+

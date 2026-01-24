@@ -29,3 +29,7 @@
 @if (modalService.getModalState$(ModalType.CLEAR_CHAT) | async){
   <app-clear-chat (close)="modalService.closeModal(ModalType.CLEAR_CHAT)" (switchToLogin)="switchToLogin()" (switchToRegister)="switchToRegister()" (confirmClear)="handleClearChat()"/>
 }
+
+@if (modalService.getModalState$(ModalType.ENTER_TRIP_NAME) | async){
+  <app-enter-trip-name (close)="modalService.closeModal(ModalType.ENTER_TRIP_NAME)" (saveTrip)="modalService.onSaveTrip($event)"/>
+}

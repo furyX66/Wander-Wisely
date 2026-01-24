@@ -13,6 +13,7 @@ import {NewPasswordComponent} from '../forgot-password/new-password/new-password
 import {CloseModalComponent} from '../close-modal/close-modal.component';
 import {ClearChatComponent} from '../clear-chat/clear-chat.component';
 import {GuestChatSessionService} from '../../../core/services/guest-chat-session.service';
+import {EnterTripNameComponent} from '../enter-trip-name/enter-trip-name.component';
 
 @Component({
   selector: 'app-modal-container-component',
@@ -25,7 +26,8 @@ import {GuestChatSessionService} from '../../../core/services/guest-chat-session
     VerificationCodeInputComponent,
     NewPasswordComponent,
     CloseModalComponent,
-    ClearChatComponent
+    ClearChatComponent,
+    EnterTripNameComponent
   ],
   templateUrl: './modal-container-component.component.html',
   styleUrl: './modal-container-component.component.scss'

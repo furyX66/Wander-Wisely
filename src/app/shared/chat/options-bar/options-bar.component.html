@@ -6,7 +6,7 @@
   Budget
   <span>{{ getDollarSign() }}</span>
 </button>
-<button [class.save-button]="hasSelectedAttractions()" [disabled]="!hasSelectedAttractions()" [class.disabled]="!hasSelectedAttractions()" (click)="onSaveTrip()">Save trip</button>
+<button [class.save-button]="hasSelectedAttractions()" [disabled]="!hasSelectedAttractions()" [class.disabled]="!hasSelectedAttractions()" (click)="openTripNameModal()">Save trip</button>
 
 @if (isBudgetDropdownOpen()) {
   <div class="dropdown-menu"

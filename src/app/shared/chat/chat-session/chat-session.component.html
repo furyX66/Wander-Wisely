@@ -1,5 +1,5 @@
 <section class="chat-area">
-  <app-options-bar (saveTrip)="saveTrip()" [hasSelectedAttractions]="selectedAttractions.size > 0"/>
+  <app-options-bar [hasSelectedAttractions]="selectedAttractions.size > 0"/>
   <div class="chat-messages" id="chatContainer" #chatContainer (scroll)="onScroll()">
     @for ((msg of messages$ | async); track msg.id) {
       @if (msg.role === 'user') {

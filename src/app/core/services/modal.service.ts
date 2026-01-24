@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, distinctUntilChanged, filter, Observable} from 'rxjs';
+import {BehaviorSubject, distinctUntilChanged, filter, Observable, Subject} from 'rxjs';
 import {NavigationStart, Router} from '@angular/router';
 
 interface ModalState {
@@ -12,6 +12,8 @@ interface ModalState {
 @Injectable({ providedIn: 'root' })
 export class ModalService {
   private readonly modalState$ = new BehaviorSubject<Record<string, ModalState>>({});
+  private saveTripSubject = new Subject<string>();
+  saveTripRequested$ = this.saveTripSubject.asObservable();
 
   constructor(private router: Router) {
     this.router.events
@@ -19,10 +21,6 @@ export class ModalService {
       .subscribe(() => {
         this.closeAllModals();
       });
-  }
-
-  get allModalsState$(): Observable<Record<string, ModalState>> {
-    return this.modalState$.asObservable();
   }
 
   getModalState$(modalId: string): Observable<boolean> {
@@ -47,7 +45,6 @@ export class ModalService {
     });
   }
 
-
   closeModal(modalId: string): void {
     const currentState = this.modalState$.value;
     if (currentState[modalId]) {
@@ -71,24 +68,12 @@ export class ModalService {
     this.modalState$.next(updatedState);
   }
 
-  toggleModal(modalId: string, data?: any): void {
-    const currentState = this.modalState$.value;
-    const isCurrentlyOpen = currentState[modalId]?.isOpen || false;
-
-    if (isCurrentlyOpen) {
-      this.closeModal(modalId);
-    } else {
-      this.openModal(modalId, data);
-    }
-  }
-
-  isModalOpen(modalId: string): boolean {
-    const currentState = this.modalState$.value;
-    return currentState[modalId]?.isOpen || false;
-  }
-
   getModalData(modalId: string): any {
     const currentState = this.modalState$.value;
     return currentState[modalId]?.data;
+  }
+
+  onSaveTrip(tripName: string): void {
+    this.saveTripSubject.next(tripName);
   }
 }

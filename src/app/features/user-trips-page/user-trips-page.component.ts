@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {combineLatest, filter, map, of, shareReplay, switchMap, take} from 'rxjs';
+import {filter, map, of, shareReplay, switchMap, take} from 'rxjs';
 import {UserService} from '../../core/services/user.service';
 import {AuthService} from '../../core/services/auth.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -48,18 +48,6 @@ export class UserTripsPageComponent implements OnInit {
     shareReplay(1)
   );
   user$ = this.userService.currentUser$;
-  userTrips$ = combineLatest([
-    this.user$,
-    this.isLoggedIn$
-  ]).pipe(
-    switchMap(([user, isLoggedIn]) => {
-      if (!isLoggedIn || !user?.userId) {
-        return [];
-      }
-      return this.tripsService.getMyTrips();
-    }),
-    shareReplay(1)
-  );
 
   onSearchChange(query: string): void {
     this.searchQuery = query;

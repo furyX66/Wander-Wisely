@@ -1,9 +1,11 @@
-import {Component, input, output, signal} from '@angular/core';
+import {Component, inject, input, signal} from '@angular/core';
 import {IBudgetOption} from '../../../../interfaces/IBudgetOption';
 import {ClickOutsideDirective} from '../../../core/helpers/directives/click-outside.directive';
 import {DropdownArrowIconComponent} from '../../../../../public/assets/icons/dropdown-arrow-icon.component';
 import {DatePickerComponent} from '../date-picker/date-picker.component';
 import {CityAutocompleteInputComponent} from '../city-autocomplete-input/city-autocomplete-input.component';
+import {ModalService} from '../../../core/services/modal.service';
+import {ModalType} from '../../../../enums/ModalType';
 
 @Component({
   selector: 'app-options-bar',
@@ -18,12 +20,12 @@ import {CityAutocompleteInputComponent} from '../city-autocomplete-input/city-au
   styleUrl: './options-bar.component.scss'
 })
 export class OptionsBarComponent {
+  private modalService = inject(ModalService);
   whereFrom = signal<string>("")
   whereTo = signal<string>("")
   budget = signal<string>("")
 
   hasSelectedAttractions  = input<boolean>(false);
-  saveTrip = output<void>()
 
   isBudgetDropdownOpen = signal<boolean>(false);
   isWhereToDropdownOpen = signal<boolean>(false);
@@ -68,6 +70,10 @@ export class OptionsBarComponent {
     this.whereTo.set("")
   }
 
+  openTripNameModal(): void {
+    this.modalService.openModal(ModalType.ENTER_TRIP_NAME)
+  }
+
   selectBudgedOption(option: IBudgetOption): void {
     if (this.budget() === option.label) {
       this.budget.set('');
@@ -75,10 +81,6 @@ export class OptionsBarComponent {
       this.budget.set(option.label);
     }
     this.closeBudgetDropdown();
-  }
-
-  onSaveTrip(): void {
-    this.saveTrip.emit();
   }
 
   getDollarSign(): string {

@@ -22,8 +22,4 @@ export class ClearChatComponent {
   handleClear() {
     this.confirmClear.emit();
   }
-
-  handleCancel() {
-    this.close.emit();
-  }
 }
